@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/01/24 16:34:07 by julnolle         ###   ########.fr        #
+#    Updated: 2020/01/28 20:22:50 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,20 +40,31 @@ LDFLAGS		= -L $(MINIDIR) -l mlx
 
 MINIFLAGS	= -framework OpenGL -framework AppKit
 
+## for libft compilation w/o chained list functions ##
+LIBFT_DIR 	= libft/
+LIBFT 		= $(LIBFT_DIR)libft.a
+####
+
 
 all:	$(NAME)
 
-$(NAME):	$(HEAD) $(SRCS) $(TESTFILE)
-			$(CC) -I $(INCLUDES) -I $(MINIDIR) $(SANITIZE) $(LDFLAGS) $(MINIFLAGS) $(SRCS)
+$(LIBFT):
+		@echo "\x1b[1m\x1b[31m--> Compiling Libft...\x1b[0m"
+		@(cd $(LIBFT_DIR) && $(MAKE))
+
+$(NAME):	$(HEAD) $(SRCS) $(TESTFILE) $(LIBFT)
+			$(CC) $(CFLAGS) -I $(INCLUDES) -I $(MINIDIR) $(LDFLAGS) $(MINIFLAGS) $(SRCS) $(LIBFT) -I $(LIBFT_DIR)
 
 # $(OBJS):	%.o: %.c $(HEAD)
 # 			$(CC) -c -I $(INCLUDES) -I $(MINIDIR) $(SANITIZE) $(LDFLAGS) $(MINIFLAGS) $< -o $@
 # 			@echo "\x1b[1m\x1b[32m-> $@ compiled\x1b[0m"
 clean:
+	@(cd $(LIBFT_DIR) && $(MAKE) $@)
 	@$(RM) $(OBJS)
 	@echo "\x1b[1m\x1b[31m-> $@ made\x1b[0m"
 
 fclean: clean
+	@(cd $(LIBFT_DIR) && $(MAKE) $@)
 	@$(RM) $(NAME)
 	@echo "\x1b[1m\x1b[31m-> $@ made\x1b[0m"
 
