@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/28 20:15:43 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:52:04 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,15 @@ typedef struct	s_data
 {
 	void	*mlx_ptr;
 	void	*mlx_win;
+    void	*img;
+    char	*addr;
+    int		bits_per_pixel;
+    int		line_length;
+    int		endian;
 }				t_data;
+
+typedef struct  s_image {
+}               t_image;
 
 /*
 ** window structure
@@ -62,8 +70,8 @@ typedef struct	s_data
 
 typedef struct	s_win
 {
-	int		x;
-	int		y;
+	int		w;
+	int		h;
 	t_bool	set;
 }				t_win;
 
@@ -73,6 +81,7 @@ typedef struct	s_win
 
 typedef struct	s_color
 {
+	int		t;
 	int		r;
 	int		g;
 	int		b;
@@ -140,5 +149,10 @@ typedef struct	s_sp
 
 void	ft_putendl(char *s);
 int		ft_atoi2(char **str);
+void	ft_draw_circle(t_data *data);
+void	ft_draw_square(t_data *data);
+void	ft_draw_triangle(t_data *data);
+void	ft_draw_hex(t_data *data);
+void	ft_pixel_put(t_data *data, int x, int y, int color);
 
 #endif

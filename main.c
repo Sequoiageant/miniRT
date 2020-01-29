@@ -16,9 +16,13 @@
 void	ft_set_win(char **line, t_win *win)
 {
 	(*line)++;
-	win->x = ft_atoi2(line);
-	win->y = ft_atoi2(line);
+	win->w = ft_atoi2(line);
+	win->h = ft_atoi2(line);
 	win->set = true;
+	if (win->w > 2560)
+		win->w = 2560;
+	if (win->h > 1440)
+		win->h = 1440;
 }
 
 void	ft_set_light(char **line, t_win *win)
@@ -59,45 +63,39 @@ int	ft_func_choose(char *line, t_win *win)
 	return (1);
 }
 
+void	ft_pixel_put(t_data *data, int x, int y, int color)
+{
+    char	*dst;
+
+    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+}
+
+int ft_close(t_data *data)
+{
+	mlx_destroy_window(data->mlx_ptr, data->mlx_win);
+	exit(EXIT_SUCCESS);
+}
+
 int key_event(int key, t_data *data)
 {
-	double		angle;
-	int r;
-	int x;
-	int y;
-	t_color	color;
 
 	ft_putnbr(key);
-	r = 200;
-	while (r > 0)
-	{
-		angle = 0;
-		while (angle < 360)
-		{
-			color.r = (rand() % 50) + 1;
-			color.g = (rand() % 254) + 1;
-			color.b = (rand() % 254) + 1;
-			x = r * cos(angle * M_PI / 180);
-			y = r * sin(angle * M_PI / 180);
-			mlx_pixel_put(data->mlx_ptr, data->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
-			angle += 0.1;
-		}
-		r--;
-	}
-
-/*	i = 160;
-	while (i < 480)
-	{
-		j = 120;
-		while (j < 360)
-		{
-			mlx_pixel_put(data->mlx_ptr, data->mlx_win, i, j, 0.1*color.r*color.g*color.b);
-			j++;
-		}
-		i++;
-	}*/
+	if(key == 8)
+		ft_draw_circle(data);
+	else if(key == 1)
+		ft_draw_square(data);
+	else if(key == 17)
+		ft_draw_triangle(data);
+	else if(key == 4)
+		ft_draw_hex(data);
+	else if(key == 49)
+		mlx_string_put(data->mlx_ptr, data->mlx_win, 650, 500, 0xFFFF00, "CA MARCHE !");
+	else if(key == 53)
+		ft_close(data);
 	return(0);
 }
+
 
 int	ft_launch_window(t_win *win)
 {
@@ -105,11 +103,12 @@ int	ft_launch_window(t_win *win)
 
 	if ((data.mlx_ptr = mlx_init()) == NULL)
 		return (EXIT_FAILURE);
-	if ((data.mlx_win = mlx_new_window(data.mlx_ptr, win->x, win->y, "miniRT")) == NULL)
+	if ((data.mlx_win = mlx_new_window(data.mlx_ptr, win->w, win->h, "miniRT")) == NULL)
 		return (EXIT_FAILURE);
-	// mlx_hook(data.mlx_win, 3, 53, key_event, NULL);
-	// mlx_hook(data.mlx_win, 17, 1L << 17, key_event, NULL);
-	mlx_key_hook(data.mlx_win, key_event, &data);
+	data.img = mlx_new_image(data.mlx_ptr, win->w, win->h);
+	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+	mlx_hook(data.mlx_win, 2, 0L, key_event, &data);
+	mlx_hook(data.mlx_win, 17, 1L << 17, ft_close, NULL);
 
 	mlx_loop(data.mlx_ptr);
 	return (EXIT_SUCCESS);
