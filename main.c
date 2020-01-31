@@ -63,14 +63,6 @@ int	ft_func_choose(char *line, t_win *win)
 	return (1);
 }
 
-void	ft_pixel_put(t_data *data, int x, int y, int color)
-{
-    char	*dst;
-
-    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
-}
-
 int ft_close(t_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->mlx_win);
@@ -79,11 +71,12 @@ int ft_close(t_data *data)
 
 int key_event(int key, t_data *data)
 {
-
 	ft_putnbr(key);
 	if(key == 8)
 		ft_draw_circle(data);
-	else if(key == 1)
+	if(key == 1)
+		ft_draw_sphere(data);
+	else if(key == 12)
 		ft_draw_square(data);
 	else if(key == 17)
 		ft_draw_triangle(data);
@@ -109,7 +102,7 @@ int	ft_launch_window(t_win *win)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	mlx_hook(data.mlx_win, 2, 0L, key_event, &data);
 	mlx_hook(data.mlx_win, 17, 1L << 17, ft_close, NULL);
-
+	ft_raytracing(&data, win);
 	mlx_loop(data.mlx_ptr);
 	return (EXIT_SUCCESS);
 	return (0);

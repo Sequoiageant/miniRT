@@ -6,36 +6,39 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 15:48:03 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/29 18:52:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/01/31 14:46:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_draw_circle(t_data *data)
+void	ft_draw_sphere(t_data *data)
 {
-	double	angle;
-	int		r;
-	int 	x;
-	int 	y;
+	double phi;
+	double theta;
+	int R;
+	int x;
+	int y;
+	int z;
 
-	r = 200;
-	while (r > 0)
+	R = 150;
+	phi = 1;
+	while (phi <= 360)
 	{
-		angle = 0;
-		while (angle < 360)
+		theta = -90;
+		while (theta <= 90)
 		{
-			x = r * cos(angle * M_PI / 180);
-			y = r * sin(angle * M_PI / 180);
-			// mlx_pixel_put(data->mlx_ptr, data->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
-			ft_pixel_put(data, x + 300, y + 300, 0x00FF0000);
-			angle += 0.1;
+			x = cos(theta) * cos(phi) * R;
+			y = cos(theta) * sin(phi) * R;
+			z = sin(theta) * R;
+			ft_pixel_put(data, x + 400, y + 300, 0xFFFF00);
+			theta += 0.5;
 		}
-		r--;
+		phi++;
 	}
 	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
 }
-/*
+
 void	ft_draw_circle(t_data *data)
 {
 	t_color	color;
@@ -63,7 +66,7 @@ void	ft_draw_circle(t_data *data)
 	}
 	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
 }
-*/
+
 void	ft_draw_square(t_data *data)
 {
 	// t_color	color;

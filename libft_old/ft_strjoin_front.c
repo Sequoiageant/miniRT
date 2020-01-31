@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt_utils.c                                     :+:      :+:    :+:   */
+/*   ft_strjoin_front.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/28 20:18:38 by julnolle         ###   ########.fr       */
+/*   Created: 2019/12/18 18:28:10 by julnolle          #+#    #+#             */
+/*   Updated: 2019/12/18 18:47:03 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "libft.h"
 
-int		ft_atoi2(char **str)
+void	ft_strjoin_front(char *front, char **src)
 {
-	size_t	i;
-	int		res;
+	char *tmp;
 
-	i = 0;
-	res = 0;
-	while ((**str >= 9 && **str <= 13) || **str == ' ')
-		(*str)++;
-	if ((*str)[0] == '+' || (*str)[0] == '-')
-		i++;
-	while ((*str)[i] >= '0' && (*str)[i] <= '9')
-	{
-		res = res * 10 + (*str)[i] - 48;
-		i++;
-	}
-	(*str) += i;
-	return ((*str)[0] == '-' ? -res : res);
+	if (front == NULL || *src == NULL)
+		return ;
+	tmp = ft_strdup(*src);
+	free(*src);
+	*src = ft_strjoin(front, tmp);
+	free(tmp);
 }

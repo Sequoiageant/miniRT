@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/29 16:52:04 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/01/30 18:32:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@
 #include <mlx.h>
 #include <stdio.h>
 #include "get_next_line.h"
+
 /*
 ** --------------------------------- Defines ---------------------------------
 */
-
+ 
 # define PI 3.1415926535
+# define ABS(x) x < 0 ? -x : x
 
 /*
 ** ----------------------------------- Enum ----------------------------------
@@ -54,15 +56,15 @@ typedef struct	s_data
 {
 	void	*mlx_ptr;
 	void	*mlx_win;
-    void	*img;
-    char	*addr;
-    int		bits_per_pixel;
-    int		line_length;
-    int		endian;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
 }				t_data;
 
-typedef struct  s_image {
-}               t_image;
+typedef struct	s_image {
+}				t_image;
 
 /*
 ** window structure
@@ -126,6 +128,7 @@ typedef struct	s_camera
 	double	cam_or_x;
 	double	cam_or_y;
 	double	cam_or_z;
+	int		cam_fov;
 }				t_camera;
 
 /*
@@ -149,10 +152,22 @@ typedef struct	s_sp
 
 void	ft_putendl(char *s);
 int		ft_atoi2(char **str);
+void	ft_pixel_put(t_data *data, int x, int y, int color);
+
+/*
+** ---------------------------------- forms ---------------------------------
+*/
+
 void	ft_draw_circle(t_data *data);
 void	ft_draw_square(t_data *data);
 void	ft_draw_triangle(t_data *data);
+void	ft_draw_sphere(t_data *data);
 void	ft_draw_hex(t_data *data);
-void	ft_pixel_put(t_data *data, int x, int y, int color);
+
+/*
+** ------------------------------- Ray tracing ------------------------------
+*/
+
+void	ft_raytracing(t_data *data, t_win *win);
 
 #endif
