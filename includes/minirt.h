@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/30 18:32:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:52:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <mlx.h>
-#include <stdio.h>
+#include "libft.h"
 #include "get_next_line.h"
+#include <stdio.h>
 
 /*
 ** --------------------------------- Defines ---------------------------------
@@ -72,22 +73,20 @@ typedef struct	s_image {
 
 typedef struct	s_win
 {
-	int		w;
-	int		h;
+	float	w;
+	float	h;
 	t_bool	set;
 }				t_win;
 
 /*
-** color structure <===== TO BE DELETED
+** vector structure
 */
 
-typedef struct	s_color
+typedef struct	s_vec
 {
-	int		t;
-	int		r;
-	int		g;
-	int		b;
-}				t_color;
+	float x;
+	float y;
+}				t_vec;
 
 /*
 ** ambiant light structure
@@ -95,11 +94,11 @@ typedef struct	s_color
 
 typedef struct	s_amb_light
 {
-	double	al_lum;
-	int		al_lr;
-	int		al_lg;
-	int		al_lb;
-}				t_amb_light;
+	double	lum;
+	int		r;
+	int		g;
+	int		b;
+}				t_ambl;
 
 /*
 ** light structure
@@ -107,13 +106,13 @@ typedef struct	s_amb_light
 
 typedef struct	s_light
 {
-	double	li_x;
-	double	li_y;
-	double	li_z;	
-	double	li_lum;
-	int		lr;
-	int		lg;
-	int		lb;
+	double	x;
+	double	y;
+	double	z;	
+	double	lum;
+	int		r;
+	int		g;
+	int		b;
 }				t_light;
 
 /*
@@ -122,14 +121,14 @@ typedef struct	s_light
 
 typedef struct	s_camera
 {
-	double	cam_x;
-	double	cam_y;
-	double	cam_z;	
-	double	cam_or_x;
-	double	cam_or_y;
-	double	cam_or_z;
-	int		cam_fov;
-}				t_camera;
+	double	x;
+	double	y;
+	double	z;	
+	double	or_x;
+	double	or_y;
+	double	or_z;
+	int		fov;
+}				t_cam;
 
 /*
 ** sphere structure
@@ -137,14 +136,34 @@ typedef struct	s_camera
 
 typedef struct	s_sp
 {
-	double	sp_x;
-	double	sp_y;
-	double	sp_z;
-	double	sp_dia;
-	int		sp_r;
-	int		sp_g;
-	int		sp_b;
+	double	x;
+	double	y;
+	double	z;
+	double	dia;
+	int		r;
+	int		g;
+	int		b;
 }				t_sp;
+
+/*
+** ------------------------------- Environment ------------------------------
+*/
+
+void	ft_set_win(char **tab, t_win *win);
+void	ft_set_ambiant_light(char **tab);
+void	ft_set_camera(char **tab);
+void	ft_set_sphere(char **tab);
+
+/*
+** --------------------------------- Vectors --------------------------------
+*/
+
+float	ft_dot_product(float *u, float *v, int dim);
+void	ft_cross_product(float *u, float *v, float *p);
+void	ft_add_vec(float *u, float *v, float *p, int dim);
+void	ft_sub_vec(float *u, float *v, float *p, int dim);
+float	ft_norm_vec(float *u, int dim);
+void	ft_normalize(float *vec, int dim);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -153,6 +172,8 @@ typedef struct	s_sp
 void	ft_putendl(char *s);
 int		ft_atoi2(char **str);
 void	ft_pixel_put(t_data *data, int x, int y, int color);
+int		create_trgb(int t, int r, int g, int b);
+double	ft_atof(const char *str);
 
 /*
 ** ---------------------------------- forms ---------------------------------

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 15:48:03 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/31 14:46:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:27:59 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	ft_draw_sphere(t_data *data)
 
 void	ft_draw_circle(t_data *data)
 {
-	t_color	color;
 	double	angle;
 	int		r;
 	int 	x;
@@ -53,13 +52,10 @@ void	ft_draw_circle(t_data *data)
 		angle = 0;
 		while (angle < 360)
 		{
-			color.r = (rand() % 50) + 1;
-			color.g = (rand() % 254) + 1;
-			color.b = (rand() % 254) + 1;
 			x = r * cos(angle * M_PI / 180);
 			y = r * sin(angle * M_PI / 180);
 			// mlx_pixel_put(data->mlx_ptr, data->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
-			ft_pixel_put(data, x + 300, y + 300, 1*color.r*color.g*color.b);
+			ft_pixel_put(data, x + 300, y + 300, create_trgb(255, (angle/360)*255, (angle/360)*255, 0));
 			angle += 0.1;
 		}
 		r--;

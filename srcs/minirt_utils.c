@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/31 11:59:19 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/06 10:31:16 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,81 @@ void	ft_pixel_put(t_data *data, int x, int y, int color)
 }
 
 
-double ft_dot_product(double *v, double *u, int dim)
+float 	ft_dot_product(float *u, float *v, int dim)
 {
     int		i;
-    double	result;
+    float	result;
 
     i = 0;
     result = 0.0;
     while (i < dim)
     {
-        result += v[i]*u[i];
+        result += u[i]*v[i];
         i++;
     }
     return (result);
+}
+
+void	ft_cross_product(float *u, float *v, float *p)
+{
+	p[0] = v[1] * u[2] - v[2] * u[1]; 
+	p[1] = v[0] * u[2] - v[2] * u[0]; 
+	p[2] = v[0] * u[1] - v[1] * u[0]; 
+}
+
+void	ft_add_vec(float *u, float *v, float *p, int dim)
+{
+	int		i;
+
+	i = 0;
+	while (i < dim)
+	{
+		p[i] = u[i] + v[i];
+		i++;
+	}
+}
+
+void	ft_sub_vec(float *u, float *v, float *p, int dim)
+{
+	int		i;
+
+	i = 0;
+	while (i < dim)
+	{
+		p[i] = u[i] - v[i];
+		i++;
+	}
+}
+
+float	ft_norm_vec(float *vec, int dim)
+{
+	int		i;
+	double	norm;
+
+	i = 0;
+	norm = 0.0;
+	while (i < dim)
+	{
+		norm += pow(vec[i], 2);
+		i++;
+	}
+	return (sqrt(norm));
+}
+
+void	ft_normalize(float *vec, int dim)
+{
+	float norm;
+
+	norm = ft_norm_vec(vec, dim);
+	if (norm != 1 && norm != 0)
+	{
+		vec[0] /= norm;
+		vec[1] /= norm;
+		vec[2] /= norm;
+	}
+}
+
+int		create_trgb(int t, int r, int g, int b)
+{
+	return(b << 24 | g << 16 | r << 8 | t);
 }

@@ -4,3 +4,5 @@ a.out.dSYM/*
 .DS_Store
 *.o
 test/
+essai.c
+test.c

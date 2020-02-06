@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/01/29 11:32:21 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/06 16:08:50 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ _IWHITE=$'\x1b[47m'
 NAME	=	libft.a
 
 SRCS	= 	ft_putchar.c ft_strlen.c ft_putstr.c ft_putendl.c ft_putnbr.c \
-			
+			ft_atoi.c ft_split2.c ft_strcmp.c \
+			ft_strdup.c ft_memcpy.c
 
 BONUS	=	ft_lstadd_back.c ft_lstlast.c ft_lstadd_front.c \
 			ft_lstsize.c ft_lstnew.c \

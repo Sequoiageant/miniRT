@@ -1,63 +1,32 @@
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/* ************************************************************************** */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 12:18:23 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/27 12:57:19 by julnolle         ###   ########.fr       */
+/*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
+/*   Updated: 2020/02/06 16:27:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "libft.h"
-
-void	ft_set_win(char **line, t_win *win)
-{
-	(*line)++;
-	win->w = ft_atoi2(line);
-	win->h = ft_atoi2(line);
-	win->set = true;
-	if (win->w > 2560)
-		win->w = 2560;
-	if (win->h > 1440)
-		win->h = 1440;
-}
-
-void	ft_set_light(char **line, t_win *win)
-{
-	(void)line;
-	(void)win;
-	ft_putendl("lumiere");
-}
-
-void	ft_set_camera(char **line, t_win *win)
-{
-	(void)line;
-	(void)win;
-	ft_putendl("camera");
-}
-
-/*int	ft_func_choose(char *line, t_win *win)
-{
-	char *states;
-	char *evts;
-
-	tab[0] = 'R';
-	tab[1] = 'A';
-}*/
 
 int	ft_func_choose(char *line, t_win *win)
 {
-	if (line[0] == 'R' && line[1] == ' ')
-		ft_set_win(&line, win);
-	else if (line[0] == 'A' && line[1] == ' ')
-		ft_set_light(&line, win);
-	else if (line[0] == 'c' && line[1] == ' ')
-		ft_set_camera(&line, win);
-	else if (line[0] == '\n')
+	char **tab;
+
+	tab = ft_split(line, ' ');
+	if (tab[0] == '\0')
 		return (1);
+	else if (ft_strcmp(tab[0], "R") == 0)
+		ft_set_win(tab, win);
+	else if (ft_strcmp(tab[0], "A") == 0)
+		ft_set_ambiant_light(tab);
+	else if (ft_strcmp(tab[0], "c") == 0)
+		ft_set_camera(tab);
+	else if (ft_strcmp(tab[0], "sp") == 0)
+		ft_set_sphere(tab);
 	else
 		return (0);
 	return (1);
@@ -89,7 +58,6 @@ int key_event(int key, t_data *data)
 	return(0);
 }
 
-
 int	ft_launch_window(t_win *win)
 {
 	t_data data;
@@ -101,7 +69,7 @@ int	ft_launch_window(t_win *win)
 	data.img = mlx_new_image(data.mlx_ptr, win->w, win->h);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	mlx_hook(data.mlx_win, 2, 0L, key_event, &data);
-	mlx_hook(data.mlx_win, 17, 1L << 17, ft_close, NULL);
+	mlx_hook(data.mlx_win, 17, 1L << 17, ft_close, &data);
 	ft_raytracing(&data, win);
 	mlx_loop(data.mlx_ptr);
 	return (EXIT_SUCCESS);
