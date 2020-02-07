@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 15:55:03 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:42:51 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,21 @@ float	ft_norm_vec(float *vec, int dim)
 		i++;
 	}
 	return (sqrt(norm));
+}
+
+float	ft_norm_vec2(float *vec, int dim)
+{
+	int		i;
+	double	norm;
+
+	i = 0;
+	norm = 0.0;
+	while (i < dim)
+	{
+		norm += vec[i] * vec[i];
+		i++;
+	}
+	return (norm);
 }
 
 float 	ft_dot_product(float *u, float *v, int dim)

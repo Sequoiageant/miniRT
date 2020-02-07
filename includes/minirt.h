@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 16:03:03 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:46:30 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void	ft_add_vec(float *u, float *v, float *p, int dim);
 void	ft_sub_vec(float *u, float *v, float *p, int dim);
 float	ft_norm_vec(float *u, int dim);
 void	ft_normalize(float *vec, int dim);
+float	ft_norm_vec2(float *vec, int dim);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
