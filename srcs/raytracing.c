@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/06 14:10:25 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:04:38 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,20 @@
 int		ft_intersec(float *dir, t_sp *sp)
 {
 	(void)sp;
-	// float d[3] = {vec->x, vec->y, 1};
-	float ce[3] = {0, 0, 20};
-	float o[3] = {0, 0, 0};
-	float p[3];
-
+	float origin[3] = {0,0,0};
+	float center[3] = {0,0,20};
+	float oc[3];
+	float r = 12.6;
 	float a;
 	float b;
 	float c;
-	double delta;
-	double t1;
-	double t2;
-	ft_sub_vec(o, ce, p, 3);
-
-	a = 1;
-	b = 2.0 * ft_dot_product(dir, p, 3);
-	c = pow(ft_norm_vec(p, 3), 2) - pow(12.6, 2);
-	delta = b*b - 4 * a * c;
-	if (delta < 0)
-		return (0);
-	t1 = (-b - sqrt(delta)) / (2 * a);
-	t2 = (-b + sqrt(delta)) / (2 * a);
-	if (t2 > 0)
-		return (1);
-	return (0);
+	float delta;
+	ft_sub_vec(origin, center, oc, 3);
+	a = ft_dot_product(dir, dir, 3);
+	b = 2.0 * ft_dot_product(oc, dir, 3);
+	c = ft_dot_product(oc, oc, 3) - r * r;
+	delta = b * b - 4 * a * c;
+	return (delta > 0 ? 1 : 0);
 }
 
 void	ft_raytracing(t_data *data, t_win *win)
@@ -62,7 +52,7 @@ void	ft_raytracing(t_data *data, t_win *win)
 	// double d[] = [0, 0, 1];
 	// double O[] = [0, 0, 0];
 	// double r[] = [0, 0, 0];
-	float	vec[3];
+	t_vec	dir;
 	t_sp	sp;
 	float	fov;
 	float	i;
@@ -70,7 +60,7 @@ void	ft_raytracing(t_data *data, t_win *win)
 	float 	height;
 	float 	width;
 
-	fov = 60 * M_PI / 180;
+	fov = 120 * M_PI / 180;
 	width = 2 * tan(fov / 2.0);
 	height = 2 * tan(fov / 2.0) * (win->w / win->h);
 	i = 0;
@@ -79,14 +69,14 @@ void	ft_raytracing(t_data *data, t_win *win)
 		j = 0;
 		while (j < win->h - 1)
 		{
-			vec[0] = j - width / 2;
-			vec[1] = i - height / 2;
-			vec[2] = -width /(2.0 * tan(fov / 2.0));
-			// printf("%f,%f,%f,\n", vec[0], vec[1], vec[2]);
-			ft_normalize(vec, 3);
-			// printf("%f,%f,%f,\n", vec[0], vec[1], vec[2]);
+			dir.x = j - width / 2;
+			dir.y = i - height / 2;
+			dir.z = -width / (2.0 * tan(fov / 2.0));
+			// printf("%f,%f,%f,\n", dir[0], dir[1], dir[2]);
+			ft_normalize(dir, 3);
+			// printf("%f,%f,%f,\n", dir[0], dir[1], dir[2]);
 
-			if (ft_intersec(vec, &sp) == 1)
+			if (ft_intersec(dir, &sp) == 1)
 				ft_pixel_put(data, i, j, create_trgb(255, 69, 0, 0));
 			else
 				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 255, 255, 0));

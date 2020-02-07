@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 14:47:17 by julnolle          #+#    #+#             */
-/*   Updated: 2020/01/24 15:05:11 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:14:53 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,10 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <stdio.h>
 
-char			*ft_substr(char const *s, unsigned int start, size_t len);
-char			*ft_strdup(const char *src);
-int				get_next_line(int fd, char **line);
-char			*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *src);
+int		get_next_line(int fd, char **line);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif
