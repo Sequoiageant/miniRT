@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 17:48:51 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/11 14:24:41 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 int		ft_intersec(float *dir, t_sp *sp)
 {
 	(void)sp;
-	float origin[3] = {0,0,0};
-	float center[3] = {0,0,-2};
+	float origin[3] = {0.0, 0.0, 0.0};
+	float center[3] = {sp->pos.x, sp->pos.y, sp->pos.z};
 	float oc[3];
-	float r = 12.6;
+	float r = sp->dia;
 	float a;
 	float b;
 	float c;
@@ -38,14 +38,14 @@ int		ft_intersec(float *dir, t_sp *sp)
 	ft_sub_vec(origin, center, oc, 3);
 	a = 1;
 	b = 2.0 * ft_dot_product(dir, oc, 3);
-	c = ft_norm_vec2(oc, 3) - (r * r);
+	c = ft_norm_vec2(oc, 3) - ((r/2) * (r/2));
 	delta = b * b - 4 * a * c;
-	// printf("%f\n", ft_norm_vec2(oc, 3));
 	if (delta < 0)
 		return (0);
 	t1 = (-b - sqrt(delta)) / (2 * a);
 	t2 = (-b + sqrt(delta)) / (2 * a);
-	if (t2 > 0)
+	// printf("t1 :%f | t2 :%f\n", t1, t2);
+	if (t2 > 0 || delta == 0)
 		return (1);
 	return (0);
 }
@@ -54,36 +54,48 @@ void	ft_raytracing(t_data *data, t_win *win)
 {
 	float	dir[3];
 	t_sp	sp;
+	t_sp	sp2;
+	t_light	li;
 	float	fov;
 	float	i;
 	float	j;
 	float 	height;
 	float 	width;
 
-	fov = 120 * M_PI / 180;
-	width = 2 * tan(fov / 2.0);
-	height = 2 * tan(fov / 2.0) * (win->w / win->h);
+	sp.pos.x = 6.0;
+	sp.pos.y = -2.0;
+	sp.pos.z = -25.0;
+	sp.dia = 8.0;	
+
+	sp2.pos.x = -5.0;
+	sp2.pos.y = 1000.0;
+	sp2.pos.z = -200.0;
+	sp2.dia = 2000;
+
+	li.lum = 0.9;
+	li.pos.x = 15;
+	li.pos.y = 60;
+	li.pos.z = -40;
+
+	fov = 60 * M_PI / 180;
 	i = 0;
 	while (i < win->w - 1)
 	{
 		j = 0;
 		while (j < win->h - 1)
 		{
-			dir[0] = j - width / 2;
-			dir[1] = i - height / 2;
-			dir[2] = -width / (2.0 * tan(fov / 2.0));
-			// printf("%f,%f,%f,\n", dir[0], dir[1], dir[2]);
+			dir[0] = i - win->w / 2;
+			dir[1] = j - win->h / 2;
+			dir[2] = -win->w / (2.0 * tan(fov / 2.0));
 			ft_normalize(dir, 3);
-			// printf("%f,%f,%f,\n", dir[0], dir[1], dir[2]);
 
-			if (ft_intersec(dir, &sp) == 1)
-			{
-				ft_pixel_put(data, i, j, create_trgb(255, 69, 0, 0));
-				// printf("%s\n", "TOTO");
-			}
+			if (ft_intersec(dir, &sp2) == 1)
+				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 69, 0, 0));
+			else if (ft_intersec(dir, &sp) == 1)
+				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 69, 255, 0));
 			else
 				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 255, 255, 0));
-				j++;
+			j++;
 		}
 		i++;
 	}

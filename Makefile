@@ -6,13 +6,13 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/07 17:19:46 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/12 10:14:27 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	a.out
 
-SRCS	= 	main.c \
+SRCS	= 	srcs/main.c \
 			srcs/minirt_utils.c srcs/ft_set_env.c srcs/ft_vec_func.c \
 			srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c \
 			srcs/minirt_forms.c srcs/raytracing.c \

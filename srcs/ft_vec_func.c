@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 17:42:51 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:53:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ float 	ft_dot_product(float *u, float *v, int dim)
     result = 0.0;
     while (i < dim)
     {
-        result += u[i]*v[i];
+        result += u[i] * v[i];
         i++;
     }
     return (result);
@@ -62,6 +62,16 @@ void	ft_cross_product3(float *u, float *v, float *p)
 	p[0] = v[2] * u[1] - v[1] * u[2]; 
 	p[1] = v[0] * u[2] - v[2] * u[0]; 
 	p[2] = v[1] * u[0] - v[0] * u[1]; 
+}
+
+float	*ft_mult_vec3(float *u, float m)
+{
+	float *mult;
+
+	mult[0] = m * u[0]; 
+	mult[1] = m * u[1]; 
+	mult[2] = m * u[2]; 
+	return (mult);
 }
 
 void	ft_add_vec(float *u, float *v, float *p, int dim)
@@ -99,4 +109,13 @@ void	ft_normalize(float *vec, int dim)
 		vec[1] /= norm;
 		vec[2] /= norm;
 	}
+}
+
+float	*ft_get_normalize(float *vec, int dim)
+{
+	float *n;
+
+	n = vec;
+	ft_normalize(n, dim);
+	return (n);
 }

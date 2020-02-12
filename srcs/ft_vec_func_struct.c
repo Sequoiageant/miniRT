@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 16:42:05 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/12 10:09:59 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,22 @@ float 	ft_dot_product3(t_vec3 *u, t_vec3 *v)
 
 void	ft_cross_product3(t_vec3 *u, t_vec3 *v, t_vec3 *p)
 {
-	p->x = v->z * u->y - v->y * u->z; 
-	p->y = v->x * u->z - v->z * u->x; 
-	p->z = v->y * u->x - v->x * u->y; 
+	p->x = v->z * u->y - v->y * u->z;
+	p->y = v->x * u->z - v->z * u->x;
+	p->z = v->y * u->x - v->x * u->y;
 }
 
 void	ft_add_vec(t_vec3 *u, t_vec3 *v, t_vec3 *p)
 {
-	p->x = u->x + v->x; 
-	p->y = u->y + v->y; 
+	p->x = u->x + v->x;
+	p->y = u->y + v->y;
 	p->z = u->z + v->z;
 }
 
 void	ft_sub_vec(t_vec3 *u, t_vec3 *v, t_vec3 *p)
 {
-	p->x = u->x - v->x; 
-	p->y = u->y - v->y; 
+	p->x = u->x - v->x;
+	p->y = u->y - v->y;
 	p->z = u->z - v->z;
 }
 

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/06 17:34:17 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/12 16:41:43 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_func_choose(char *line, t_win *win)
 	char **tab;
 
 	tab = ft_split(line, ' ');
-	if (tab[0] == '\0')
+	if (tab[0] == 0)
 		return (1);
 	else if (ft_strcmp(tab[0], "R") == 0)
 		ft_set_win(tab, win);

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/07 13:42:27 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/10 18:38:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	ft_set_ambiant_light(char **tab)
 	al_color = ft_split(tab[2], ',');
 	if (al_color != NULL)
 	{
-		al.r = ft_atoi(al_color[0]);
-		al.g = ft_atoi(al_color[1]);
-		al.b = ft_atoi(al_color[2]);
+		al.color.r = ft_atoi(al_color[0]);
+		al.color.g = ft_atoi(al_color[1]);
+		al.color.b = ft_atoi(al_color[2]);
 		free(al_color);
 		al_color = NULL;
 	}
@@ -48,18 +48,18 @@ void	ft_set_camera(char **tab)
 	cam_set = ft_split(tab[1], ',');
 	if (cam_set != NULL)
 	{
-		cam.x = ft_atof(cam_set[0]);
-		cam.y = ft_atof(cam_set[1]);
-		cam.z = ft_atof(cam_set[2]);
+		cam.pos.x = ft_atof(cam_set[0]);
+		cam.pos.y = ft_atof(cam_set[1]);
+		cam.pos.z = ft_atof(cam_set[2]);
 		free(cam_set);
 		cam_set = NULL;
 	}
 	cam_set = ft_split(tab[2], ',');
 	if (cam_set != NULL)
 	{
-		cam.or_x = ft_atof(cam_set[0]);
-		cam.or_y = ft_atof(cam_set[1]);
-		cam.or_z = ft_atof(cam_set[2]);
+		cam.dir.x = ft_atof(cam_set[0]);
+		cam.dir.y = ft_atof(cam_set[1]);
+		cam.dir.z = ft_atof(cam_set[2]);
 		free(cam_set);
 		cam_set = NULL;
 	}
@@ -74,9 +74,9 @@ void	ft_set_sphere(char **tab)
 	sp_set = ft_split(tab[1], ',');
 	if (sp_set != NULL)
 	{
-		sp.x = ft_atof(sp_set[0]);
-		sp.y = ft_atof(sp_set[1]);
-		sp.z = ft_atof(sp_set[2]);
+		sp.pos.x = ft_atof(sp_set[0]);
+		sp.pos.y = ft_atof(sp_set[1]);
+		sp.pos.z = ft_atof(sp_set[2]);
 		free(sp_set);
 		sp_set = NULL;
 	}
@@ -84,9 +84,9 @@ void	ft_set_sphere(char **tab)
 	sp_set = ft_split(tab[3], ',');
 	if (sp_set != NULL)
 	{
-		sp.r = ft_atof(sp_set[0]);
-		sp.g = ft_atof(sp_set[1]);
-		sp.b = ft_atof(sp_set[2]);
+		sp.color.r = ft_atof(sp_set[0]);
+		sp.color.g = ft_atof(sp_set[1]);
+		sp.color.b = ft_atof(sp_set[2]);
 		free(sp_set);
 		sp_set = NULL;
 	}
