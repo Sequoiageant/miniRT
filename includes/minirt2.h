@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 18:41:39 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:35:09 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@
 # define NB_OBJ		5
 # define NB_ENV		4
 
-# define P_R		"R"
-# define P_A		"A"
-# define P_C		"c"
-# define P_L		"l"
 # define P_SP		"sp"
 # define P_PL		"pl"
 # define P_SQ		"sq"
@@ -257,7 +253,7 @@ typedef struct		s_triangle
 
 typedef struct		s_object
 {
-	enum e_obj		type;
+	char		*type;
 	union
 	{
 		t_sp		sp;
@@ -265,6 +261,7 @@ typedef struct		s_object
 		t_sq		sq;
 		t_cy		cy;
 		t_tr		tr;
+		enum e_bool	err;
 	}				u_obj;
 	struct s_object	*next;
 }					t_obj;
@@ -272,12 +269,11 @@ typedef struct		s_object
 /*
 ** ------------------------------- Environment ------------------------------
 */
-typedef	int			(*t_func)(t_win *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **);
+typedef	int			(*t_func)(t_win *, char *, t_stm *);
 void				ft_set_win(char **tab, t_win *win);
 void				ft_set_ambiant_light(char **tab);
 void				ft_set_camera(char **tab);
-int					set_sp(char **tab, t_obj **objlst);
+void				ft_set_sphere(char **tab);
 
 /*
 ** --------------------------------- Vectors --------------------------------

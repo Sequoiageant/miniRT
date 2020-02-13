@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/12 10:14:27 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/13 19:33:55 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,15 +14,20 @@ NAME	=	a.out
 
 SRCS	= 	srcs/main.c \
 			srcs/minirt_utils.c srcs/ft_set_env.c srcs/ft_vec_func.c \
-			srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c \
 			srcs/minirt_forms.c srcs/raytracing.c \
 			srcs/ft_atof.c
+
+GNL_SRCS	= 	srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c
+
+MAINTEST 	=	test.c
 
 TESTFILE 	=	scene.rt
 
 INCLUDES 	=	./includes
 
-MINIDIR 	=	./minilibx_opengl_20191021
+LMX_DIR 	=	./minilibx_opengl_20191021
+
+LINUX_LMX 	=	./minilibx
 
 HEAD 		= $(INCLUDES)/minirt.h
 
@@ -38,9 +43,9 @@ LDFLAGS		= -L. -lftprintf
 
 SANITIZE	= -g
 
-LDFLAGS		= -L $(MINIDIR) -l mlx
+LDFLAGS		= -L $(LMX_DIR) -lmlx
 
-MINIFLAGS	= -framework OpenGL -framework AppKit
+LMX_FLAGS	= -framework OpenGL -framework AppKit
 
 ## for libft compilation w/o chained list functions ##
 LIBFT_DIR 	= libft/
@@ -56,13 +61,16 @@ $(LIBFT):
 
 $(MLX):
 		@echo "\x1b[1m\x1b[31m--> Compiling mlx...\x1b[0m"
-		@(cd $(MINIDIR) && $(MAKE))
+		@(cd $(LMX_DIR) && $(MAKE))
 
-$(NAME):	$(HEAD) $(SRCS) $(MLX) $(LIBFT)
-			$(CC) -I $(INCLUDES) -I $(MINIDIR) $(LDFLAGS) $(MINIFLAGS) $(SRCS) $(LIBFT) -I $(LIBFT_DIR)
+$(NAME):	$(HEAD) $(SRCS) $(GNL_SRCS) $(MLX) $(LIBFT)
+			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS) $(LMX_FLAGS)
+
+test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
+			$(CC) $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)
 
 # $(OBJS):	%.o: %.c $(HEAD)
-# 			$(CC) -c -I $(INCLUDES) -I $(MINIDIR) $(SANITIZE) $(LDFLAGS) $(MINIFLAGS) $< -o $@
+# 			$(CC) -c -I $(INCLUDES) -I $(LMX_DIR) $(SANITIZE) $(LDFLAGS) $(LMX_FLAGS) $< -o $@
 # 			@echo "\x1b[1m\x1b[32m-> $@ compiled\x1b[0m"
 clean:
 	@(cd $(LIBFT_DIR) && $(MAKE) $@)
@@ -76,4 +84,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY:		all exec clean fclean re bonus
+.PHONY:		all exec clean fclean re bonus test

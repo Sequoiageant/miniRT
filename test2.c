@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/04 19:06:06 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 16:32:14 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:40:09 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	set_env(t_win *win, char *env, t_stm *machine)
 		if (*env == str_env[i])
 		{
 			printf("[%c] -> ENV\n", str_env[i]);
+			machine->obj = 0;
 			return (1);
 		}
 		i++;
@@ -97,6 +98,7 @@ int	set_obj(t_win *win, char *obj, t_stm *machine)
 		if (ft_strnequ(obj, str_obj[i], len) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
+			machine->obj |= (1 << i);
 			return (len);
 		}
 		i++;
@@ -115,6 +117,7 @@ int	parser(char **line, t_win *win, int fd)
 
 	ret = 1;
 	machine.state = OBJECT;
+	machine.obj = 0;
 	while (ret > 0)
 	{	
 		ret = get_next_line(fd, line);
@@ -124,8 +127,7 @@ int	parser(char **line, t_win *win, int fd)
 			if (tab)
 				if (tab[0] == NULL)
 					machine.state = EMPTY;
-				if (func[machine.state](win, tab[0], &machine) == FAILURE)
-					return (FAILURE);
+				func[machine.state](win, tab[0], &machine);
 				free(*line);
 				free(tab);
 			}
@@ -133,22 +135,21 @@ int	parser(char **line, t_win *win, int fd)
 		return (SUCCESS);
 	}
 
-	int	main(int ac, char **av)
+	int main(int argc, char const *argv[])
 	{
 		int		fd;
 		char	*line;
 		t_win	win;
 
-		if (ac == 2)
-		{
-			fd = open(av[1], O_RDONLY);
-			if (fd != -1)
-			{
-				parser(&line, &win, fd);
-				close(fd);
-			}
-		}
+		if (argc == 1)
+			fd = 0;
+		else if (argc == 2)
+			fd = open(argv[1], O_RDONLY);
 		else
-			return (FAILURE);
-		return (SUCCESS);
+			return (2);
+		parser(&line, &win, fd);
+
+		if (argc == 2)
+			close(fd);
+		return 0;
 	}

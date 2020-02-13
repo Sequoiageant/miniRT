@@ -6,30 +6,70 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/12 16:41:43 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/13 20:01:56 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	ft_func_choose(char *line, t_win *win)
+int		ft_strnequ(char *s1, char *s2, int n)
 {
-	char **tab;
+	int	i;
 
-	tab = ft_split(line, ' ');
-	if (tab[0] == 0)
-		return (1);
-	else if (ft_strcmp(tab[0], "R") == 0)
-		ft_set_win(tab, win);
-	else if (ft_strcmp(tab[0], "A") == 0)
-		ft_set_ambiant_light(tab);
-	else if (ft_strcmp(tab[0], "c") == 0)
-		ft_set_camera(tab);
-	else if (ft_strcmp(tab[0], "sp") == 0)
-		ft_set_sphere(tab);
-	else
-		return (0);
-	return (1);
+	i = 0;
+	while (i < n && s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
+int	set_pl(char **tab, t_obj **objlst)
+{
+	printf("	-->%s\n", tab[0]);
+	return (0);
+}
+
+int	set_sq(char **tab, t_obj **objlst)
+{
+	printf("	-->%s\n", tab[0]);
+	return (0);
+}
+
+int	set_cy(char **tab, t_obj **objlst)
+{
+	printf("	-->%s\n", tab[0]);
+	return (0);
+}
+
+int	set_tr(char **tab, t_obj **objlst)
+{
+	printf("	-->%s\n", tab[0]);
+	return (0);
+}
+
+int	ft_list_objects(char **tab, t_win *win)
+{
+	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
+	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
+	t_obj 			*objlst;
+	int				len;
+	int				i;
+
+	i = 0;
+	while (i < NB_OBJ)
+	{
+		len = 2;
+		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
+		{
+			func[i](tab, &objlst);
+			return (len);
+		}
+		i++;
+	}
+	return (0);
 }
 
 int ft_close(t_data *data)
@@ -76,31 +116,112 @@ int	ft_launch_window(t_win *win)
 	return (0);
 }
 
-int main(int argc, char const *argv[])
+int	error(t_win *win, char **tab, t_stm *machine)
+{
+	(void)win;
+	printf("[%s] -> ERROR\n", tab[0]);
+	machine->state = OBJECT;
+	return (0);
+}
+
+int	empty(t_win *win, char **tab, t_stm *machine)
+{
+	(void)win;
+	printf("[%s] -> EMPTY\n", tab[0]);
+	machine->state = OBJECT;
+	return (0);
+}
+
+int	set_env(t_win *win, char **tab, t_stm *machine)
+{
+	(void)win;
+
+	static char	str_env[NB_ENV] = STR_ENV;
+	int			i;
+
+	i = 0;
+	while (i < NB_ENV)
+	{
+		if ((*tab)[0] == str_env[i])
+		{
+			printf("[%c] -> ENV\n", str_env[i]);
+			return (1);
+		}
+		i++;
+	}
+	error(win, tab, machine);
+	return (0);
+}
+
+int	set_obj(t_win *win, char **tab, t_stm *machine)
+{
+	(void)win;
+
+	static char	*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
+	int			len;
+	int			i;
+
+	i = 0;
+	while (i < NB_OBJ)
+	{
+		len = 2;
+		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
+		{
+			printf("[%s] -> OBJECT\n", str_obj[i]);
+			ft_list_objects(tab, win);
+			return (len);
+		}
+		i++;
+	}
+	set_env(win, tab, machine);
+	return (0);
+}
+
+int	parser(char **line, t_win *win, int fd)
+{
+	t_stm			machine;
+	int				ret;
+	char			**tab;
+	static t_func	func[NB_STATE] = {set_env, set_obj, empty, error};
+
+	ret = 1;
+	machine.state = OBJECT;
+	while (ret > 0)
+	{	
+		ret = get_next_line(fd, line);
+		if (ret != -1)
+		{
+			tab = ft_split(*line, ' ');
+			if (tab)
+			{
+				if (tab[0] == NULL)
+					machine.state = EMPTY;
+				if (func[machine.state](win, tab, &machine) == FAILURE)
+					return (FAILURE);
+				free(*line);
+				free(tab);
+			}
+		}
+	}
+	return (SUCCESS);
+}
+
+int	main(int ac, char **av)
 {
 	int		fd;
 	char	*line;
-	int		ret;
 	t_win	win;
 
-	if (argc == 1)
-		fd = 0;
-	else if (argc == 2)
-		fd = open(argv[1], O_RDONLY);
-	else
-		return (2);
-	ret = 1;
-	while (ret > 0)
-	{	
-		ret = get_next_line(fd, &line);
-		if (ret != -1)
+	if (ac == 2)
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd != -1)
 		{
-			ft_func_choose(line, &win);
-			free(line);
+			parser(&line, &win, fd);
+			close(fd);
 		}
 	}
-	ft_launch_window(&win);
-	if (argc == 2)
-		close(fd);
-	return 0;
+	else
+		return (FAILURE);
+	return (SUCCESS);
 }
