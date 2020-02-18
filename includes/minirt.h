@@ -258,26 +258,34 @@ typedef struct		s_triangle
 typedef struct		s_object
 {
 	enum e_obj		type;
-	union
-	{
-		t_sp		sp;
-		t_pl		pl;
-		t_sq		sq;
-		t_cy		cy;
-		t_tr		tr;
-	}				u_obj;
+	void			*content;
+	// union
+	// {
+	// 	t_sp		sp;
+	// 	t_pl		pl;
+	// 	t_sq		sq;
+	// 	t_cy		cy;
+	// 	t_tr		tr;
+	// }				u_obj;
 	struct s_object	*next;
 }					t_obj;
+
+typedef struct		s_list2
+{
+    t_obj	*first;
+}					t_list2;
 
 /*
 ** ------------------------------- Environment ------------------------------
 */
+
 typedef	int			(*t_func)(t_win *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **);
 void				ft_set_win(char **tab, t_win *win);
 void				ft_set_ambiant_light(char **tab);
 void				ft_set_camera(char **tab);
 int					set_sp(char **tab, t_obj **objlst);
+int					set_sq(char **tab, t_obj **objlst);
 
 /*
 ** --------------------------------- Vectors --------------------------------

@@ -32,12 +32,6 @@ int	set_pl(char **tab, t_obj **objlst)
 	return (0);
 }
 
-int	set_sq(char **tab, t_obj **objlst)
-{
-	printf("	-->%s\n", tab[0]);
-	return (0);
-}
-
 int	set_cy(char **tab, t_obj **objlst)
 {
 	printf("	-->%s\n", tab[0]);
@@ -50,25 +44,18 @@ int	set_tr(char **tab, t_obj **objlst)
 	return (0);
 }
 
-int	ft_list_objects(char **tab, t_win *win)
+int	ft_list_objects(char **tab, t_win *win, int i)
 {
-	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
-	t_obj 			*objlst;
-	int				len;
-	int				i;
+	static t_obj	*objlst;
 
-	i = 0;
-	while (i < NB_OBJ)
+	func[i](tab, &objlst);
+	while (objlst->next != NULL)
 	{
-		len = 2;
-		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
-		{
-			func[i](tab, &objlst);
-			return (len);
-		}
-		i++;
+		printf("	-->%d\n", objlst->type);
+		objlst = objlst->next;
 	}
+	printf("%s\n", "TOTO");
 	return (0);
 }
 
@@ -168,7 +155,7 @@ int	set_obj(t_win *win, char **tab, t_stm *machine)
 		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
-			ft_list_objects(tab, win);
+			ft_list_objects(tab, win, i);
 			return (len);
 		}
 		i++;

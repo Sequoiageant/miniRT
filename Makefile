@@ -35,7 +35,7 @@ OBJS		= $(SRCS:.c=.o)
 
 OBJS_BONUS	= $(BONUS:.c=.o)
 
-CC			= clang
+CC			= gcc
 
 CFLAGS		= -Wall -Wextra -Werror
 
@@ -47,6 +47,7 @@ LDFLAGS		= -L $(LMX_DIR) -lmlx
 
 LMX_FLAGS	= -framework OpenGL -framework AppKit
 
+LINUXFLAGS	= -lmlx -lX11 -lXext -lm 
 ## for libft compilation w/o chained list functions ##
 LIBFT_DIR 	= libft/
 LIBFT 		= $(LIBFT_DIR)libft.a
@@ -64,7 +65,7 @@ $(MLX):
 		@(cd $(LMX_DIR) && $(MAKE))
 
 $(NAME):	$(HEAD) $(SRCS) $(GNL_SRCS) $(MLX) $(LIBFT)
-			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS) $(LMX_FLAGS)
+			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LINUXFLAGS)
 
 test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
 			$(CC) $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)
