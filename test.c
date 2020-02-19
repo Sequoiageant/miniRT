@@ -6,11 +6,27 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/04 19:06:06 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 16:32:14 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/19 14:23:33 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	ft_lstsize(t_obj *lst)
+{
+	int size;
+
+	size = 0;
+	if (lst != NULL)
+	{
+		while (lst)
+		{
+			size++;
+			lst = lst->next;
+		}
+	}
+return (size);
+}
 
 int		ft_strnequ(char *s1, char *s2, int n)
 {
@@ -45,23 +61,23 @@ void	print_bin(int nb)
 	printf("]\n");
 }
 
-int	error(t_win *win, char *obj, t_stm *machine)
+int	error(t_win *win, char **tab, t_stm *machine, t_obj **objlst)
 {
 	(void)win;
-	printf("[%s] -> ERROR\n", obj);
+	printf("[%s] -> ERROR\n", tab[0]);
 	machine->state = OBJECT;
 	return (0);
 }
 
-int	empty(t_win *win, char *obj, t_stm *machine)
+int	empty(t_win *win, char **tab, t_stm *machine, t_obj **objlst)
 {
 	(void)win;
-	printf("[%s] -> EMPTY\n", obj);
+	printf("[%s] -> EMPTY\n", tab[0]);
 	machine->state = OBJECT;
 	return (0);
 }
 
-int	set_env(t_win *win, char *env, t_stm *machine)
+int	set_env(t_win *win, char **tab, t_stm *machine, t_obj **objlst)
 {
 	(void)win;
 
@@ -71,18 +87,33 @@ int	set_env(t_win *win, char *env, t_stm *machine)
 	i = 0;
 	while (i < NB_ENV)
 	{
-		if (*env == str_env[i])
+		if ((*tab)[0] == str_env[i])
 		{
 			printf("[%c] -> ENV\n", str_env[i]);
 			return (1);
 		}
 		i++;
 	}
-	error(win, env, machine);
+	error(win, tab, machine, objlst);
 	return (0);
 }
 
-int	set_obj(t_win *win, char *obj, t_stm *machine)
+int	ft_list_objects(char **tab, t_win *win, int i, t_obj **objlst)
+{
+	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
+
+	func[i](tab, objlst);
+	while ((*objlst))
+	{
+		printf("	-->%d\n", (*objlst)->type);
+		(*objlst) = (*objlst)->next;
+	}
+	printf("%d\n", ft_lstsize((*objlst)));
+
+	return (0);
+}
+
+int	set_obj(t_win *win, char **tab, t_stm *machine, t_obj **objlst)
 {
 	(void)win;
 
@@ -94,27 +125,29 @@ int	set_obj(t_win *win, char *obj, t_stm *machine)
 	while (i < NB_OBJ)
 	{
 		len = 2;
-		if (ft_strnequ(obj, str_obj[i], len) == TRUE)
+		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
+			ft_list_objects(tab, win, i, objlst);
 			return (len);
 		}
 		i++;
 	}
-	set_env(win, obj, machine);
+	set_env(win, tab, machine, objlst);
 	return (0);
 }
 
 int	parser(char **line, t_win *win, int fd)
 {
 	t_stm			machine;
-	t_obj			obj;
+	t_obj			*objlst;
 	int				ret;
 	char			**tab;
 	static t_func	func[NB_STATE] = {set_env, set_obj, empty, error};
 
 	ret = 1;
 	machine.state = OBJECT;
+	objlst = NULL;
 	while (ret > 0)
 	{	
 		ret = get_next_line(fd, line);
@@ -122,33 +155,35 @@ int	parser(char **line, t_win *win, int fd)
 		{
 			tab = ft_split(*line, ' ');
 			if (tab)
+			{
 				if (tab[0] == NULL)
 					machine.state = EMPTY;
-				if (func[machine.state](win, tab[0], &machine) == FAILURE)
+				if (func[machine.state](win, tab, &machine, &objlst) == FAILURE)
 					return (FAILURE);
 				free(*line);
 				free(tab);
 			}
 		}
-		return (SUCCESS);
 	}
+	return (SUCCESS);
+}
 
-	int	main(int ac, char **av)
+int	main(int ac, char **av)
+{
+	int		fd;
+	char	*line;
+	t_win	win;
+
+	if (ac == 2)
 	{
-		int		fd;
-		char	*line;
-		t_win	win;
-
-		if (ac == 2)
+		fd = open(av[1], O_RDONLY);
+		if (fd != -1)
 		{
-			fd = open(av[1], O_RDONLY);
-			if (fd != -1)
-			{
-				parser(&line, &win, fd);
-				close(fd);
-			}
+			parser(&line, &win, fd);
+			close(fd);
 		}
-		else
-			return (FAILURE);
-		return (SUCCESS);
 	}
+	else
+		return (FAILURE);
+	return (SUCCESS);
+}

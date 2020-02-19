@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 18:41:39 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/19 19:37:17 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,9 +176,10 @@ typedef struct		s_ambiant_light
 
 typedef struct		s_light
 {
-	double	lum;
-	t_vec3	pos;
-	t_col	color;
+	double			lum;
+	t_vec3			pos;
+	t_col			color;
+	struct	s_light	*next;
 }					t_light;
 
 /*
@@ -187,9 +188,10 @@ typedef struct		s_light
 
 typedef struct		s_camera
 {
-	t_vec3	pos;
-	t_vec3	dir;
-	int		fov;
+	t_vec3				pos;
+	t_vec3				dir;
+	int					fov;
+	struct	s_camera	*next;
 }					t_cam;
 
 /*
@@ -225,8 +227,8 @@ typedef struct		s_plane
 typedef struct		s_square
 {
 	t_vec3	pos;
-	double	h;
 	t_vec3	dir;
+	double	h;
 	t_col	color;
 }					t_sq;
 
@@ -237,10 +239,10 @@ typedef struct		s_square
 typedef struct		s_cylindre
 {
 	t_vec3	pos;
-	double	h;
-	double	dia;
 	t_vec3	dir;
 	t_col	color;
+	double	dia;
+	double	h;
 }					t_cy;
 
 /*
@@ -258,22 +260,10 @@ typedef struct		s_triangle
 typedef struct		s_object
 {
 	enum e_obj		type;
+	double			z_pos;
 	void			*content;
-	// union
-	// {
-	// 	t_sp		sp;
-	// 	t_pl		pl;
-	// 	t_sq		sq;
-	// 	t_cy		cy;
-	// 	t_tr		tr;
-	// }				u_obj;
 	struct s_object	*next;
 }					t_obj;
-
-typedef struct		s_list2
-{
-    t_obj	*first;
-}					t_list2;
 
 /*
 ** ------------------------------- Environment ------------------------------
@@ -281,11 +271,17 @@ typedef struct		s_list2
 
 typedef	int			(*t_func)(t_win *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **);
-void				ft_set_win(char **tab, t_win *win);
-void				ft_set_ambiant_light(char **tab);
-void				ft_set_camera(char **tab);
+typedef	int			(*t_func3)(char **);
+int					set_res(char **tab);
+int					set_light(char **tab);
+int					set_al(char **tab);
+int					set_cam(char **tab);
 int					set_sp(char **tab, t_obj **objlst);
 int					set_sq(char **tab, t_obj **objlst);
+int					set_pl(char **tab, t_obj **objlst);
+int					set_cy(char **tab, t_obj **objlst);
+int					set_tr(char **tab, t_obj **objlst);
+
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -305,6 +301,7 @@ float				*ft_mult_vec3(float *u, float m);
 ** ---------------------------------- Utils ---------------------------------
 */
 
+int					ft_launch_window(t_win *win);
 void				ft_pixel_put(t_data *data, int x, int y, int color);
 int					create_trgb(int t, int r, int g, int b);
 double				ft_atof(const char *str);

@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/13 19:33:55 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/19 13:36:01 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS	= 	srcs/main.c \
 
 GNL_SRCS	= 	srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c
 
-MAINTEST 	=	test.c
+MAINTEST 	=	test.c srcs/ft_set_env.c srcs/ft_atof.c
 
 TESTFILE 	=	scene.rt
 
@@ -43,9 +43,7 @@ LDFLAGS		= -L. -lftprintf
 
 SANITIZE	= -g
 
-LDFLAGS		= -L $(LMX_DIR) -lmlx
-
-LMX_FLAGS	= -framework OpenGL -framework AppKit
+LDFLAGS		= -L $(LMX_DIR) -lmlx -framework OpenGL -framework AppKit
 
 LINUXFLAGS	= -lmlx -lX11 -lXext -lm 
 ## for libft compilation w/o chained list functions ##
@@ -65,7 +63,7 @@ $(MLX):
 		@(cd $(LMX_DIR) && $(MAKE))
 
 $(NAME):	$(HEAD) $(SRCS) $(GNL_SRCS) $(MLX) $(LIBFT)
-			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LINUXFLAGS)
+			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS)
 
 test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
 			$(CC) $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)

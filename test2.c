@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   test2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/04 19:06:06 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 15:40:09 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/19 14:21:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int	parser(char **line, t_win *win, int fd)
 		{
 			tab = ft_split(*line, ' ');
 			if (tab)
+			{
 				if (tab[0] == NULL)
 					machine.state = EMPTY;
 				func[machine.state](win, tab[0], &machine);
@@ -132,24 +133,25 @@ int	parser(char **line, t_win *win, int fd)
 				free(tab);
 			}
 		}
-		return (SUCCESS);
 	}
+	return (SUCCESS);
+}
 
-	int main(int argc, char const *argv[])
-	{
-		int		fd;
-		char	*line;
-		t_win	win;
+int main(int argc, char const *argv[])
+{
+	int		fd;
+	char	*line;
+	t_win	win;
 
-		if (argc == 1)
-			fd = 0;
-		else if (argc == 2)
-			fd = open(argv[1], O_RDONLY);
-		else
-			return (2);
-		parser(&line, &win, fd);
+	if (argc == 1)
+		fd = 0;
+	else if (argc == 2)
+		fd = open(argv[1], O_RDONLY);
+	else
+		return (2);
+	parser(&line, &win, fd);
 
-		if (argc == 2)
-			close(fd);
-		return 0;
-	}
+	if (argc == 2)
+		close(fd);
+	return 0;
+}

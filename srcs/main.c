@@ -6,11 +6,25 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 20:01:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/19 19:38:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	ft_lstsize(t_obj *lst)
+{
+	int size;
+
+	size = 0;
+	if (lst != NULL)
+		while (lst)
+		{
+			size++;
+			lst = lst->next;
+		}
+	return (size);
+}
 
 int		ft_strnequ(char *s1, char *s2, int n)
 {
@@ -26,21 +40,26 @@ int		ft_strnequ(char *s1, char *s2, int n)
 	return (TRUE);
 }
 
-int	set_pl(char **tab, t_obj **objlst)
+void	print_list(t_obj *objlst)
 {
-	printf("	-->%s\n", tab[0]);
-	return (0);
+	printf("size : %d\n", ft_lstsize(objlst));
+	// while (objlst)
+	// {
+	// 	printf("	-->%d\n", objlst->type);
+	// 	objlst = objlst->next;
+	// }
 }
 
-int	set_cy(char **tab, t_obj **objlst)
+void	sort_list(t_obj *objlst)
 {
-	printf("	-->%s\n", tab[0]);
-	return (0);
+	print_list(objlst);
 }
 
-int	set_tr(char **tab, t_obj **objlst)
+int	ft_list_env(char **tab, t_win *win, int i)
 {
-	printf("	-->%s\n", tab[0]);
+	static t_func3	func[NB_ENV] = {set_res, set_al, set_cam, set_light};
+
+	func[i](tab);
 	return (0);
 }
 
@@ -50,12 +69,7 @@ int	ft_list_objects(char **tab, t_win *win, int i)
 	static t_obj	*objlst;
 
 	func[i](tab, &objlst);
-	while (objlst->next != NULL)
-	{
-		printf("	-->%d\n", objlst->type);
-		objlst = objlst->next;
-	}
-	printf("%s\n", "TOTO");
+	sort_list(objlst);
 	return (0);
 }
 
@@ -132,6 +146,7 @@ int	set_env(t_win *win, char **tab, t_stm *machine)
 		if ((*tab)[0] == str_env[i])
 		{
 			printf("[%c] -> ENV\n", str_env[i]);
+			ft_list_env(tab, win, i);
 			return (1);
 		}
 		i++;
