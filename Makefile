@@ -6,14 +6,15 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/19 13:36:01 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/20 11:26:26 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	a.out
 
 SRCS	= 	srcs/main.c \
-			srcs/minirt_utils.c srcs/ft_set_env.c srcs/ft_vec_func.c \
+			srcs/minirt_utils.c srcs/ft_vec_func.c \
+			srcs/ft_set_env.c srcs/ft_set_obj.c \
 			srcs/minirt_forms.c srcs/raytracing.c \
 			srcs/ft_atof.c
 
@@ -35,17 +36,21 @@ OBJS		= $(SRCS:.c=.o)
 
 OBJS_BONUS	= $(BONUS:.c=.o)
 
+ifeq ($(UNAME_S),Linux)
 CC			= gcc
+LDFLAGS		= -lmlx -lX11 -lXext -lm 
+else
+CC			= clang
+LDFLAGS		= -L $(LMX_DIR) -lmlx -framework OpenGL -framework AppKit
+endif
 
 CFLAGS		= -Wall -Wextra -Werror
 
-LDFLAGS		= -L. -lftprintf
+PRINTF		= -L. -lftprintf
 
 SANITIZE	= -g
 
-LDFLAGS		= -L $(LMX_DIR) -lmlx -framework OpenGL -framework AppKit
 
-LINUXFLAGS	= -lmlx -lX11 -lXext -lm 
 ## for libft compilation w/o chained list functions ##
 LIBFT_DIR 	= libft/
 LIBFT 		= $(LIBFT_DIR)libft.a
@@ -66,7 +71,7 @@ $(NAME):	$(HEAD) $(SRCS) $(GNL_SRCS) $(MLX) $(LIBFT)
 			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS)
 
 test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
-			$(CC) $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)
+			$(CC) -g $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)
 
 # $(OBJS):	%.o: %.c $(HEAD)
 # 			$(CC) -c -I $(INCLUDES) -I $(LMX_DIR) $(SANITIZE) $(LDFLAGS) $(LMX_FLAGS) $< -o $@

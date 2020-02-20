@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/19 19:37:17 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/20 18:49:12 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 # define CY			0x000008
 # define TR			0x000010
 
-
 /*
 ** ----------------------------------- Enum ----------------------------------
 */
@@ -99,7 +98,7 @@ typedef struct		s_state_machine
 ** mlibx structure
 */
 
-typedef struct		s_data
+typedef struct		s_mlx
 {
 	void	*mlx_ptr;
 	void	*mlx_win;
@@ -108,7 +107,7 @@ typedef struct		s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}					t_data;
+}					t_mlx;
 
 /*
 ** image structure <== to be deleted ??
@@ -179,7 +178,7 @@ typedef struct		s_light
 	double			lum;
 	t_vec3			pos;
 	t_col			color;
-	struct	s_light	*next;
+	struct s_light	*next;
 }					t_light;
 
 /*
@@ -191,7 +190,7 @@ typedef struct		s_camera
 	t_vec3				pos;
 	t_vec3				dir;
 	int					fov;
-	struct	s_camera	*next;
+	struct s_camera		*next;
 }					t_cam;
 
 /*
@@ -257,31 +256,62 @@ typedef struct		s_triangle
 	t_col	color;
 }					t_tr;
 
-typedef struct		s_object
+/*
+** objects linked list
+*/
+
+/*typedef struct		s_object
 {
 	enum e_obj		type;
 	double			z_pos;
 	void			*content;
 	struct s_object	*next;
 }					t_obj;
+*/
+typedef struct		s_object
+{
+	enum e_obj		type;
+	double			z_pos;
+	union
+	{
+		t_sp		sp;
+		t_pl		pl;
+		t_sq		sq;
+		t_cy		cy;
+		t_tr		tr;
+	}				u_obj;
+	struct s_object	*next;
+}					t_obj;
+
+/*
+** All environment + objects structure
+*/
+
+typedef struct		s_data
+{
+	t_win	win;
+	t_obj	*objlst;
+	t_light	*lights;
+	t_ambl	al;
+	t_cam	*cams;
+}					t_data;
 
 /*
 ** ------------------------------- Environment ------------------------------
 */
 
-typedef	int			(*t_func)(t_win *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **);
-typedef	int			(*t_func3)(char **);
-int					set_res(char **tab);
-int					set_light(char **tab);
-int					set_al(char **tab);
-int					set_cam(char **tab);
-int					set_sp(char **tab, t_obj **objlst);
-int					set_sq(char **tab, t_obj **objlst);
-int					set_pl(char **tab, t_obj **objlst);
-int					set_cy(char **tab, t_obj **objlst);
-int					set_tr(char **tab, t_obj **objlst);
-
+typedef	int			(*t_func)(t_data *, char **, t_stm *);
+typedef	int			(*t_func2)(char **, t_obj **, t_data *);
+typedef	int			(*t_func3)(char **, t_data *);
+int					set_res(char **tab, t_data *data);
+int					set_light(char **tab, t_data *data);
+int					set_al(char **tab, t_data *data);
+int					set_cam(char **tab, t_data *data);
+int					set_sp(char **tab, t_obj **objlst, t_data *data);
+int					set_sq(char **tab, t_obj **objlst, t_data *data);
+int					set_pl(char **tab, t_obj **objlst, t_data *data);
+int					set_cy(char **tab, t_obj **objlst, t_data *data);
+int					set_tr(char **tab, t_obj **objlst, t_data *data);
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -301,25 +331,26 @@ float				*ft_mult_vec3(float *u, float m);
 ** ---------------------------------- Utils ---------------------------------
 */
 
-int					ft_launch_window(t_win *win);
-void				ft_pixel_put(t_data *data, int x, int y, int color);
+int					ft_launch_window(t_data *data);
+void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					create_trgb(int t, int r, int g, int b);
 double				ft_atof(const char *str);
+void				ft_free_tab2(char **tab);
 
 /*
 ** ---------------------------------- forms ---------------------------------
 */
 
-void				ft_draw_circle(t_data *data);
-void				ft_draw_square(t_data *data);
-void				ft_draw_triangle(t_data *data);
-void				ft_draw_sphere(t_data *data);
-void				ft_draw_hex(t_data *data);
+void				ft_draw_circle(t_mlx *mlx);
+void				ft_draw_square(t_mlx *mlx);
+void				ft_draw_triangle(t_mlx *mlx);
+void				ft_draw_sphere(t_mlx *mlx);
+void				ft_draw_hex(t_mlx *mlx);
 
 /*
 ** ------------------------------- Ray tracing ------------------------------
 */
 
-void				ft_raytracing(t_data *data, t_win *win);
+void				ft_raytracing(t_mlx *mlx, t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/11 14:24:41 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/20 19:28:36 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@
 **     Paint the pixel with that color (4)
 */
 
-int		ft_intersec(float *dir, t_sp *sp)
+int		ft_intersec(float *dir, t_sp sp)
 {
-	(void)sp;
 	float origin[3] = {0.0, 0.0, 0.0};
-	float center[3] = {sp->pos.x, sp->pos.y, sp->pos.z};
+	float center[3] = {sp.pos.x, sp.pos.y, sp.pos.z};
 	float oc[3];
-	float r = sp->dia;
+	float r = sp.dia;
 	float a;
 	float b;
 	float c;
@@ -50,19 +49,45 @@ int		ft_intersec(float *dir, t_sp *sp)
 	return (0);
 }
 
-void	ft_raytracing(t_data *data, t_win *win)
+void	ft_raytracing(t_mlx *mlx, t_data *data)
 {
+	t_win	win;
 	float	dir[3];
-	t_sp	sp;
-	t_sp	sp2;
-	t_light	li;
 	float	fov;
 	float	i;
 	float	j;
-	float 	height;
-	float 	width;
 
-	sp.pos.x = 6.0;
+	win = data->win;
+	fov = 60 * M_PI / 180;
+	while (data->objlst)
+	{
+		if (data->objlst->type == SPHERE)
+		{
+			i = 0;
+			while (i < win.w - 1)
+			{
+				j = 0;
+				while (j < win.h - 1)
+				{
+					dir[0] = i - win.w / 2;
+					dir[1] = j - win.h / 2;
+					dir[2] = -win.w / (2.0 * tan(fov / 2.0));
+					ft_normalize(dir, 3);
+
+						// ft_pixel_put(mlx, i, j, create_trgb((j/win.h)*255, 255, 255, 0));
+					if (ft_intersec(dir, data->objlst->u_obj.sp) == 1)
+						ft_pixel_put(mlx, i, j, create_trgb((j/win.h)*255, 69, 0, 0));
+					j++;
+				}
+				i++;
+			}
+		}
+		data->objlst = data->objlst->next;
+	}
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
+}
+
+/*	sp.pos.x = 6.0;
 	sp.pos.y = -2.0;
 	sp.pos.z = -25.0;
 	sp.dia = 8.0;	
@@ -71,38 +96,12 @@ void	ft_raytracing(t_data *data, t_win *win)
 	sp2.pos.y = 1000.0;
 	sp2.pos.z = -200.0;
 	sp2.dia = 2000;
+else if (ft_intersec(dir, &sp) == 1)
+ft_pixel_put(mlx, i, j, create_trgb((j/win.h)*255, 69, 255, 0));
+else
+ft_pixel_put(mlx, i, j, create_trgb((j/win.h)*255, 255, 255, 0));*/
 
-	li.lum = 0.9;
-	li.pos.x = 15;
-	li.pos.y = 60;
-	li.pos.z = -40;
-
-	fov = 60 * M_PI / 180;
-	i = 0;
-	while (i < win->w - 1)
-	{
-		j = 0;
-		while (j < win->h - 1)
-		{
-			dir[0] = i - win->w / 2;
-			dir[1] = j - win->h / 2;
-			dir[2] = -win->w / (2.0 * tan(fov / 2.0));
-			ft_normalize(dir, 3);
-
-			if (ft_intersec(dir, &sp2) == 1)
-				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 69, 0, 0));
-			else if (ft_intersec(dir, &sp) == 1)
-				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 69, 255, 0));
-			else
-				ft_pixel_put(data, i, j, create_trgb((j/win->h)*255, 255, 255, 0));
-			j++;
-		}
-		i++;
-	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
-}
-
-/*void	ft_raytracing(t_data *data, t_win *win)
+/*void	ft_raytracing(t_mlx *mlx, t_win *win)
 {
 int	cam_x = 0;
 	double	cam_y = 0;
@@ -121,7 +120,7 @@ int	cam_x = 0;
 	double	j;
 
 	i = 0;
-	while (i < win->w)
+	while (i < win.w)
 	{
 		j = 0;
 		while (j < win->h)
@@ -131,13 +130,13 @@ int	cam_x = 0;
 			x = xo * 2 - 1;
 			y = yo * 2 - 1;
 
-			ft_pixel_put(data, x, y, 0xFFFF00);
+			ft_pixel_put(mlx, x, y, 0xFFFF00);
 			j++;
 		}
 		i++;
 	}
 	ft_putnbr(i * j);
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 
 
 }

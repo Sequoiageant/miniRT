@@ -7,3 +7,4 @@ test/
 essai.c
 essai
 test3.c
+valgrind-out.txt

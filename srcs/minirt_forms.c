@@ -6,13 +6,13 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 15:48:03 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/04 17:27:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/20 12:58:45 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_draw_sphere(t_data *data)
+void	ft_draw_sphere(t_mlx *mlx)
 {
 	double phi;
 	double theta;
@@ -31,15 +31,15 @@ void	ft_draw_sphere(t_data *data)
 			x = cos(theta) * cos(phi) * R;
 			y = cos(theta) * sin(phi) * R;
 			z = sin(theta) * R;
-			ft_pixel_put(data, x + 400, y + 300, 0xFFFF00);
+			ft_pixel_put(mlx, x + 400, y + 300, 0xFFFF00);
 			theta += 0.5;
 		}
 		phi++;
 	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 }
 
-void	ft_draw_circle(t_data *data)
+void	ft_draw_circle(t_mlx *mlx)
 {
 	double	angle;
 	int		r;
@@ -54,16 +54,16 @@ void	ft_draw_circle(t_data *data)
 		{
 			x = r * cos(angle * M_PI / 180);
 			y = r * sin(angle * M_PI / 180);
-			// mlx_pixel_put(data->mlx_ptr, data->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
-			ft_pixel_put(data, x + 300, y + 300, create_trgb(255, (angle/360)*255, (angle/360)*255, 0));
+			// mlx_pixel_put(mlx->mlx_ptr, mlx->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
+			ft_pixel_put(mlx, x + 300, y + 300, create_trgb(255, (angle/360)*255, (angle/360)*255, 0));
 			angle += 0.1;
 		}
 		r--;
 	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 }
 
-void	ft_draw_square(t_data *data)
+void	ft_draw_square(t_mlx *mlx)
 {
 	// t_color	color;
 	int		x;
@@ -75,16 +75,16 @@ void	ft_draw_square(t_data *data)
 		y = 120;
 		while (y < 460)
 		{
-			ft_pixel_put(data, x, y, 0x00FF0000);
-			// mlx_pixel_put(data->mlx_ptr, data->mlx_win, i, j, color.r*color.g*color.b);
+			ft_pixel_put(mlx, x, y, 0x00FF0000);
+			// mlx_pixel_put(mlx->mlx_ptr, mlx->mlx_win, i, j, color.r*color.g*color.b);
 			y++;
 		}
 		x++;
 	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 }
 
-void	ft_draw_triangle(t_data *data)
+void	ft_draw_triangle(t_mlx *mlx)
 {
 	// t_color	color;
 	int		x;
@@ -96,15 +96,15 @@ void	ft_draw_triangle(t_data *data)
 		y = 400;
 		while (y < x)
 		{
-			ft_pixel_put(data, x, y, 0xFFFF00);
+			ft_pixel_put(mlx, x, y, 0xFFFF00);
 			y++;
 		}
 		x++;
 	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 }
 
-void	ft_draw_hex(t_data *data)
+void	ft_draw_hex(t_mlx *mlx)
 {
 	int length=150, i=0, j=0, k, l;
 
@@ -113,7 +113,7 @@ void	ft_draw_hex(t_data *data)
 		for(j = 0; j < 3*length; j++)
 		{
 			if(j>=k && j<=l)
-				ft_pixel_put(data, j, i, 0x00FF00);
+				ft_pixel_put(mlx, j, i, 0x00FF00);
 		}
 	}
 
@@ -122,8 +122,8 @@ void	ft_draw_hex(t_data *data)
 		for(j=0; j<3*length;j++)
 		{
 			if(j>=k && j<=l)
-				ft_pixel_put(data, j, i, 0xFFFF00);
+				ft_pixel_put(mlx, j, i, 0xFFFF00);
 		}
 	}
-	mlx_put_image_to_window(data, data->mlx_win, data->img, 0, 0);
+	mlx_put_image_to_window(mlx, mlx->mlx_win, mlx->img, 0, 0);
 }
