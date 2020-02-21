@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/20 18:55:54 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/21 16:00:05 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,6 @@ int	ft_list_objects(char **tab, t_data *data, int i)
 	static t_obj	*objlst;
 
 	func[i](tab, &objlst, data);
-	// data->objlst = objlst;
-	// if (data->objlst->type == SPHERE)
-	// {
-	// 	printf("	-->type: %d\n", objlst->type);
-	// 	printf("	-->%f\n", ((t_sp *)data->objlst->content)->dia);
-	// }
-	// sort_list(objlst);
 	return (0);
 }
 
@@ -94,7 +87,7 @@ int ft_close(t_mlx *mlx)
 
 int key_event(int key, t_mlx *mlx)
 {
-	ft_putnbr(key);
+	// ft_putnbr(key);
 	if(key == 8)
 		ft_draw_circle(mlx);
 	if(key == 1)
@@ -112,6 +105,52 @@ int key_event(int key, t_mlx *mlx)
 	return(0);
 }
 
+int	search_list(int cam_num, t_data data)
+{
+	while (data.cams)
+	{
+		if (data.cams->nbr == cam_num)
+		{
+			return (1);
+		}
+		data.cams = data.cams->next;
+	}
+	return (0);
+}
+
+int choose_cam(int key, t_data *data)
+{
+	static int cam_num;
+
+	if(key == 123)
+	{
+		if (cam_num > 0)
+		{
+			cam_num--;
+			// printf("%d\n", cam_num);
+			if (search_list(cam_num, *data) == 1)
+			{
+				data->cam_num = cam_num;
+				ft_raytracing(data);
+			}
+		}
+	}
+	if(key == 124)
+	{
+		if (cam_num < 2)
+		{
+			cam_num++;
+			// printf("%d\n", cam_num);
+			if (search_list(cam_num, *data) == 1)
+			{
+				data->cam_num = cam_num;
+				ft_raytracing(data);
+			}
+		}
+	}
+	return(0);
+}
+
 int	ft_launch_window(t_data *data)
 {
 	t_mlx	mlx;
@@ -124,9 +163,12 @@ int	ft_launch_window(t_data *data)
 		return (EXIT_FAILURE);
 	mlx.img = mlx_new_image(mlx.mlx_ptr, win.w, win.h);
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel, &mlx.line_length, &mlx.endian);
-	mlx_hook(mlx.mlx_win, 2, 0L, key_event, &mlx);
+	mlx_hook(mlx.mlx_win, 2, 1L<<0, key_event, &mlx);
+	mlx_hook(mlx.mlx_win, 3, 1L<<1, choose_cam, data);
 	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, &mlx);
-	ft_raytracing(&mlx, data);
+	data->mlx = mlx;
+	// mlx_loop_hook(&mlx, ft_raytracing, data);
+	ft_raytracing(data);
 	mlx_loop(mlx.mlx_ptr);
 	return (EXIT_SUCCESS);
 	return (0);
@@ -237,5 +279,6 @@ int	main(int ac, char **av)
 	}
 	else
 		return (FAILURE);
+	system("leaks a.out");
 	return (SUCCESS);
 }

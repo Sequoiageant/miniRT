@@ -6,14 +6,14 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/20 11:26:26 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/21 10:04:53 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	a.out
 
 SRCS	= 	srcs/main.c \
-			srcs/minirt_utils.c srcs/ft_vec_func.c \
+			srcs/minirt_utils.c srcs/ft_vec_func_struct.c \
 			srcs/ft_set_env.c srcs/ft_set_obj.c \
 			srcs/minirt_forms.c srcs/raytracing.c \
 			srcs/ft_atof.c

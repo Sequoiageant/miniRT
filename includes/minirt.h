@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/20 18:49:12 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/21 15:16:39 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,11 @@ typedef struct		s_light
 
 typedef struct		s_camera
 {
-	t_vec3				pos;
-	t_vec3				dir;
-	int					fov;
-	struct s_camera		*next;
+	int				nbr;	
+	t_vec3			pos;
+	t_vec3			dir;
+	int				fov;
+	struct s_camera	*next;
 }					t_cam;
 
 /*
@@ -290,10 +291,12 @@ typedef struct		s_object
 typedef struct		s_data
 {
 	t_win	win;
+	t_mlx	mlx;
 	t_obj	*objlst;
 	t_light	*lights;
 	t_ambl	al;
 	t_cam	*cams;
+	int		cam_num;
 }					t_data;
 
 /*
@@ -317,7 +320,7 @@ int					set_tr(char **tab, t_obj **objlst, t_data *data);
 ** --------------------------------- Vectors --------------------------------
 */
 
-float				ft_dot_product(float *u, float *v, int dim);
+/*float				ft_dot_product(float *u, float *v, int dim);
 void				ft_cross_product(float *u, float *v, float *p);
 void				ft_add_vec(float *u, float *v, float *p, int dim);
 void				ft_sub_vec(float *u, float *v, float *p, int dim);
@@ -325,7 +328,17 @@ float				ft_norm_vec(float *u, int dim);
 void				ft_normalize(float *vec, int dim);
 float				ft_norm_vec2(float *vec, int dim);
 float				*ft_get_normalize(float *vec, int dim);
-float				*ft_mult_vec3(float *u, float m);
+float				*ft_mult_vec3(float *u, float m);*/
+
+float				ft_dot_product3(t_vec3 *u, t_vec3 *v);
+void				ft_cross_product3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
+void				ft_add_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
+void				ft_sub_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
+float				ft_norm_vec3(t_vec3 *u);
+void				ft_normalize(t_vec3 *vec);
+float				ft_norm_vec3_2(t_vec3 *vec);
+float				*ft_get_normalize(t_vec3 *vec, int dim);
+float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -351,6 +364,6 @@ void				ft_draw_hex(t_mlx *mlx);
 ** ------------------------------- Ray tracing ------------------------------
 */
 
-void				ft_raytracing(t_mlx *mlx, t_data *data);
+void				ft_raytracing(t_data *data);
 
 #endif

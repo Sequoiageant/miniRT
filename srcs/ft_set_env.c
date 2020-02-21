@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/20 16:43:06 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/21 17:16:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	print_cams(t_cam *cams)
 {
 	while (cams)
 	{
+		printf("	-->num %d\n", cams->nbr);
 		printf("	-->%d\n", cams->fov);
 		cams = cams->next;
 	}
@@ -32,11 +33,14 @@ void	print_cams(t_cam *cams)
 
 void	ft_add_cam(t_cam **cams, t_cam *cam)
 {
-	t_cam *new;
+	static	int	cam_num;
+	t_cam 		*new;
 
+	cam_num++;
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->nbr = cam_num;
 		new->pos = cam->pos;
 		new->dir = cam->dir;
 		new->fov = cam->fov;
@@ -44,7 +48,7 @@ void	ft_add_cam(t_cam **cams, t_cam *cam)
 		(*cams) = new;
 	}
 	ft_putendl("	-->cam added");
-	print_cams((*cams));
+	// print_cams((*cams));
 }
 
 void	ft_add_light(t_light **lights, t_light *light)
