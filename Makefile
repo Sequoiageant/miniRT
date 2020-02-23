@@ -26,22 +26,21 @@ TESTFILE 	=	scene.rt
 
 INCLUDES 	=	./includes
 
-LMX_DIR 	=	./minilibx_opengl_20191021
-
-LINUX_LMX 	=	./minilibx
-
 HEAD 		= $(INCLUDES)/minirt.h
 
 OBJS		= $(SRCS:.c=.o)
 
 OBJS_BONUS	= $(BONUS:.c=.o)
 
+UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 CC			= gcc
 LDFLAGS		= -lmlx -lX11 -lXext -lm 
+LMX_DIR 	= ./minilibx
 else
 CC			= clang
 LDFLAGS		= -L $(LMX_DIR) -lmlx -framework OpenGL -framework AppKit
+LMX_DIR 	= ./minilibx_opengl_20191021
 endif
 
 CFLAGS		= -Wall -Wextra -Werror
