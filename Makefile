@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/21 10:04:53 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/24 19:08:40 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ LDFLAGS		= -L $(LMX_DIR) -lmlx -framework OpenGL -framework AppKit
 LMX_DIR 	= ./minilibx_opengl_20191021
 endif
 
-CFLAGS		= -Wall -Wextra -Werror
+#CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		+= -fsanitize=address -g3
 
 PRINTF		= -L. -lftprintf
 
@@ -67,7 +68,7 @@ $(MLX):
 		@(cd $(LMX_DIR) && $(MAKE))
 
 $(NAME):	$(HEAD) $(SRCS) $(GNL_SRCS) $(MLX) $(LIBFT)
-			$(CC) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS)
+			$(CC) $(CFLAGS) $(SRCS) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LMX_DIR) -I$(LIBFT_DIR) $(LDFLAGS)
 
 test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
 			$(CC) -g $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)

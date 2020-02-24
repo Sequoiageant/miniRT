@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 10:16:15 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/24 18:29:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,20 @@ void	ft_sub_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p)
 	p->x = u->x - v->x;
 	p->y = u->y - v->y;
 	p->z = u->z - v->z;
+}
+
+void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
+{
+	u->x *= dir->x;
+	u->y *= dir->y;
+	u->z *= dir->z;
+}
+
+void	ft_multby_vec3(t_vec3 *u, int mult)
+{
+	u->x *= mult;
+	u->y *= mult;
+	u->z *= mult;
 }
 
 void	ft_normalize(t_vec3 *vec)

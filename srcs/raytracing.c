@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 17:43:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/24 18:34:25 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ t_cam	select_cam(t_data data)
 			cam.pos = data.cams->pos;
 			cam.dir = data.cams->dir;
 			cam.fov = data.cams->fov;
-			// printf("%d\n", cam.fov);
 			return (cam);
 		}
 		data.cams = data.cams->next;
@@ -73,7 +72,7 @@ t_cam	select_cam(t_data data)
 	return (cam);
 }
 
-int		ft_intersec(t_vec3 *dir, t_data *data)
+int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst)
 {
 	t_vec3 origin;
 	t_vec3 oc;
@@ -85,9 +84,9 @@ int		ft_intersec(t_vec3 *dir, t_data *data)
 	double t1;
 	double t2;
 
-	r = data->objlst->u_obj.sp.dia;
+	r = objlst->u_obj.sp.dia;
 	origin = select_cam(*data).pos;
-	ft_sub_vec3(&origin, &data->objlst->u_obj.sp.pos, &oc);
+	ft_sub_vec3(&origin, &objlst->u_obj.sp.pos, &oc);
 	a = 1;
 	b = 2.0 * ft_dot_product3(dir, &oc);
 	c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
@@ -101,7 +100,7 @@ int		ft_intersec(t_vec3 *dir, t_data *data)
 	return (0);
 }
 
-void	ft_raytracing_sp(t_data *data)
+void	ft_raytracing_sp(t_data *data, t_obj *objlst)
 {
 	t_win	win;
 	t_vec3	dir;
@@ -111,7 +110,7 @@ void	ft_raytracing_sp(t_data *data)
 
 	win = data->win;
 	fov = select_cam(*data).fov * M_PI / 180;
-	printf("%f\n", fov);
+	printf("%d\n", select_cam(*data).fov);
 	i = 0;
 	while (i < win.w - 1)
 	{
@@ -122,9 +121,30 @@ void	ft_raytracing_sp(t_data *data)
 			dir.y = j - win.h / 2;
 			dir.z = -win.w / (2.0 * tan(fov / 2.0));
 			ft_normalize(&dir);
-						// ft_pixel_put(data->mlx, i, j, create_trgb((j/win.h)*255, 255, 255, 0));
-			if (ft_intersec(&dir, data) == 1)
-				ft_pixel_put(&data->mlx, i, j, create_trgb((j/win.h)*data->objlst->u_obj.sp.color.r, data->objlst->u_obj.sp.color.g, data->objlst->u_obj.sp.color.b, 0));
+			if (ft_intersec_sp(&dir, data, objlst) == 1)
+			{
+				ft_pixel_put(&data->mlx, i, j, create_trgb((j/win.h)*objlst->u_obj.sp.color.r, objlst->u_obj.sp.color.g, objlst->u_obj.sp.color.b, 0));
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	reset_image(t_data *data)
+{
+	float	i;
+	float	j;
+	t_win	win;
+	win = data->win;
+
+	i = 0;
+	while (i < win.w - 1)
+	{
+		j = 0;
+		while (j < win.h - 1)
+		{
+			ft_pixel_put(&data->mlx, i, j, create_trgb((j/win.h)*255, 255, 255, 0));
 			j++;
 		}
 		i++;
@@ -136,13 +156,14 @@ void	ft_raytracing(t_data *data)
 	t_obj *objlst;
 
 	objlst = data->objlst;
-	while (data->objlst)
+	reset_image(data);
+	while (objlst)
 	{
-		if (data->objlst->type == SPHERE)
+		if (objlst->type == SPHERE)
 		{
-			ft_raytracing_sp(data);
+			ft_raytracing_sp(data, objlst);
 		}
-		data->objlst = data->objlst->next;
+		objlst = objlst->next;
 	}
 	mlx_put_image_to_window(&data->mlx, data->mlx.mlx_win, data->mlx.img, 0, 0);
 }

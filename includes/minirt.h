@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 15:16:39 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/24 18:57:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define FAILURE	-1
 # define TRUE		1
 # define FALSE		0
+
+# define MACHINE_ERROR		-1
+# define MACHINE_CONTINUE	1
+# define MACHINE_AGAIN		0
 
 # define NB_STATE	4
 # define NB_OBJ		5
@@ -65,9 +69,9 @@ enum			e_bool
 
 enum			e_state
 {
+	EMPTY,
 	ENV,
 	OBJECT,
-	EMPTY,
 	ERROR
 };
 

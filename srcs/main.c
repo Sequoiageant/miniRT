@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 16:00:05 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/24 19:28:23 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,34 +120,24 @@ int	search_list(int cam_num, t_data data)
 
 int choose_cam(int key, t_data *data)
 {
-	static int cam_num;
+	static int cam_num = 1;
 
 	if(key == 123)
+		cam_num--;
+	else if(key == 124)
+		cam_num++;
+	if (cam_num > 0)
 	{
-		if (cam_num > 0)
-		{
-			cam_num--;
-			// printf("%d\n", cam_num);
-			if (search_list(cam_num, *data) == 1)
-			{
-				data->cam_num = cam_num;
-				ft_raytracing(data);
-			}
-		}
+		if (search_list(cam_num, *data) == 1)
+			data->cam_num = cam_num;
 	}
-	if(key == 124)
+	if (cam_num < data->cam_num)
 	{
-		if (cam_num < 2)
-		{
-			cam_num++;
-			// printf("%d\n", cam_num);
-			if (search_list(cam_num, *data) == 1)
-			{
-				data->cam_num = cam_num;
-				ft_raytracing(data);
-			}
-		}
+		if (search_list(cam_num, *data) == 1)
+			data->cam_num = cam_num;
 	}
+	ft_raytracing(data);
+	printf("%d\n", cam_num);
 	return(0);
 }
 
@@ -168,26 +158,40 @@ int	ft_launch_window(t_data *data)
 	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, &mlx);
 	data->mlx = mlx;
 	// mlx_loop_hook(&mlx, ft_raytracing, data);
+	data->cam_num = 1;
 	ft_raytracing(data);
 	mlx_loop(mlx.mlx_ptr);
 	return (EXIT_SUCCESS);
-	return (0);
 }
 
 int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
 	printf("[%s] -> ERROR\n", tab[0]);
-	machine->state = OBJECT;
-	return (0);
+	return (MACHINE_CONTINUE);
 }
 
-int	empty(t_data *data, char **tab, t_stm *machine)
+
+int	set_obj(t_data *data, char **tab, t_stm *machine)
 {
-	(void)data;
-	printf("[%s] -> EMPTY\n", tab[0]);
-	machine->state = OBJECT;
-	return (0);
+	static char	*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
+	int			len;
+	int			i;
+	i = 0;
+
+	while (i < NB_OBJ)
+	{
+		len = 2;
+		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
+		{
+			printf("[%s] -> OBJECT\n", str_obj[i]);
+			ft_list_objects(tab, data, i);
+			return (MACHINE_CONTINUE);
+		}
+		i++;
+	}
+	machine->state = ERROR;
+	return (MACHINE_AGAIN);
 }
 
 int	set_env(t_data *data, char **tab, t_stm *machine)
@@ -202,69 +206,62 @@ int	set_env(t_data *data, char **tab, t_stm *machine)
 		{
 			printf("[%c] -> ENV\n", str_env[i]);
 			ft_list_env(tab, data, i);
-			return (1);
+			return (MACHINE_CONTINUE);
 		}
 		i++;
 	}
-	error(data, tab, machine);
-	return (0);
+	machine->state = OBJECT;
+	return (MACHINE_AGAIN);
 }
 
-int	set_obj(t_data *data, char **tab, t_stm *machine)
+
+int	empty(t_data *data, char **tab, t_stm *machine)
 {
-	static char	*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
-	int			len;
-	int			i;
-
-	i = 0;
-	while (i < NB_OBJ)
-	{
-		len = 2;
-		if (ft_strnequ(tab[0], str_obj[i], len) == TRUE)
-		{
-			printf("[%s] -> OBJECT\n", str_obj[i]);
-			ft_list_objects(tab, data, i);
-			return (len);
-		}
-		i++;
-	}
-	set_env(data, tab, machine);
-	return (0);
+	(void)data;
+	printf("[%s] -> EMPTY\n", tab[0]);
+	if (tab[0] == NULL)
+		return (MACHINE_CONTINUE);
+	machine->state = ENV;
+	return (MACHINE_AGAIN);
 }
 
-int	parser(char **line, t_data *data, int fd)
+int	parser(t_data *data, int fd)
 {
 	t_stm			machine;
 	int				ret;
+	int 			ret_machine;
 	char			**tab;
-	static t_func	func[NB_STATE] = {set_env, set_obj, empty, error};
+	char			*line;
+	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
 
 	ret = 1;
-	machine.state = OBJECT;
+	machine.state = EMPTY;
 	while (ret > 0)
-	{	
-		ret = get_next_line(fd, line);
-		if (ret != -1)
+	{
+		line = NULL;
+		ret = get_next_line(fd, &line);
+		if (ret != FAILURE)
 		{
-			tab = ft_split(*line, ' ');
+			tab = ft_split(line, ' ');
 			if (tab)
 			{
-				if (tab[0] == NULL)
-					machine.state = EMPTY;
-				if (func[machine.state](data, tab, &machine) == FAILURE)
-					return (FAILURE);
-				free(*line);
+				ret_machine = MACHINE_AGAIN;
+				while (ret_machine == MACHINE_AGAIN)
+					ret_machine = func[machine.state](data, tab, &machine);
+				machine.state = EMPTY;
+				if (ret_machine == MACHINE_ERROR)
+					ret = FAILURE;
 				free(tab);
 			}
+			free(line);
 		}
 	}
-	return (SUCCESS);
+	return (ret);
 }
 
 int	main(int ac, char **av)
 {
 	int		fd;
-	char	*line;
 	t_data	data;
 
 	if (ac == 2)
@@ -272,7 +269,7 @@ int	main(int ac, char **av)
 		fd = open(av[1], O_RDONLY);
 		if (fd != -1)
 		{
-			parser(&line, &data, fd);
+			parser(&data, fd);
 			close(fd);
 		}
 		ft_launch_window(&data);
