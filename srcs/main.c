@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/24 19:28:23 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/25 14:13:31 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ int	ft_launch_window(t_data *data)
 int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
+	(void)machine;
 	printf("[%s] -> ERROR\n", tab[0]);
 	return (MACHINE_CONTINUE);
 }
@@ -218,9 +219,11 @@ int	set_env(t_data *data, char **tab, t_stm *machine)
 int	empty(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
-	printf("[%s] -> EMPTY\n", tab[0]);
 	if (tab[0] == NULL)
+	{
+		printf("[%s] -> EMPTY\n", tab[0]);
 		return (MACHINE_CONTINUE);
+	}
 	machine->state = ENV;
 	return (MACHINE_AGAIN);
 }

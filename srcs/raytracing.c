@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/24 18:34:25 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/25 11:24:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,15 @@ t_obj *copy_list(t_obj *head)
 
 t_cam	select_cam(t_data data)
 {
-	t_cam cam;
-
 	while (data.cams)
 	{
 		if (data.cam_num == 0)
-			data.cam_num = 2;
+			data.cam_num = 1;
 		if (data.cams->nbr == data.cam_num)
-		{
-			cam.nbr = data.cams->nbr;	
-			cam.pos = data.cams->pos;
-			cam.dir = data.cams->dir;
-			cam.fov = data.cams->fov;
-			return (cam);
-		}
+			return (*data.cams);
 		data.cams = data.cams->next;
 	}
-	return (cam);
+	return (*data.cams);
 }
 
 int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst)

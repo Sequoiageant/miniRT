@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 17:16:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/25 11:20:55 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int		set_al(char **tab, t_data *data)
 		al.color.b = ft_atoi(al_set[2]);
 		ft_free_tab2(al_set);
 	}
+	data->al = al;
 	return (0);
 }
 

@@ -9,3 +9,4 @@ essai
 test3.c
 valgrind-out.txt
 ressource.c
+*.swp
