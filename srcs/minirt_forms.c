@@ -19,7 +19,7 @@ void	ft_draw_sphere(t_mlx *mlx)
 	int R;
 	int x;
 	int y;
-	int z;
+	// int z;
 
 	R = 150;
 	phi = 1;
@@ -30,7 +30,7 @@ void	ft_draw_sphere(t_mlx *mlx)
 		{
 			x = cos(theta) * cos(phi) * R;
 			y = cos(theta) * sin(phi) * R;
-			z = sin(theta) * R;
+			// z = sin(theta) * R;
 			ft_pixel_put(mlx, x + 400, y + 300, 0xFFFF00);
 			theta += 0.5;
 		}

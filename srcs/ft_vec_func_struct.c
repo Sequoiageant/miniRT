@@ -45,25 +45,34 @@ float 	ft_dot_product3(t_vec3 *u, t_vec3 *v)
 	return (result);
 }
 
-void	ft_cross_product3(t_vec3 *u, t_vec3 *v, t_vec3 *p)
+t_vec3	ft_cross_product3(t_vec3 *u, t_vec3 *v)
 {
-	p->x = v->z * u->y - v->y * u->z;
-	p->y = v->x * u->z - v->z * u->x;
-	p->z = v->y * u->x - v->x * u->y;
+	t_vec3 p;
+
+	p.x = v->z * u->y - v->y * u->z;
+	p.y = v->x * u->z - v->z * u->x;
+	p.z = v->y * u->x - v->x * u->y;
+	return (p);
 }
 
-void	ft_add_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p)
+t_vec3	ft_add_vec3(t_vec3 *u, t_vec3 *v)
 {
-	p->x = u->x + v->x;
-	p->y = u->y + v->y;
-	p->z = u->z + v->z;
+	t_vec3 p;
+
+	p.x = u->x + v->x;
+	p.y = u->y + v->y;
+	p.z = u->z + v->z;
+	return (p);
 }
 
-void	ft_sub_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p)
+t_vec3	ft_sub_vec3(t_vec3 *u, t_vec3 *v)
 {
-	p->x = u->x - v->x;
-	p->y = u->y - v->y;
-	p->z = u->z - v->z;
+	t_vec3 p;
+
+	p.x = u->x - v->x;
+	p.y = u->y - v->y;
+	p.z = u->z - v->z;
+	return (p);
 }
 
 void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
@@ -91,4 +100,13 @@ void	ft_normalize(t_vec3 *vec)
 		vec->y /= norm;
 		vec->z /= norm;
 	}
+}
+
+t_vec3	ft_get_normalized(t_vec3 vec)
+{
+	t_vec3	p;
+
+	p = vec;
+	ft_normalize(&p);
+	return (p);
 }

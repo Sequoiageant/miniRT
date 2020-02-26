@@ -58,6 +58,22 @@
 # define TR			0x000010
 
 /*
+** Keycodes MAC
+# define ESC		53
+# define LEFT		123
+# define RIGHT		124
+*/
+
+/*
+** Keycodes LINUX
+*/
+
+# define ESC		65307
+# define LEFT		65361
+# define RIGHT		65363
+
+
+/*
 ** ----------------------------------- Enum ----------------------------------
 */
 
@@ -158,6 +174,21 @@ typedef struct		s_color
 	int b;
 	int t;
 }					t_col;
+
+/*
+** quadratic equation structure
+*/
+
+typedef struct		s_quadra
+{
+	double a;
+	double b;
+	double c;
+	double delta;
+	double t;
+	double t1;
+	double t2;
+}					t_quadra;
 
 /*
 ** <===========< environment structures >===========>
@@ -310,6 +341,7 @@ typedef struct		s_data
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **, t_data *);
 typedef	int			(*t_func3)(char **, t_data *);
+typedef	int			(*t_ray)(t_data *, t_obj *);
 int					set_res(char **tab, t_data *data);
 int					set_light(char **tab, t_data *data);
 int					set_al(char **tab, t_data *data);
@@ -335,13 +367,13 @@ float				*ft_get_normalize(float *vec, int dim);
 float				*ft_mult_vec3(float *u, float m);*/
 
 float				ft_dot_product3(t_vec3 *u, t_vec3 *v);
-void				ft_cross_product3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
-void				ft_add_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
-void				ft_sub_vec3(t_vec3 *u, t_vec3 *v, t_vec3 *p);
+t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
+t_vec3				ft_add_vec3(t_vec3 *u, t_vec3 *v);
+t_vec3				ft_sub_vec3(t_vec3 *u, t_vec3 *v);
 float				ft_norm_vec3(t_vec3 *u);
 void				ft_normalize(t_vec3 *vec);
 float				ft_norm_vec3_2(t_vec3 *vec);
-float				*ft_get_normalize(t_vec3 *vec, int dim);
+t_vec3				ft_get_normalized(t_vec3 vec);
 float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
 
 /*

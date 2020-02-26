@@ -68,31 +68,54 @@ int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst)
 {
 	t_vec3 origin;
 	t_vec3 oc;
+	t_quadra q;
 	float r;
-	float a;
-	float b;
-	float c;
-	float delta;
-	double t1;
-	double t2;
 
 	r = objlst->u_obj.sp.dia;
 	origin = select_cam(*data).pos;
-	ft_sub_vec3(&origin, &objlst->u_obj.sp.pos, &oc);
-	a = 1;
-	b = 2.0 * ft_dot_product3(dir, &oc);
-	c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
-	delta = b * b - 4 * a * c;
-	if (delta < 0)
+	oc = ft_sub_vec3(&origin, &objlst->u_obj.sp.pos);
+	q.a = 1;
+	q.b = 2.0 * ft_dot_product3(dir, &oc);
+	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
+	q.delta = q.b * q.b - 4 * q.a * q.c;
+	if (q.delta < 0)
 		return (0);
-	t1 = (-b - sqrt(delta)) / (2 * a);
-	t2 = (-b + sqrt(delta)) / (2 * a);
-	if (t2 > 0 || delta == 0)
+	// q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
+	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
+	if (q.t2 > 0 || q.delta == 0)
 		return (1);
 	return (0);
 }
 
-void	ft_raytracing_sp(t_data *data, t_obj *objlst)
+int		rt_tr(t_data *data, t_obj *objlst)
+{
+	(void)data;
+	(void)objlst;
+	printf("%s\n", "raytracing of triangle");
+	return (0);
+}
+int		rt_cy(t_data *data, t_obj *objlst)
+{
+	(void)data;
+	(void)objlst;
+	printf("%s\n", "raytracing of cylinder");
+	return (0);
+}
+int		rt_sq(t_data *data, t_obj *objlst)
+{
+	(void)data;
+	(void)objlst;
+	printf("%s\n", "raytracing of square");
+	return (0);
+}
+int		rt_pl(t_data *data, t_obj *objlst)
+{
+	(void)data;
+	(void)objlst;
+	printf("%s\n", "raytracing of plane");
+	return (0);
+}
+int		rt_sp(t_data *data, t_obj *objlst)
 {
 	t_win	win;
 	t_vec3	dir;
@@ -102,7 +125,7 @@ void	ft_raytracing_sp(t_data *data, t_obj *objlst)
 
 	win = data->win;
 	fov = select_cam(*data).fov * M_PI / 180;
-	printf("%d\n", select_cam(*data).fov);
+	// printf("%d\n", select_cam(*data).fov);
 	i = 0;
 	while (i < win.w - 1)
 	{
@@ -121,6 +144,7 @@ void	ft_raytracing_sp(t_data *data, t_obj *objlst)
 		}
 		i++;
 	}
+	return (0);
 }
 
 void	reset_image(t_data *data)
@@ -146,16 +170,14 @@ void	reset_image(t_data *data)
 void	ft_raytracing(t_data *data)
 {
 	t_obj *objlst;
+	static t_ray	raytrace[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 
 	objlst = data->objlst;
 	reset_image(data);
 	while (objlst)
 	{
-		if (objlst->type == SPHERE)
-		{
-			ft_raytracing_sp(data, objlst);
-		}
+		raytrace[objlst->type](data, objlst);
 		objlst = objlst->next;
 	}
-	mlx_put_image_to_window(&data->mlx, data->mlx.mlx_win, data->mlx.img, 0, 0);
+	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);
 }

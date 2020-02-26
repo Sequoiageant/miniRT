@@ -85,26 +85,6 @@ int ft_close(t_mlx *mlx)
 	exit(EXIT_SUCCESS);
 }
 
-int key_event(int key, t_mlx *mlx)
-{
-	// ft_putnbr(key);
-	if(key == 8)
-		ft_draw_circle(mlx);
-	if(key == 1)
-		ft_draw_sphere(mlx);
-	else if(key == 12)
-		ft_draw_square(mlx);
-	else if(key == 17)
-		ft_draw_triangle(mlx);
-	else if(key == 4)
-		ft_draw_hex(mlx);
-	else if(key == 49)
-		mlx_string_put(mlx->mlx_ptr, mlx->mlx_win, 650, 500, 0xFFFF00, "CA MARCHE !");
-	else if(key == 53)
-		ft_close(mlx);
-	return(0);
-}
-
 int	search_list(int cam_num, t_data data)
 {
 	while (data.cams)
@@ -122,9 +102,9 @@ int choose_cam(int key, t_data *data)
 {
 	static int cam_num = 1;
 
-	if(key == 123)
+	if(key == LEFT)
 		cam_num--;
-	else if(key == 124)
+	else if(key == RIGHT)
 		cam_num++;
 	if (cam_num > 0)
 	{
@@ -141,6 +121,17 @@ int choose_cam(int key, t_data *data)
 	return(0);
 }
 
+int key_event(int key, t_data *data)
+{
+	ft_putnbr(key);
+	ft_putendl("");
+ 	if(key == LEFT || key == RIGHT)
+		choose_cam(key, data);
+	else if(key == ESC)
+		ft_close(&data->mlx);
+	return(0);
+}
+
 int	ft_launch_window(t_data *data)
 {
 	t_mlx	mlx;
@@ -153,10 +144,9 @@ int	ft_launch_window(t_data *data)
 		return (EXIT_FAILURE);
 	mlx.img = mlx_new_image(mlx.mlx_ptr, win.w, win.h);
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel, &mlx.line_length, &mlx.endian);
-	mlx_hook(mlx.mlx_win, 2, 1L<<0, key_event, &mlx);
-	mlx_hook(mlx.mlx_win, 3, 1L<<1, choose_cam, data);
-	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, &mlx);
 	data->mlx = mlx;
+	mlx_hook(mlx.mlx_win, 3, 1L<<1, key_event, data);
+	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, &mlx);
 	// mlx_loop_hook(&mlx, ft_raytracing, data);
 	data->cam_num = 1;
 	ft_raytracing(data);
@@ -178,8 +168,8 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 	static char	*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
 	int			len;
 	int			i;
+	
 	i = 0;
-
 	while (i < NB_OBJ)
 	{
 		len = 2;
@@ -197,15 +187,15 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 
 int	set_env(t_data *data, char **tab, t_stm *machine)
 {
-	static char	str_env[NB_ENV] = STR_ENV;
+	static char	*str_env[NB_ENV] = {P_R, P_A, P_C, P_L};
 	int			i;
 
 	i = 0;
 	while (i < NB_ENV)
 	{
-		if ((*tab)[0] == str_env[i])
+		if (ft_strcmp(tab[0], str_env[i]) == 0)
 		{
-			printf("[%c] -> ENV\n", str_env[i]);
+			printf("[%s] -> ENV\n", str_env[i]);
 			ft_list_env(tab, data, i);
 			return (MACHINE_CONTINUE);
 		}
