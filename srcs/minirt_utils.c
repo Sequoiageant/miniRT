@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/21 15:08:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/27 17:39:27 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,21 @@ void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 
 int		create_trgb(int t, int r, int g, int b)
 {
-	return(b << 24 | g << 16 | r << 8 | t);
+	return(t | r << 8 | g << 16 | b << 24);
 }
 
 void	ft_free_tab2(char **tab)
 {
 	free(tab);
 	tab = NULL;
+}
+
+float	ft_max(float a, float b)
+{
+	return ((a > b) ? a : b);
+}
+
+float	ft_min(float a, float b)
+{
+	return ((a < b) ? a : b);
 }

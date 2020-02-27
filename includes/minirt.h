@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/24 18:57:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/27 17:26:39 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <mlx.h>
+# include <limits.h>
 # include <stdio.h> //<====== A ENLEVER
 # include "libft.h"
 # include "get_next_line.h"
@@ -59,18 +60,19 @@
 
 /*
 ** Keycodes MAC
+*/
+
 # define ESC		53
 # define LEFT		123
 # define RIGHT		124
-*/
 
 /*
 ** Keycodes LINUX
-*/
 
 # define ESC		65307
 # define LEFT		65361
 # define RIGHT		65363
+*/
 
 
 /*
@@ -366,7 +368,7 @@ float				ft_norm_vec2(float *vec, int dim);
 float				*ft_get_normalize(float *vec, int dim);
 float				*ft_mult_vec3(float *u, float m);*/
 
-float				ft_dot_product3(t_vec3 *u, t_vec3 *v);
+float				ft_dot_product3(t_vec3 u, t_vec3 v);
 t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
 t_vec3				ft_add_vec3(t_vec3 *u, t_vec3 *v);
 t_vec3				ft_sub_vec3(t_vec3 *u, t_vec3 *v);
@@ -375,6 +377,7 @@ void				ft_normalize(t_vec3 *vec);
 float				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
 float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
+void				ft_multby_vec3(t_vec3 *u, int mult);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -385,6 +388,8 @@ void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					create_trgb(int t, int r, int g, int b);
 double				ft_atof(const char *str);
 void				ft_free_tab2(char **tab);
+float 				ft_max(float a, float b);
+float 				ft_min(float a, float b);
 
 /*
 ** ---------------------------------- forms ---------------------------------

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/24 18:29:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/27 15:38:41 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ float	ft_norm_vec3_2(t_vec3 *vec)
 	return (norm);
 }
 
-float 	ft_dot_product3(t_vec3 *u, t_vec3 *v)
+float 	ft_dot_product3(t_vec3 u, t_vec3 v)
 {
 	float	result;
 
 	result = 0.0;
-	result += u->x * v->x;
-	result += u->y * v->y;
-	result += u->z * v->z;
+	result += u.x * v.x;
+	result += u.y * v.y;
+	result += u.z * v.z;
 	return (result);
 }
 

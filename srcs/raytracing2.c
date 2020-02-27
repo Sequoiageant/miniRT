@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/27 17:42:39 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/25 11:24:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,27 @@ t_cam	select_cam(t_data data)
 	return (*data.cams);
 }
 
-int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_vec3 *n, t_vec3 *p, double *t)
+int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst)
 {
-	t_vec3		origin;
-	t_vec3		oc;
-	t_quadra	q;
-	float		r;
+	t_vec3 origin;
+	t_vec3 oc;
+	t_quadra q;
+	float r;
 
 	r = objlst->u_obj.sp.dia;
 	origin = select_cam(*data).pos;
 	oc = ft_sub_vec3(&origin, &objlst->u_obj.sp.pos);
 	q.a = 1;
-	q.b = 2.0 * ft_dot_product3(*dir, oc);
+	q.b = 2.0 * ft_dot_product3(dir, &oc);
 	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
 	q.delta = q.b * q.b - 4 * q.a * q.c;
 	if (q.delta < 0)
-		return (FALSE);
-	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
+		return (0);
+	// q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
 	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
-	if (q.t2 < 0)
-		return (FALSE);
-	*t = ((q.t1 > 0) ? q.t1 : q.t2);
-	ft_multby_vec3(dir, *t);
-	*p = ft_add_vec3(&origin, dir);
-	*n = ft_sub_vec3(p, &objlst->u_obj.sp.pos);
-	ft_normalize(n);
-		return (TRUE);
+	if (q.t2 > 0 || q.delta == 0)
+		return (1);
+	return (0);
 }
 
 int		rt_tr(t_data *data, t_obj *objlst)
@@ -120,56 +115,34 @@ int		rt_pl(t_data *data, t_obj *objlst)
 	printf("%s\n", "raytracing of plane");
 	return (0);
 }
-
-int	rt_sp(t_data *data, t_obj *objlst)
+int		rt_sp(t_data *data, t_obj *objlst)
 {
 	t_win	win;
 	t_vec3	dir;
 	float	fov;
-	float	y;
-	float	x;
-	t_vec3	n;
-	t_vec3	p;
-	double  int_pix = 0;
-	t_vec3 lum;
-	lum.x = -30;
-	lum.y = -60;
-	lum.z = 40;
-	double int_lum = 1500000;
-	t_vec3 p2;
-	int color;
-	static double t = LONG_MAX;
-	// t_vec3 p3;
-	// t_vec3 p4;
+	float	i;
+	float	j;
 
 	win = data->win;
 	fov = select_cam(*data).fov * M_PI / 180;
 	// printf("%d\n", select_cam(*data).fov);
-	y = 0;
-	while (y < win.h - 1)
+	i = 0;
+	while (i < win.w - 1)
 	{
-		x = 0;
-		while (x < win.w - 1)
+		j = 0;
+		while (j < win.h - 1)
 		{
-			dir.x = x - win.w / 2;
-			dir.y = y - win.h / 2;
+			dir.x = i - win.w / 2;
+			dir.y = j - win.h / 2;
 			dir.z = -win.w / (2.0 * tan(fov / 2.0));
 			ft_normalize(&dir);
-			if (ft_intersec_sp(&dir, data, objlst, &n, &p, &t))
+			if (ft_intersec_sp(&dir, data, objlst) == 1)
 			{
-				p2 = ft_sub_vec3(&lum, &p);
-				int_pix = int_lum * ft_max(0, ft_dot_product3(ft_get_normalized(p2), n));
-				int_pix /=  ft_norm_vec3_2(&p2);
-				if (int_pix < 0)
-					int_pix = 0;
-				if (int_pix > 255)
-					int_pix = 255;
-				color = create_trgb(objlst->u_obj.sp.color.r,objlst->u_obj.sp.color.g,objlst->u_obj.sp.color.b,objlst->u_obj.sp.color.t);
-				ft_pixel_put(&data->mlx, x, y, color * int_pix);
+				ft_pixel_put(&data->mlx, i, j, create_trgb((j/win.h)*objlst->u_obj.sp.color.r, objlst->u_obj.sp.color.g, objlst->u_obj.sp.color.b, 0));
 			}
-			x++;
+			j++;
 		}
-		y++;
+		i++;
 	}
 	return (0);
 }
