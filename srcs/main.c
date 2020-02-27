@@ -28,6 +28,20 @@ int	ft_lstsize(t_obj *lst)
 	return (size);
 }
 
+// void	ft_lstclear(t_obj **lst)
+// {
+// 	if (lst != NULL && *lst != NULL)
+// 	{
+// 		while (*lst != NULL)
+// 		{
+// 			free(*lst->content);
+// 			(*lst) = (*lst)->next;
+// 		}
+// 		free(*lst);
+// 		*lst = NULL;
+// 	}
+// }
+
 int		ft_strnequ(char *s1, char *s2, int n)
 {
 	int	i;
@@ -42,20 +56,20 @@ int		ft_strnequ(char *s1, char *s2, int n)
 	return (TRUE);
 }
 
-/*void	print_list(t_obj *objlst)
+void	print_list(t_obj *objlst)
 {
-
-	printf("	-->list size: %d\n", ft_lstsize(objlst));
-	while (objlst)
+	//printf("	-->list size: %d\n", ft_lstsize(objlst));
+	if (objlst)
 	{
-		if (objlst->type == SPHERE)
+		while (objlst)
 		{
 			printf("	-->type: %d\n", objlst->type);
-			printf("	-->%f\n", ((t_sp *)objlst->content)->dia);
+			objlst = objlst->next;
 		}
-		objlst = objlst->next;
 	}
-}*/
+	else
+		printf("%s\n", "LISTE VIDE");
+}
 
 /*void	sort_list(t_obj *objlst)
 {
@@ -79,9 +93,13 @@ int	ft_list_objects(char **tab, t_data *data, int i)
 	return (0);
 }
 
-int ft_close(t_mlx *mlx)
+int ft_close(t_data *data)
 {
-	mlx_destroy_window(mlx->mlx_ptr, mlx->mlx_win);
+	mlx_destroy_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
+	print_list(data->objlst);
+	free(data->objlst);
+	data->objlst = NULL;
+	print_list(data->objlst);
 	exit(EXIT_SUCCESS);
 }
 
@@ -125,10 +143,10 @@ int key_event(int key, t_data *data)
 {
 	ft_putnbr(key);
 	ft_putendl("");
- 	if(key == LEFT || key == RIGHT)
+	if(key == LEFT || key == RIGHT)
 		choose_cam(key, data);
 	else if(key == ESC)
-		ft_close(&data->mlx);
+		ft_close(data);
 	return(0);
 }
 
