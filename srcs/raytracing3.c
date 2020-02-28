@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/28 20:53:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/28 18:23:12 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_cam	select_cam(t_data data)
 	return (*data.cams);
 }
 
-int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		ft_intersec_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_vec3 *n, t_vec3 *p, double *t)
 {
 	t_vec3		origin;
 	t_vec3		oc;
@@ -79,53 +79,91 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
 	q.delta = q.b * q.b - 4 * q.a * q.c;
 	if (q.delta < 0)
-		return (0);
+		return (FALSE);
 	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
 	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
 	if (q.t2 < 0)
-		return (0);
-	inter->t = ((q.t1 > 0) ? q.t1 : q.t2);
-	ft_multby_vec3(dir, inter->t);
-	inter->pos = ft_add_vec3(&origin, dir);
-	inter->norm = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
-	ft_normalize(&inter->norm);
-	return (1);
+		return (FALSE);
+	*t = ((q.t1 > 0) ? q.t1 : q.t2);
+	ft_multby_vec3(dir, *t);
+	*p = ft_add_vec3(&origin, dir);
+	*n = ft_sub_vec3(p, &objlst->u_obj.sp.pos);
+	ft_normalize(n);
+		return (TRUE);
 }
 
-int		rt_tr(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_tr(t_data *data, t_obj *objlst)
 {
 	(void)data;
 	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of triangle");
+	printf("%s\n", "raytracing of triangle");
 	return (0);
 }
-int		rt_cy(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_cy(t_data *data, t_obj *objlst)
 {
 	(void)data;
 	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of cylinder");
+	printf("%s\n", "raytracing of cylinder");
 	return (0);
 }
-int		rt_sq(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_sq(t_data *data, t_obj *objlst)
 {
 	(void)data;
 	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of square");
+	printf("%s\n", "raytracing of square");
 	return (0);
 }
-int		rt_pl(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_pl(t_data *data, t_obj *objlst)
 {
 	(void)data;
 	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of plane");
+	printf("%s\n", "raytracing of plane");
+	return (0);
+}
+
+int	rt_sp(t_data *data, t_obj *objlst)
+{
+	t_win	win;
+	t_vec3	dir;
+	float	fov;
+	float	y;
+	float	x;
+	t_vec3	n;
+	t_vec3	p;
+	double  int_pix = 0;
+	double int_lum = 1500000;
+	t_vec3 p2;
+	int color;
+	static double t = INFINITY;
+
+	win = data->win;
+	fov = select_cam(*data).fov * M_PI / 180;
+	y = 0;
+	while (y < win.h - 1)
+	{
+		x = 0;
+		while (x < win.w - 1)
+		{
+			dir.x = x - win.w / 2;
+			dir.y = y - win.h / 2;
+			dir.z = -win.w / (2.0 * tan(fov / 2.0));
+			ft_normalize(&dir);
+			if (ft_intersec_sp(&dir, data, objlst, &n, &p, &t))
+			{
+				p2 = ft_sub_vec3(&data->lights->pos, &p);
+				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p2), n));
+				int_pix /=  ft_norm_vec3_2(&p2);
+				if (int_pix < 0.0)
+					int_pix = 0;
+				if (int_pix > 255)
+					int_pix = 255;
+				color = create_trgb(int_pix,int_pix,int_pix,0);
+				ft_pixel_put(&data->mlx, x, y, color);
+			}
+			x++;
+		}
+		y++;
+	}
 	return (0);
 }
 
@@ -151,62 +189,15 @@ void	reset_image(t_data *data)
 
 void	ft_raytracing(t_data *data)
 {
-	t_inter	inter;
-	t_inter	finter;
-	float x;
-	float y;
-	float fov;
 	t_obj *objlst;
-	double t = INFINITY;
-	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
-	t_vec3 p;
-	t_win win;
-	t_vec3 dir;
-	double  int_pix = 0;
-	double int_lum = 1500000;
-	int color;
+	static t_ray	raytrace[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 
+	objlst = data->objlst;
 	reset_image(data);
-	win = data->win;
-	fov = select_cam(*data).fov * M_PI / 180;
-	y = 0;
-	while (y < win.h - 1)
+	while (objlst)
 	{
-		x = 0;
-		while (x < win.w - 1)
-		{
-			dir.x = x - win.w / 2;
-			dir.y = y - win.h / 2;
-			dir.z = -win.w / (2.0 * tan(fov / 2.0));
-			ft_normalize(&dir);
-			
-			objlst = data->objlst;
-			while (objlst)
-			{
-				if (intersec[objlst->type](&dir, data, objlst, &inter))
-				{
-					if (inter.t < t)
-					{
-						finter.obj_num = objlst->type;
-						finter.pos = inter.pos;
-						finter.norm = inter.norm;
-					}
-				}
-				objlst = objlst->next;
-			}
-				p = ft_sub_vec3(&data->lights->pos, &finter.pos);
-				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.norm));
-				int_pix /=  ft_norm_vec3_2(&p);
-				if (int_pix < 0.0)
-					int_pix = 0;
-				if (int_pix > 255)
-					int_pix = 255;
-				color = create_trgb(int_pix,int_pix,int_pix,0);
-				ft_pixel_put(&data->mlx, x, y, color);
-	
-			x++;
-		}
-		y++;
+		raytrace[objlst->type](data, objlst);
+		objlst = objlst->next;
 	}
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);
 }

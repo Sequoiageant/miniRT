@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/27 17:26:39 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/28 20:50:00 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ typedef struct		s_mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	char	pad[4];
 }					t_mlx;
 
 /*
@@ -148,6 +149,7 @@ typedef struct		s_win
 	double		w;
 	double		h;
 	enum e_bool	set;
+	char		pad[4];
 }					t_win;
 
 /*
@@ -191,6 +193,18 @@ typedef struct		s_quadra
 	double t1;
 	double t2;
 }					t_quadra;
+
+/*
+** intersection structure
+*/
+
+typedef struct		s_intersection
+{
+	double	t;
+	t_vec3	pos;
+	t_vec3	norm;
+	int		obj_num;
+}					t_inter;
 
 /*
 ** <===========< environment structures >===========>
@@ -309,7 +323,7 @@ typedef struct		s_triangle
 typedef struct		s_object
 {
 	enum e_obj		type;
-	double			z_pos;
+	int				num;
 	union
 	{
 		t_sp		sp;
@@ -327,13 +341,14 @@ typedef struct		s_object
 
 typedef struct		s_data
 {
-	t_win	win;
-	t_mlx	mlx;
+	t_cam	*cams;
 	t_obj	*objlst;
 	t_light	*lights;
+	t_win	win;
+	t_mlx	mlx;
 	t_ambl	al;
-	t_cam	*cams;
 	int		cam_num;
+	char	pad[4];
 }					t_data;
 
 /*
@@ -343,7 +358,8 @@ typedef struct		s_data
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **, t_data *);
 typedef	int			(*t_func3)(char **, t_data *);
-typedef	int			(*t_ray)(t_data *, t_obj *);
+// typedef	int			(*t_ray)(t_data *, t_obj *);
+typedef	int			(*t_ray)(t_vec3 *, t_data *, t_obj *, t_inter *);
 int					set_res(char **tab, t_data *data);
 int					set_light(char **tab, t_data *data);
 int					set_al(char **tab, t_data *data);
@@ -377,7 +393,7 @@ void				ft_normalize(t_vec3 *vec);
 float				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
 float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
-void				ft_multby_vec3(t_vec3 *u, int mult);
+void				ft_multby_vec3(t_vec3 *u, float mult);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -390,6 +406,7 @@ double				ft_atof(const char *str);
 void				ft_free_tab2(char **tab);
 float 				ft_max(float a, float b);
 float 				ft_min(float a, float b);
+int					ft_close(t_data *data);
 
 /*
 ** ---------------------------------- forms ---------------------------------

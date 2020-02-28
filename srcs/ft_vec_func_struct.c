@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/27 15:38:41 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/28 12:35:59 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
 	u->z *= dir->z;
 }
 
-void	ft_multby_vec3(t_vec3 *u, int mult)
+void	ft_multby_vec3(t_vec3 *u, float mult)
 {
 	u->x *= mult;
 	u->y *= mult;
