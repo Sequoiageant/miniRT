@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/28 20:49:13 by julnolle         ###   ########.fr        #
+#    Updated: 2020/02/29 14:30:47 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,7 +116,7 @@ $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			echo "\x1b[1m\x1b[32m-> $@ made\x1b[0m"
 
 $(DIR_OBJS):
-	mkdir $@
+	mkdir -p $@
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/28 20:50:00 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/29 14:30:51 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # define NB_STATE	4
 # define NB_OBJ		5
 # define NB_ENV		4
+
+# define EPSILON	1e-9
 
 # define P_R		"R"
 # define P_A		"A"
@@ -200,9 +202,11 @@ typedef struct		s_quadra
 
 typedef struct		s_intersection
 {
+	enum e_bool	set;
 	double	t;
 	t_vec3	pos;
 	t_vec3	norm;
+	
 	int		obj_num;
 }					t_inter;
 

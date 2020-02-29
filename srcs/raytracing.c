@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/28 20:53:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/02/29 14:55:25 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	ft_raytracing(t_data *data)
 	float y;
 	float fov;
 	t_obj *objlst;
-	double t = INFINITY;
+	double t;
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	t_vec3 p;
 	t_win win;
@@ -181,19 +181,24 @@ void	ft_raytracing(t_data *data)
 			ft_normalize(&dir);
 			
 			objlst = data->objlst;
+			t = INFINITY;
+			inter.set = false;
 			while (objlst)
 			{
 				if (intersec[objlst->type](&dir, data, objlst, &inter))
 				{
+					inter.set = true;
 					if (inter.t < t)
 					{
-						finter.obj_num = objlst->type;
+						t = inter.t;
 						finter.pos = inter.pos;
 						finter.norm = inter.norm;
 					}
 				}
 				objlst = objlst->next;
 			}
+			if (inter.set)
+			{
 				p = ft_sub_vec3(&data->lights->pos, &finter.pos);
 				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.norm));
 				int_pix /=  ft_norm_vec3_2(&p);
@@ -203,7 +208,7 @@ void	ft_raytracing(t_data *data)
 					int_pix = 255;
 				color = create_trgb(int_pix,int_pix,int_pix,0);
 				ft_pixel_put(&data->mlx, x, y, color);
-	
+			}
 			x++;
 		}
 		y++;
