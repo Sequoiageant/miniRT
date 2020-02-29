@@ -12,7 +12,16 @@
 
 NAME	= minirt
 
-CC		= clang
+# ---------------- COL --------------- #
+
+red			= \033[1;31m
+green		= \033[1;32m
+yellow		= \033[1;33m
+no_color	= \033[1;0m
+
+# ---------------- CC ---------------- #
+
+CC	= clang
 
 ifeq ($(err), no)
 	CFLAGS += -Wall
@@ -109,22 +118,22 @@ fast:
 
 $(NAME):	$(LIBFT) $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
-			echo "\x1b[1m\x1b[33m-> Linking $@...\x1b[0m"
+			echo "$(yellow)-> Linking $@...$(no_color)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) -c $< -o $@ $(ALL_INC)
-			echo "\x1b[1m\x1b[32m-> $@ made\x1b[0m"
+			echo "$(green)-> $@ made$(no_color)"
 
 $(DIR_OBJS):
 	mkdir -p $@
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
-	echo "\x1b[1m\x1b[31m--> Creating $@...\x1b[0m"
+	echo "$(red)--> Creating $@...$(no_color)"
 
 $(MLX):
 	$(MAKE) -C $(MLX_DIR)
-	echo "\x1b[1m\x1b[31m--> Creating $@...\x1b[0m"
+	echo "$(red)--> Creating $@...$(no_color)"
 
 FORCE:
 
@@ -135,12 +144,12 @@ FORCE:
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
 	$(RM) -R $(DIR_OBJS)
-	echo "\x1b[1m\x1b[31m-> $@ made\x1b[0m"
+	echo "$(red)-> $@ made$(no_color)"
 
 fclean: clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
 	$(RM) $(NAME)
-	echo "\x1b[1m\x1b[31m-> $@ made\x1b[0m"
+	echo "$(red)-> $@ made$(no_color)"
 
 re: fclean
 	$(MAKE)

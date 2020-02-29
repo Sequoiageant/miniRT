@@ -62,19 +62,19 @@
 
 /*
 ** Keycodes MAC
-*/
 
 # define ESC		53
 # define LEFT		123
 # define RIGHT		124
+*/
 
 /*
 ** Keycodes LINUX
+*/
 
 # define ESC		65307
 # define LEFT		65361
 # define RIGHT		65363
-*/
 
 
 /*
