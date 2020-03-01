@@ -129,7 +129,7 @@ $(DIR_OBJS):
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
-	echo "$(red)--> Creating $@...$(no_color)"
+	echo "$(red)--> $@ made$(no_color)"
 
 $(MLX):
 	$(MAKE) -C $(MLX_DIR)
@@ -155,4 +155,4 @@ re: fclean
 	$(MAKE)
 
 .PHONY:		all exec clean fclean re bonus test
-.SILENT:	$(OBJS) $(NAME) $(LIBFT)
+.SILENT:	$(OBJS) $(DIR_OBJS) $(NAME) $(LIBFT)

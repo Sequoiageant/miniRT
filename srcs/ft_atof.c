@@ -12,31 +12,25 @@
 
 #include "libft.h"
 
-int		ft_simple_atoi(const char *str, double *len)
-{
-	int	res;
-
-	res = 0;
-	while (*str >= '0' && *str <= '9')
-	{
-		res = res * 10 + *str - 48;
-		str++;
-		(*len)++;
-	}
-	return (res);
-}
-
 double	ft_atof(const char *str)
 {
 	double	e;
 	double	d;
-	double	len;
+	int		len;
 
 	e = (double)ft_atoi(str);
+	if(str[0] == '-' || str[0] == '+')
+		str++;
 	while (*str >= '0' && *str <= '9')
 		str++;
 	if (*str == '.')
 		str++;
-	d = (double)ft_simple_atoi(str, &len) / pow(10, len);
-	return (e < 0 ? -(-e + d) : e + d);
+	len = 0;
+	while (str[len] >= '0' && str[len] <= '9')
+	{
+		d = d * 10 + str[len] - 48;
+		len++;
+	}
+	d /= pow(10, len);
+	return ((e < 0) ? -(-e + d) : e + d);
 }
