@@ -6,43 +6,35 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/28 12:35:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:16:59 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-float	ft_norm_vec3(t_vec3 *vec)
+t_vec3	new_vec(float a, float b, float c)
 {
-	float	norm;
+	t_vec3 vec;
 
-	norm = 0.0;
-	norm += vec->x * vec->x;
-	norm += vec->y * vec->y;
-	norm += vec->z * vec->z;
-	return (sqrt(norm));
+	vec.x = a;
+	vec.y = b;
+	vec.z = c;
+	return (vec);
 }
 
 float	ft_norm_vec3_2(t_vec3 *vec)
 {
-	float	norm;
+	return (vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+}
 
-	norm = 0.0;
-	norm += vec->x * vec->x;
-	norm += vec->y * vec->y;
-	norm += vec->z * vec->z;
-	return (norm);
+float	ft_norm_vec3(t_vec3 *vec)
+{
+	return (sqrt(ft_norm_vec3_2(vec)));
 }
 
 float 	ft_dot_product3(t_vec3 u, t_vec3 v)
 {
-	float	result;
-
-	result = 0.0;
-	result += u.x * v.x;
-	result += u.y * v.y;
-	result += u.z * v.z;
-	return (result);
+	return (u.x * v.x + u.y * v.y + u.z * v.z);
 }
 
 t_vec3	ft_cross_product3(t_vec3 *u, t_vec3 *v)
@@ -109,4 +101,10 @@ t_vec3	ft_get_normalized(t_vec3 vec)
 	p = vec;
 	ft_normalize(&p);
 	return (p);
+}
+
+double	ft_get_dist(t_vec3 u, t_vec3 v)
+{
+	return (sqrt(pow(v.x - u.x, 2) +
+		pow(v.y - u.y, 2) + pow(v.z - u.z, 2)));
 }

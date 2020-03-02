@@ -1,20 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test4.c                                            :+:      :+:    :+:   */
+/*   ft_atof.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/04 19:06:06 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/28 16:58:07 by julnolle         ###   ########.fr       */
+/*   Created: 2020/02/05 16:58:17 by julnolle          #+#    #+#             */
+/*   Updated: 2020/03/02 12:14:13 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "libft.h"
 
-int	main(void)
+double	ft_atof(const char *str)
 {
-	printf("%.2d%.2d%.2d%.2d\n", 0,255,0,100);
-	printf("%X\n", create_trgb(100,255,0,0));
-	return (0);
+	double	e;
+	double	d;
+	int		len;
+
+	e = (double)ft_atoi(str);
+	if(str[0] == '-' || str[0] == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+		str++;
+	if (*str == '.')
+		str++;
+	len = 0;
+	while (str[len] >= '0' && str[len] <= '9')
+	{
+		d = d * 10 + str[len] - 48;
+		len++;
+	}
+	d /= pow(10, len);
+	return ((e < 0) ? -(-e + d) : e + d);
 }

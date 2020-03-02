@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/29 14:30:47 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/02 17:55:55 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,6 @@ SRCS += ft_set_env.c
 SRCS += ft_set_obj.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
-SRCS += ft_atof.c
 
 # Gnl Sources
 SRCS += get_next_line.c
@@ -85,10 +84,6 @@ SRCS += get_next_line_utils.c
 
 vpath %.c srcs/
 vpath %.c srcs/gnl/
-
-#MAINTEST 	= test.c srcs/ft_set_env.c srcs/ft_atof.c
-#TESTFILE 	=	scene.rt
-
 
 # ---------------- INC --------------- #
 
@@ -104,12 +99,11 @@ OBJS		= $(patsubst %.c, $(DIR_OBJS)%.o, $(SRCS))
 
 # ---------------- LIB --------------- #
 
-## for libft compilation w/o chained list functions ##
-
 LIBFT_DIR 	= libft/
 LIBFT 		= $(LIBFT_DIR)libft.a
 LIB_LINK	= $(LDFLAGS) -L$(LIBFT_DIR) -lft
-####
+
+# --------- Compilation Rules -------- #
 
 all: $(NAME)
 
@@ -137,19 +131,15 @@ $(MLX):
 
 FORCE:
 
-
-# test:	$(HEAD) $(MAINTEST) $(LIBFT) $(GNL_SRCS)
-# 			$(CC) -g $(MAINTEST) $(GNL_SRCS) $(LIBFT) -I$(INCLUDES) -I$(LIBFT_DIR) -o essai && ./essai $(TESTFILE)
-
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
 	$(RM) -R $(DIR_OBJS)
-	echo "$(red)-> $@ made$(no_color)"
+	@echo "$(red)-> $@ made$(no_color)"
 
 fclean: clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
 	$(RM) $(NAME)
-	echo "$(red)-> $@ made$(no_color)"
+	@echo "$(red)-> $@ made$(no_color)"
 
 re: fclean
 	$(MAKE)

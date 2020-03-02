@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/27 17:39:27 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 17:57:23 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,9 @@ float	ft_max(float a, float b)
 float	ft_min(float a, float b)
 {
 	return ((a < b) ? a : b);
+}
+
+float	rad(float alpha)
+{
+	return (alpha * M_PI / 180);
 }

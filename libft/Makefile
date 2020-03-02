@@ -6,11 +6,14 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/02/13 18:59:44 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/02 17:45:21 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	libft.a
+
+CC		=	clang
+CFLAGS	=	-Wall -Wextra -Werror
 
 # ---------------- COL --------------- #
 
@@ -19,27 +22,49 @@ green		= \033[1;32m
 yellow		= \033[1;33m
 no_color	= \033[1;0m
 
-SRCS	= 	ft_putchar.c ft_strlen.c ft_putstr.c ft_putendl.c ft_putnbr.c \
-			ft_atoi.c ft_split2.c ft_strcmp.c \
-			ft_strdup.c ft_memcpy.c
+# ---------------- SRC --------------- #
 
-BONUS	=	ft_lstadd_back.c ft_lstlast.c ft_lstadd_front.c \
-			ft_lstsize.c ft_lstnew.c \
-			ft_lstiter.c ft_lstdelone.c ft_lstclear.c ft_lstmap.c 
+# Main Sources
+
+SRCS	+= 	ft_putchar.c
+SRCS	+= 	ft_strlen.c
+SRCS	+= 	ft_putstr.c
+SRCS	+= 	ft_putendl.c
+SRCS	+= 	ft_putnbr.c
+SRCS	+= 	ft_atoi.c
+SRCS	+= 	ft_split2.c
+SRCS	+= 	ft_strcmp.c
+SRCS	+= 	ft_strdup.c
+SRCS	+= 	ft_memcpy.c
+SRCS	+= 	ft_atof.c
+
+# Bonus Sources
+
+BONUS	+=	ft_lstadd_back.c
+BONUS	+=	ft_lstlast.c
+BONUS	+=	ft_lstadd_front.c
+BONUS	+=	ft_lstsize.c
+BONUS	+=	ft_lstnew.c
+BONUS	+=	ft_lstiter.c
+BONUS	+=	ft_lstdelone.c
+BONUS	+=	ft_lstclear.c
+BONUS	+=	ft_lstmap.c 
+
+vpath %.c .
+
+# ---------------- INC --------------- #
 
 INCLUDES =	./
-
 HEAD = $(INCLUDES)libft.h
 
-OBJS	=	$(SRCS:.c=.o)
+# ---------------- OBJ --------------- #
 
-OBJS_BONUS	=	$(BONUS:.c=.o)
-
-CC		=	gcc
-
-CFLAGS	=	-Wall -Wextra -Werror
+DIR_OBJS	= ./objs/
+OBJS		= $(patsubst %.c, $(DIR_OBJS)%.o, $(SRCS))
+# OBJS_BONUS	= $(patsubst %.c, $(DIR_OBJS)%.o, $(SRCS))
 
 
+# --------- Compilation Rules -------- #
 
 all:		$(NAME)
 
@@ -48,66 +73,29 @@ $(NAME):	$(OBJS)
 			ranlib $(NAME)
 			echo "$(red)--> Creating $@...$(no_color)"
 
-$(OBJS):	%.o: %.c $(HEAD)
+$(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES)
+
+$(DIR_OBJS):
+	mkdir -p $@
 
 bonus : 	$(OBJS_BONUS) $(OBJ)
 			ar rcs $(NAME) $^
 			ranlib $(NAME)
 			echo "$(red)--> Creating $@...$(no_color)"
 
-$(OBJS_BONUS):	%.o: %.c $(HEAD)
-			$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES)
+$(OBJS_BONUS):	$(DIR_OBJS)%.o: %.c $(HEAD)
+				$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES)
 
 clean:
-			$(RM) $(OBJS) $(OBJS_BONUS)
+			$(RM) -R $(DIR_OBJS)
+			echo "$(red)-> $@ libft made$(no_color)"
 
 fclean:		clean
-		   	$(RM) $(NAME)
+			$(RM) $(NAME)
 
-re:			fclean all
-
-.SILENT:	$(OBJS) $(NAME)
-
-coffee:
-	@echo ""
-	@echo "             (         ) "
-	@echo "	              )        ("
-	@echo "               ___)...----)----....___"
-	@echo '           .-""      )    (           ""-.'
-	@echo "      .-''''|-._      (       )        _.-|"
-	@echo '     /  .--.|   `""---...........---""`   |'
-	@echo "    /  /    |                             |"
-	@echo "    |  |    |                             |"
-	@echo "     \  \   |                             |"
-	@echo "      '\ '\ |                             |"
-	@echo "        '\ '|                             |"
-	@echo "        _/ /\                             /"
-	@echo "       (__/  \                           /"
-	@echo '    _..---""` \                         /`""---.._'
-	@echo " .-'           \                       /          '-."
-	@echo ":               '-.__             __.-'              :"
-	@echo ':                  ) ""---...---"" (                :'
-	@echo "\'._                '"--...___...--"'              _.'"
-	@echo '   \""--..__                              __..--""/'
-	@echo "     '._     """----.....______.....----"""         _.'"
-	@echo '         ""--..,,_____            _____,,..--"""'''
-	@echo '                      """------"""'
-
-music:
-	@echo ""                      	  
-	@echo "						  .     	"
-	@echo "		                      .   |     	"
-	@echo "		   _.-._              |  0'     	"
-	@echo "		 ,'     '.__,--.     0'         	"
-	@echo "		/   .--.        |           ,,, 	"
-	@echo "		| [==========|=|=|=|=|==|==_- -]	"
-	@echo "		\   "--" __ .   |           ''' 	"
-	@echo "		 '..__.,'   '--'                	"
-	@echo "		   		    .   .0    . 	       	"
-	@echo "		jn          |)  |)   .|     	   	"
-	@echo "		  ____     0'   '   | 0 	       	"
-	@echo "		  |  |             0'           	"
-	@echo "		 0' 0'								"
+re: 		fclean
+			$(MAKE)
 
 .PHONY:		all clean fclean re bonus coffee music
+.SILENT:	$(OBJS) $(NAME) clean

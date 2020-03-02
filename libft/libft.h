@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 10:02:42 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/13 19:03:50 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 17:19:21 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void			ft_strjoin_back(char *back, char **src);
 void			ft_strjoin_front(char *front, char **src);
 char			*ft_itoa_base(long nb, char *base);
 int				ft_strcmp(const char *s1, const char *s2);
+double			ft_atof(const char *str);
 
 
 #endif

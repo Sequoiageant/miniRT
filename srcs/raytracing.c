@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/29 14:55:25 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 19:34:23 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
 	if (q.t2 < 0)
 		return (0);
-	inter->t = ((q.t1 > 0) ? q.t1 : q.t2);
+	if(q.t1 > 0)
+		inter->t = q.t1;
+	else
+		inter->t =q.t2;
 	ft_multby_vec3(dir, inter->t);
 	inter->pos = ft_add_vec3(&origin, dir);
 	inter->norm = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
@@ -131,22 +134,33 @@ int		rt_pl(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 
 void	reset_image(t_data *data)
 {
-	float	i;
-	float	j;
+	float	x;
+	float	y;
 	t_win	win;
 	win = data->win;
 
-	i = 0;
-	while (i < win.w - 1)
+	y = 0;
+	while (y < win.h - 1)
 	{
-		j = 0;
-		while (j < win.h - 1)
+		x = 0;
+		while (x < win.w - 1)
 		{
-			ft_pixel_put(&data->mlx, i, j, create_trgb((j/win.h)*255, 255, 255, 0));
-			j++;
+			ft_pixel_put(&data->mlx, x, y, create_trgb((y/win.h)*255, 255, 255, 0));
+			x++;
 		}
-		i++;
+		y++;
 	}
+}
+
+void reset_inter(t_inter *inter)
+{
+	inter->t = 0;
+	inter->pos.x = 0.0;
+	inter->pos.y = 0.0;
+	inter->pos.z = 0.0;
+	inter->norm.x = 0.0;
+	inter->norm.y = 0.0;
+	inter->norm.z = 0.0;
 }
 
 void	ft_raytracing(t_data *data)
@@ -157,7 +171,7 @@ void	ft_raytracing(t_data *data)
 	float y;
 	float fov;
 	t_obj *objlst;
-	double t;
+	double min_t;
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	t_vec3 p;
 	t_win win;
@@ -166,9 +180,9 @@ void	ft_raytracing(t_data *data)
 	double int_lum = 1500000;
 	int color;
 
-	reset_image(data);
+	// reset_image(data);
 	win = data->win;
-	fov = select_cam(*data).fov * M_PI / 180;
+	fov = rad(select_cam(*data).fov);
 	y = 0;
 	while (y < win.h - 1)
 	{
@@ -181,16 +195,17 @@ void	ft_raytracing(t_data *data)
 			ft_normalize(&dir);
 			
 			objlst = data->objlst;
-			t = INFINITY;
+			min_t = LARGE_NUMB;
 			inter.set = false;
 			while (objlst)
 			{
+				reset_inter(&inter);
 				if (intersec[objlst->type](&dir, data, objlst, &inter))
 				{
 					inter.set = true;
-					if (inter.t < t)
+					if (inter.t < min_t)
 					{
-						t = inter.t;
+						min_t = inter.t;
 						finter.pos = inter.pos;
 						finter.norm = inter.norm;
 					}
@@ -199,6 +214,7 @@ void	ft_raytracing(t_data *data)
 			}
 			if (inter.set)
 			{
+				int_pix = 0;
 				p = ft_sub_vec3(&data->lights->pos, &finter.pos);
 				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.norm));
 				int_pix /=  ft_norm_vec3_2(&p);
@@ -208,7 +224,11 @@ void	ft_raytracing(t_data *data)
 					int_pix = 255;
 				color = create_trgb(int_pix,int_pix,int_pix,0);
 				ft_pixel_put(&data->mlx, x, y, color);
+				reset_inter(&finter);
 			}
+			else
+				ft_pixel_put(&data->mlx, x, y, create_trgb((y/win.h)*255, 255, 69, 0));
+
 			x++;
 		}
 		y++;

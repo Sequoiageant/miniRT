@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/29 14:30:51 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 18:22:03 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define NB_ENV		4
 
 # define EPSILON	1e-9
+# define LARGE_NUMB	1e99
 
 # define P_R		"R"
 # define P_A		"A"
@@ -61,20 +62,47 @@
 # define TR			0x000010
 
 /*
-** Keycodes MAC
+** Scree size MAC 42
+*/
+
+
+/*
+** Keycodes and screen size MAC 42
+*/
+
+# define MAX_W		2560
+# define MAX_H		1440
 
 # define ESC		53
 # define LEFT		123
 # define RIGHT		124
-*/
+# define UP			126
+# define DOWN		125
+# define KEY_A		0
+# define KEY_S		1
+# define KEY_D		2
+# define KEY_W		13
+# define KEY_Q		12
+# define KEY_E		14
+# define KEY_J		38
+# define KEY_K		40
+# define KEY_L		37
+# define KEY_I		34
+# define KEY_U		32
+# define KEY_O		31
+# define KEY_SPACE	49
+# define KEY_MINUS	78
+# define KEY_PLUS	69
 
 /*
-** Keycodes LINUX
-*/
+** Keycodes and screen size LINUX
+# define MAX_W		2560
+# define MAX_H		1440
 
 # define ESC		65307
 # define LEFT		65361
 # define RIGHT		65363
+*/
 
 
 /*
@@ -316,14 +344,6 @@ typedef struct		s_triangle
 ** objects linked list
 */
 
-/*typedef struct		s_object
-{
-	enum e_obj		type;
-	double			z_pos;
-	void			*content;
-	struct s_object	*next;
-}					t_obj;
-*/
 typedef struct		s_object
 {
 	enum e_obj		type;
@@ -376,9 +396,8 @@ int					set_tr(char **tab, t_obj **objlst, t_data *data);
 
 /*
 ** --------------------------------- Vectors --------------------------------
-*/
 
-/*float				ft_dot_product(float *u, float *v, int dim);
+float				ft_dot_product(float *u, float *v, int dim);
 void				ft_cross_product(float *u, float *v, float *p);
 void				ft_add_vec(float *u, float *v, float *p, int dim);
 void				ft_sub_vec(float *u, float *v, float *p, int dim);
@@ -386,8 +405,10 @@ float				ft_norm_vec(float *u, int dim);
 void				ft_normalize(float *vec, int dim);
 float				ft_norm_vec2(float *vec, int dim);
 float				*ft_get_normalize(float *vec, int dim);
-float				*ft_mult_vec3(float *u, float m);*/
+float				*ft_mult_vec3(float *u, float m);
+*/
 
+t_vec3				new_vec(float a, float b, float c);
 float				ft_dot_product3(t_vec3 u, t_vec3 v);
 t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
 t_vec3				ft_add_vec3(t_vec3 *u, t_vec3 *v);
@@ -411,6 +432,7 @@ void				ft_free_tab2(char **tab);
 float 				ft_max(float a, float b);
 float 				ft_min(float a, float b);
 int					ft_close(t_data *data);
+float				rad(float alpha);
 
 /*
 ** ---------------------------------- forms ---------------------------------

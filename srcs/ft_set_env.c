@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/29 12:36:10 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:27:44 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ int		set_res(char **tab, t_data *data)
 	data->win.w = ft_atoi(tab[1]);
 	data->win.h = ft_atoi(tab[2]);
 	data->win.set = true;
-	if (data->win.w > 2560)
-		data->win.w = 2560;
-	if (data->win.h > 1440)
-		data->win.h = 1440;
+	if (data->win.w > MAX_W)
+		data->win.w = MAX_W;
+	if (data->win.h > MAX_H)
+		data->win.h = MAX_H;
 	return (0);
 }
 
