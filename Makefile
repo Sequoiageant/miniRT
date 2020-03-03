@@ -6,18 +6,13 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/02 17:55:55 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/03 15:32:58 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+include color.mk
+
 NAME	= minirt
-
-# ---------------- COL --------------- #
-
-red			= \033[1;31m
-green		= \033[1;32m
-yellow		= \033[1;33m
-no_color	= \033[1;0m
 
 # ---------------- CC ---------------- #
 
@@ -112,34 +107,34 @@ fast:
 
 $(NAME):	$(LIBFT) $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
-			echo "$(yellow)-> Linking $@...$(no_color)"
+			echo "$(_BOLD)$(_YELLOW)-> Linking $@...$(_END)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) -c $< -o $@ $(ALL_INC)
-			echo "$(green)-> $@ made$(no_color)"
+			echo "$(_BOLD)$(_GREEN)-> $@ made$(_END)"
 
 $(DIR_OBJS):
 	mkdir -p $@
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
-	echo "$(red)--> $@ made$(no_color)"
+	echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
 
 $(MLX):
 	$(MAKE) -C $(MLX_DIR)
-	echo "$(red)--> Creating $@...$(no_color)"
+	echo "$(_BOLD)$(_RED)--> Creating $@...$(_END)"
 
 FORCE:
 
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
 	$(RM) -R $(DIR_OBJS)
-	@echo "$(red)-> $@ made$(no_color)"
+	@echo "$(_BOLD)$(_RED)-> $@ made$(_END)"
 
 fclean: clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
 	$(RM) $(NAME)
-	@echo "$(red)-> $@ made$(no_color)"
+	@echo "$(_BOLD)$(_RED)-> $@ made$(_END)"
 
 re: fclean
 	$(MAKE)

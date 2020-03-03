@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/29 13:42:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 16:30:44 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int	ft_launch_window(t_data *data)
 	mlx.img = mlx_new_image(mlx.mlx_ptr, win.w, win.h);
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel, &mlx.line_length, &mlx.endian);
 	data->mlx = mlx;
-	mlx_hook(mlx.mlx_win, 3, 1L<<1, key_event, data);
+	mlx_hook(mlx.mlx_win, 3, 1L << 1, key_event, data);
 	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, data);
 	// mlx_loop_hook(&mlx, ft_raytracing, data);
 	data->cam_num = 1;

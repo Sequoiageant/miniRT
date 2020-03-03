@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/02 19:34:23 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 16:31:19 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,7 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
 	if (q.t2 < 0)
 		return (0);
-	if(q.t1 > 0)
-		inter->t = q.t1;
-	else
-		inter->t =q.t2;
+	inter->t = ft_min(q.t1, q.t2);
 	ft_multby_vec3(dir, inter->t);
 	inter->pos = ft_add_vec3(&origin, dir);
 	inter->norm = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
@@ -154,7 +151,7 @@ void	reset_image(t_data *data)
 
 void reset_inter(t_inter *inter)
 {
-	inter->t = 0;
+	inter->t = INFINITY;
 	inter->pos.x = 0.0;
 	inter->pos.y = 0.0;
 	inter->pos.z = 0.0;
@@ -177,7 +174,7 @@ void	ft_raytracing(t_data *data)
 	t_win win;
 	t_vec3 dir;
 	double  int_pix = 0;
-	double int_lum = 1500000;
+	double int_lum = 300000;
 	int color;
 
 	// reset_image(data);
@@ -195,7 +192,7 @@ void	ft_raytracing(t_data *data)
 			ft_normalize(&dir);
 			
 			objlst = data->objlst;
-			min_t = LARGE_NUMB;
+			min_t = INFINITY;
 			inter.set = false;
 			while (objlst)
 			{
