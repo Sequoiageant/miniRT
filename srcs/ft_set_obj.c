@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/20 19:00:38 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 19:44:15 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->content = content;
 		new->next = (*objlst);
@@ -45,13 +46,14 @@
 	ft_putendl("	-->element added");
 }*/
 
-void	ft_add_sp(t_obj **objlst, t_sp sp, int type, t_data *data)
+void	ft_add_sp(t_obj **objlst, t_sp sp, int type, t_data *data, int num)
 {
 	t_obj *new;
 
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->u_obj.sp = sp;
 		new->next = (*objlst);
@@ -63,13 +65,14 @@ void	ft_add_sp(t_obj **objlst, t_sp sp, int type, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-void	ft_add_sq(t_obj **objlst, t_sq sq, int type, t_data *data)
+void	ft_add_sq(t_obj **objlst, t_sq sq, int type, t_data *data, int num)
 {
 	t_obj *new;
 
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->u_obj.sq = sq;
 		new->next = (*objlst);
@@ -80,13 +83,14 @@ void	ft_add_sq(t_obj **objlst, t_sq sq, int type, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-void	ft_add_pl(t_obj **objlst, t_pl pl, int type, t_data *data)
+void	ft_add_pl(t_obj **objlst, t_pl pl, int type, t_data *data, int num)
 {
 	t_obj *new;
 
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->u_obj.pl = pl;
 		new->next = (*objlst);
@@ -97,13 +101,14 @@ void	ft_add_pl(t_obj **objlst, t_pl pl, int type, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-void	ft_add_cy(t_obj **objlst, t_cy cy, int type, t_data *data)
+void	ft_add_cy(t_obj **objlst, t_cy cy, int type, t_data *data, int num)
 {
 	t_obj *new;
 
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->u_obj.cy = cy;
 		new->next = (*objlst);
@@ -114,13 +119,14 @@ void	ft_add_cy(t_obj **objlst, t_cy cy, int type, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-void	ft_add_tr(t_obj **objlst, t_tr tr, int type, t_data *data)
+void	ft_add_tr(t_obj **objlst, t_tr tr, int type, t_data *data, int num)
 {
 	t_obj *new;
 
 	new = malloc(sizeof(*new));
 	if (new)
 	{
+		new->num = num;
 		new->type = type;
 		new->u_obj.tr = tr;
 		new->next = (*objlst);
@@ -131,7 +137,7 @@ void	ft_add_tr(t_obj **objlst, t_tr tr, int type, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-int	set_sp(char **tab, t_obj **objlst, t_data *data)
+int	set_sp(char **tab, t_obj **objlst, t_data *data, int num)
 {
 	t_sp	sp;
 	char	**sp_set;
@@ -153,12 +159,12 @@ int	set_sp(char **tab, t_obj **objlst, t_data *data)
 		sp.color.b = ft_atof(sp_set[2]);
 		ft_free_tab2(sp_set);
 	}
-	ft_add_sp(objlst, sp, SPHERE, data);
+	ft_add_sp(objlst, sp, SPHERE, data, num);
 	// print_list2((*objlst));
 	return (0);
 }
 
-int	set_sq(char **tab, t_obj **objlst, t_data *data)
+int	set_sq(char **tab, t_obj **objlst, t_data *data, int num)
 {
 	t_sq	sq;
 	char	**sq_set;
@@ -188,11 +194,11 @@ int	set_sq(char **tab, t_obj **objlst, t_data *data)
 		sq.color.b = ft_atof(sq_set[2]);
 		ft_free_tab2(sq_set);
 	}
-	ft_add_sq(objlst, sq, SQUARE, data);
+	ft_add_sq(objlst, sq, SQUARE, data, num);
 	return (0);
 }
 
-int	set_pl(char **tab, t_obj **objlst, t_data *data)
+int	set_pl(char **tab, t_obj **objlst, t_data *data, int num)
 {
 	t_pl	pl;
 	char	**pl_set;
@@ -221,11 +227,11 @@ int	set_pl(char **tab, t_obj **objlst, t_data *data)
 		pl.color.b = ft_atof(pl_set[2]);
 		ft_free_tab2(pl_set);
 	}
-	ft_add_pl(objlst, pl, PLANE, data);
+	ft_add_pl(objlst, pl, PLANE, data, num);
 	return (0);
 }
 
-int	set_cy(char **tab, t_obj **objlst, t_data *data)
+int	set_cy(char **tab, t_obj **objlst, t_data *data, int num)
 {
 	t_cy	cy;
 	char	**cy_set;
@@ -256,11 +262,11 @@ int	set_cy(char **tab, t_obj **objlst, t_data *data)
 	}
 	cy.dia = ft_atof(tab[4]);
 	cy.h = ft_atof(tab[5]);
-	ft_add_cy(objlst, cy, CYLINDER, data);
+	ft_add_cy(objlst, cy, CYLINDER, data, num);
 	return (0);
 }
 
-int	set_tr(char **tab, t_obj **objlst, t_data *data)
+int	set_tr(char **tab, t_obj **objlst, t_data *data, int num)
 {
 	t_tr	tr;
 	char	**tr_set;
@@ -297,6 +303,6 @@ int	set_tr(char **tab, t_obj **objlst, t_data *data)
 		tr.color.b = ft_atof(tr_set[2]);
 		ft_free_tab2(tr_set);
 	}
-	ft_add_tr(objlst, tr, TRIANGLE, data);
+	ft_add_tr(objlst, tr, TRIANGLE, data, num);
 	return (0);
 }

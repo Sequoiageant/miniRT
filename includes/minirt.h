@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/02 18:22:03 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 19:41:05 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ typedef struct		s_intersection
 	enum e_bool	set;
 	double	t;
 	t_vec3	pos;
-	t_vec3	norm;
+	t_vec3	normal;
 	
 	int		obj_num;
 }					t_inter;
@@ -380,7 +380,7 @@ typedef struct		s_data
 */
 
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **, t_data *);
+typedef	int			(*t_func2)(char **, t_obj **, t_data *, int);
 typedef	int			(*t_func3)(char **, t_data *);
 // typedef	int			(*t_ray)(t_data *, t_obj *);
 typedef	int			(*t_ray)(t_vec3 *, t_data *, t_obj *, t_inter *);
@@ -388,11 +388,11 @@ int					set_res(char **tab, t_data *data);
 int					set_light(char **tab, t_data *data);
 int					set_al(char **tab, t_data *data);
 int					set_cam(char **tab, t_data *data);
-int					set_sp(char **tab, t_obj **objlst, t_data *data);
-int					set_sq(char **tab, t_obj **objlst, t_data *data);
-int					set_pl(char **tab, t_obj **objlst, t_data *data);
-int					set_cy(char **tab, t_obj **objlst, t_data *data);
-int					set_tr(char **tab, t_obj **objlst, t_data *data);
+int					set_sp(char **tab, t_obj **objlst, t_data *data, int num);
+int					set_sq(char **tab, t_obj **objlst, t_data *data, int num);
+int					set_pl(char **tab, t_obj **objlst, t_data *data, int num);
+int					set_cy(char **tab, t_obj **objlst, t_data *data, int num);
+int					set_tr(char **tab, t_obj **objlst, t_data *data, int num);
 
 /*
 ** --------------------------------- Vectors --------------------------------

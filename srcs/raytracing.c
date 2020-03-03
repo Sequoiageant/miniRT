@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 16:31:19 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 20:02:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,33 +64,6 @@ t_cam	select_cam(t_data data)
 	return (*data.cams);
 }
 
-int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
-{
-	t_vec3		origin;
-	t_vec3		oc;
-	t_quadra	q;
-	float		r;
-
-	r = objlst->u_obj.sp.dia;
-	origin = select_cam(*data).pos;
-	oc = ft_sub_vec3(&origin, &objlst->u_obj.sp.pos);
-	q.a = 1;
-	q.b = 2.0 * ft_dot_product3(*dir, oc);
-	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
-	q.delta = q.b * q.b - 4 * q.a * q.c;
-	if (q.delta < 0)
-		return (0);
-	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
-	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
-	if (q.t2 < 0)
-		return (0);
-	inter->t = ft_min(q.t1, q.t2);
-	ft_multby_vec3(dir, inter->t);
-	inter->pos = ft_add_vec3(&origin, dir);
-	inter->norm = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
-	ft_normalize(&inter->norm);
-	return (1);
-}
 
 int		rt_tr(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 {
@@ -155,9 +128,37 @@ void reset_inter(t_inter *inter)
 	inter->pos.x = 0.0;
 	inter->pos.y = 0.0;
 	inter->pos.z = 0.0;
-	inter->norm.x = 0.0;
-	inter->norm.y = 0.0;
-	inter->norm.z = 0.0;
+	inter->normal.x = 0.0;
+	inter->normal.y = 0.0;
+	inter->normal.z = 0.0;
+}
+
+int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+{
+	t_vec3		origin;
+	t_vec3		oc;
+	t_quadra	q;
+	float		r;
+
+	r = objlst->u_obj.sp.dia;
+	origin = select_cam(*data).pos;
+	oc = ft_sub_vec3(&origin, &objlst->u_obj.sp.pos);
+	q.a = 1;
+	q.b = 2.0 * ft_dot_product3(*dir, oc);
+	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
+	q.delta = q.b * q.b - 4 * q.a * q.c;
+	if (q.delta < 0)
+		return (FALSE);
+	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
+	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
+	if (q.t2 < 0)
+		return (FALSE);
+	inter->t = ft_min(q.t1, q.t2);
+	ft_multby_vec3(dir, inter->t);
+	inter->pos = ft_add_vec3(&origin, dir);
+	inter->normal = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
+	ft_normalize(&inter->normal);
+	return (TRUE);
 }
 
 void	ft_raytracing(t_data *data)
@@ -190,7 +191,7 @@ void	ft_raytracing(t_data *data)
 			dir.y = y - win.h / 2;
 			dir.z = -win.w / (2.0 * tan(fov / 2.0));
 			ft_normalize(&dir);
-			
+
 			objlst = data->objlst;
 			min_t = INFINITY;
 			inter.set = false;
@@ -202,9 +203,10 @@ void	ft_raytracing(t_data *data)
 					inter.set = true;
 					if (inter.t < min_t)
 					{
+					printf("%d", objlst->num);
 						min_t = inter.t;
 						finter.pos = inter.pos;
-						finter.norm = inter.norm;
+						finter.normal = inter.normal;
 					}
 				}
 				objlst = objlst->next;
@@ -213,7 +215,7 @@ void	ft_raytracing(t_data *data)
 			{
 				int_pix = 0;
 				p = ft_sub_vec3(&data->lights->pos, &finter.pos);
-				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.norm));
+				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.normal));
 				int_pix /=  ft_norm_vec3_2(&p);
 				if (int_pix < 0.0)
 					int_pix = 0;

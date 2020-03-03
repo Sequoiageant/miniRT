@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 16:30:44 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/03 19:37:49 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ int	ft_list_objects(char **tab, t_data *data, int i)
 {
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
 	static t_obj	*objlst;
+	static int		obj_num = 1;
 
-	func[i](tab, &objlst, data);
+	func[i](tab, &objlst, data, obj_num);
+	obj_num++;
 	return (0);
 }
 
