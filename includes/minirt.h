@@ -61,49 +61,48 @@
 # define CY			0x000008
 # define TR			0x000010
 
+
+# ifdef LINUX
 /*
-** Scree size MAC 42
+** Keycodes and screen size LINUX
 */
+#  define MAX_W		2560
+#  define MAX_H		1440
 
+#  define ESC		65307
+#  define LEFT		65361
+#  define RIGHT		65363
 
+#  else
 /*
 ** Keycodes and screen size MAC 42
 */
 
-# define MAX_W		2560
-# define MAX_H		1440
+#  define MAX_W		2560
+#  define MAX_H		1440
 
-# define ESC		53
-# define LEFT		123
-# define RIGHT		124
-# define UP			126
-# define DOWN		125
-# define KEY_A		0
-# define KEY_S		1
-# define KEY_D		2
-# define KEY_W		13
-# define KEY_Q		12
-# define KEY_E		14
-# define KEY_J		38
-# define KEY_K		40
-# define KEY_L		37
-# define KEY_I		34
-# define KEY_U		32
-# define KEY_O		31
-# define KEY_SPACE	49
-# define KEY_MINUS	78
-# define KEY_PLUS	69
+#  define ESC		53
+#  define LEFT		123
+#  define RIGHT		124
+#  define UP			126
+#  define DOWN		125
+#  define KEY_A		0
+#  define KEY_S		1
+#  define KEY_D		2
+#  define KEY_W		13
+#  define KEY_Q		12
+#  define KEY_E		14
+#  define KEY_J		38
+#  define KEY_K		40
+#  define KEY_L		37
+#  define KEY_I		34
+#  define KEY_U		32
+#  define KEY_O		31
+#  define KEY_SPACE	49
+#  define KEY_PLUS	69
+#  define KEY_MINUS	78
 
-/*
-** Keycodes and screen size LINUX
-# define MAX_W		2560
-# define MAX_H		1440
-
-# define ESC		65307
-# define LEFT		65361
-# define RIGHT		65363
-*/
-
+# endif
 
 /*
 ** ----------------------------------- Enum ----------------------------------
@@ -443,7 +442,7 @@ float				rad(float alpha);
 t_col				char_to_col(char *r, char *g, char *b);
 int					color_encode(t_col col);
 t_col				mult_col_float(t_col col, float mult);
-t_col				add_col_col(t_col col, t_col add);
+t_col				add_colors(t_col col, t_col add);
 
 /*
 ** ---------------------------------- forms ---------------------------------

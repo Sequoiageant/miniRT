@@ -57,9 +57,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 	MLX_DIR 	= ./minilibx/
 	LDFLAGS		= -lmlx -lX11 -lXext -lm
+	ENV			= -D LINUX
 else
 	MLX_DIR 	= ./minilibx_opengl_20191021/
 	LDFLAGS		= -L $(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+	ENV			=
 endif
 
 # ---------------- SRC --------------- #
@@ -110,7 +112,7 @@ $(NAME):	$(LIBFT) $(OBJS)
 			echo "$(_BOLD)$(_YELLOW)-> Linking $@...$(_END)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
-			$(CC) $(CFLAGS) -c $< -o $@ $(ALL_INC)
+			$(CC) $(CFLAGS) $(ENV) -c $< -o $@ $(ALL_INC)
 			echo "$(_BOLD)$(_GREEN)-> $@ made$(_END)"
 
 $(DIR_OBJS):
