@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/02 17:45:21 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/04 16:32:55 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,10 @@ SRCS	+= 	ft_putnbr.c
 SRCS	+= 	ft_atoi.c
 SRCS	+= 	ft_split2.c
 SRCS	+= 	ft_strcmp.c
-SRCS	+= 	ft_strdup.c
 SRCS	+= 	ft_memcpy.c
+SRCS	+= 	ft_strdup.c
+SRCS	+= 	ft_strjoin.c
+SRCS	+= 	ft_substr.c
 SRCS	+= 	ft_atof.c
 
 # Bonus Sources

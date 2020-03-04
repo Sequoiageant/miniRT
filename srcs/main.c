@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 19:37:49 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/04 14:45:49 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,11 +284,11 @@ int	main(int ac, char **av)
 		{
 			parser(&data, fd);
 			close(fd);
+			ft_launch_window(&data);
 		}
-		ft_launch_window(&data);
 	}
 	else
 		return (FAILURE);
-	system("leaks a.out");
+	// system("leaks a.out");
 	return (SUCCESS);
 }

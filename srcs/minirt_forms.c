@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 15:48:03 by julnolle          #+#    #+#             */
-/*   Updated: 2020/02/20 12:58:45 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/04 16:49:29 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_draw_circle(t_mlx *mlx)
 			x = r * cos(angle * M_PI / 180);
 			y = r * sin(angle * M_PI / 180);
 			// mlx_pixel_put(mlx->mlx_ptr, mlx->mlx_win, x + 300, y + 300, 0.1*color.r*color.g*color.b);
-			ft_pixel_put(mlx, x + 300, y + 300, create_trgb(255, (angle/360)*255, (angle/360)*255, 0));
+			ft_pixel_put(mlx, x + 300, y + 300, create_rgb(255, (angle/360)*255, (angle/360)*255));
 			angle += 0.1;
 		}
 		r--;

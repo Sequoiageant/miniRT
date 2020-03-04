@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/03 15:32:58 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/04 16:35:21 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,10 +72,10 @@ SRCS += ft_set_env.c
 SRCS += ft_set_obj.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
+SRCS += color_utils.c
 
 # Gnl Sources
 SRCS += get_next_line.c
-SRCS += get_next_line_utils.c
 
 vpath %.c srcs/
 vpath %.c srcs/gnl/

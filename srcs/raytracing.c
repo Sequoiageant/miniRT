@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 20:02:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/04 19:59:16 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	reset_image(t_data *data)
 		x = 0;
 		while (x < win.w - 1)
 		{
-			ft_pixel_put(&data->mlx, x, y, create_trgb((y/win.h)*255, 255, 255, 0));
+			ft_pixel_put(&data->mlx, x, y, create_rgb(255, 255, 255));
 			x++;
 		}
 		y++;
@@ -142,23 +142,42 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 
 	r = objlst->u_obj.sp.dia;
 	origin = select_cam(*data).pos;
-	oc = ft_sub_vec3(&origin, &objlst->u_obj.sp.pos);
-	q.a = 1;
+	oc = ft_sub_vec3(origin, objlst->u_obj.sp.pos);
+	q.a = ft_norm_vec3_2(dir);
 	q.b = 2.0 * ft_dot_product3(*dir, oc);
-	q.c = ft_norm_vec3_2(&oc) - ((r/2) * (r/2));
-	q.delta = q.b * q.b - 4 * q.a * q.c;
-	if (q.delta < 0)
+	q.c = ft_norm_vec3_2(&oc) - (r * r);
+	q.delta = q.b * q.b - 4.0 * q.a * q.c;
+	if (q.delta < 0.)
 		return (FALSE);
 	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
 	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
-	if (q.t2 < 0)
+	if (q.t2 < 0.)
 		return (FALSE);
 	inter->t = ft_min(q.t1, q.t2);
-	ft_multby_vec3(dir, inter->t);
-	inter->pos = ft_add_vec3(&origin, dir);
-	inter->normal = ft_sub_vec3(&inter->pos, &objlst->u_obj.sp.pos);
+	inter->pos = ft_add_vec3(origin, ft_multby_vec3(dir, inter->t));
+	inter->normal = ft_sub_vec3(inter->pos, objlst->u_obj.sp.pos);
 	ft_normalize(&inter->normal);
 	return (TRUE);
+}
+
+t_vec3	trace_ray_normalized(t_win win, float x, float y, float fov)
+{
+	t_vec3 ray;
+
+	ray.x = x - win.w / 2;
+	ray.y = y - win.h / 2;
+	ray.z = -win.w / (2.0 * tan(fov / 2.0));
+	ft_normalize(&ray);
+	return (ray);
+}
+
+int		set_color(t_col color, double intensity, t_col lum_col)
+{
+	t_col	tmp_col;
+
+	tmp_col = add_colors(color, lum_col);
+	tmp_col = mult_col_float(tmp_col, intensity);
+	return (color_encode(tmp_col));
 }
 
 void	ft_raytracing(t_data *data)
@@ -175,38 +194,36 @@ void	ft_raytracing(t_data *data)
 	t_win win;
 	t_vec3 dir;
 	double  int_pix = 0;
-	double int_lum = 300000;
+	double int_lum;
 	int color;
 
 	// reset_image(data);
 	win = data->win;
 	fov = rad(select_cam(*data).fov);
+	int_lum = data->lights->lum * 500000;
 	y = 0;
 	while (y < win.h - 1)
 	{
 		x = 0;
 		while (x < win.w - 1)
 		{
-			dir.x = x - win.w / 2;
-			dir.y = y - win.h / 2;
-			dir.z = -win.w / (2.0 * tan(fov / 2.0));
-			ft_normalize(&dir);
-
 			objlst = data->objlst;
 			min_t = INFINITY;
 			inter.set = false;
+			dir = trace_ray_normalized(win, x, y, fov);
 			while (objlst)
 			{
 				reset_inter(&inter);
 				if (intersec[objlst->type](&dir, data, objlst, &inter))
 				{
 					inter.set = true;
-					if (inter.t < min_t)
+					if (inter.t <= min_t)
 					{
-					printf("%d", objlst->num);
 						min_t = inter.t;
 						finter.pos = inter.pos;
 						finter.normal = inter.normal;
+						finter.obj_num = objlst->num;
+						finter.col = objlst->col;
 					}
 				}
 				objlst = objlst->next;
@@ -214,19 +231,20 @@ void	ft_raytracing(t_data *data)
 			if (inter.set)
 			{
 				int_pix = 0;
-				p = ft_sub_vec3(&data->lights->pos, &finter.pos);
+				p = ft_sub_vec3(data->lights->pos, finter.pos);
 				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.normal));
 				int_pix /=  ft_norm_vec3_2(&p);
+				int_pix /=  255;
 				if (int_pix < 0.0)
 					int_pix = 0;
-				if (int_pix > 255)
-					int_pix = 255;
-				color = create_trgb(int_pix,int_pix,int_pix,0);
+				if (int_pix > 1)
+					int_pix = 1;
+
+				color = set_color(finter.col, int_pix, data->lights->color);
 				ft_pixel_put(&data->mlx, x, y, color);
-				reset_inter(&finter);
 			}
 			else
-				ft_pixel_put(&data->mlx, x, y, create_trgb((y/win.h)*255, 255, 69, 0));
+				ft_pixel_put(&data->mlx, x, y, create_rgb((y/win.h)*255, 255, 69));
 
 			x++;
 		}

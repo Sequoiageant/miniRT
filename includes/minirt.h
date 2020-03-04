@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 19:41:05 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/04 19:36:17 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@
 # define NB_OBJ		5
 # define NB_ENV		4
 
-# define EPSILON	1e-9
-# define LARGE_NUMB	1e99
+# define EPSILON	1.0e-6
+# define LARGE_NUMB	1.0e99
 
 # define P_R		"R"
 # define P_A		"A"
@@ -215,13 +215,13 @@ typedef struct		s_color
 
 typedef struct		s_quadra
 {
-	double a;
-	double b;
-	double c;
-	double delta;
-	double t;
-	double t1;
-	double t2;
+	float a;
+	float b;
+	float c;
+	float delta;
+	float t;
+	float t1;
+	float t2;
 }					t_quadra;
 
 /*
@@ -231,11 +231,11 @@ typedef struct		s_quadra
 typedef struct		s_intersection
 {
 	enum e_bool	set;
-	double	t;
-	t_vec3	pos;
-	t_vec3	normal;
-	
-	int		obj_num;
+	enum e_obj	obj_num;
+	double		t;
+	t_vec3		pos;
+	t_vec3		normal;
+	t_col		col;
 }					t_inter;
 
 /*
@@ -348,6 +348,7 @@ typedef struct		s_object
 {
 	enum e_obj		type;
 	int				num;
+	t_col			col;
 	union
 	{
 		t_sp		sp;
@@ -409,16 +410,17 @@ float				*ft_mult_vec3(float *u, float m);
 */
 
 t_vec3				new_vec(float a, float b, float c);
+t_vec3				new_vec_from_char(char *a, char *b, char *c);
 float				ft_dot_product3(t_vec3 u, t_vec3 v);
 t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
-t_vec3				ft_add_vec3(t_vec3 *u, t_vec3 *v);
-t_vec3				ft_sub_vec3(t_vec3 *u, t_vec3 *v);
+t_vec3				ft_add_vec3(t_vec3 u, t_vec3 v);
+t_vec3				ft_sub_vec3(t_vec3 u, t_vec3 v);
 float				ft_norm_vec3(t_vec3 *u);
 void				ft_normalize(t_vec3 *vec);
 float				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
 float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
-void				ft_multby_vec3(t_vec3 *u, float mult);
+t_vec3				ft_multby_vec3(t_vec3 *u, float mult);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -426,13 +428,22 @@ void				ft_multby_vec3(t_vec3 *u, float mult);
 
 int					ft_launch_window(t_data *data);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
-int					create_trgb(int t, int r, int g, int b);
+int					create_rgb(int r, int g, int b);
 double				ft_atof(const char *str);
 void				ft_free_tab2(char **tab);
 float 				ft_max(float a, float b);
 float 				ft_min(float a, float b);
 int					ft_close(t_data *data);
 float				rad(float alpha);
+
+/*
+** ---------------------------------- Colors ---------------------------------
+*/
+
+t_col				char_to_col(char *r, char *g, char *b);
+int					color_encode(t_col col);
+t_col				mult_col_float(t_col col, float mult);
+t_col				add_col_col(t_col col, t_col add);
 
 /*
 ** ---------------------------------- forms ---------------------------------

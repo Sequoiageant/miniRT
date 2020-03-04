@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/02 16:16:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/04 16:03:24 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,16 @@ t_vec3	new_vec(float a, float b, float c)
 	vec.x = a;
 	vec.y = b;
 	vec.z = c;
+	return (vec);
+}
+
+t_vec3	new_vec_from_char(char *a, char *b, char *c)
+{
+	t_vec3 vec;
+
+	vec.x = ft_atof(a);
+	vec.y = ft_atof(b);
+	vec.z = ft_atof(c);
 	return (vec);
 }
 
@@ -47,23 +57,23 @@ t_vec3	ft_cross_product3(t_vec3 *u, t_vec3 *v)
 	return (p);
 }
 
-t_vec3	ft_add_vec3(t_vec3 *u, t_vec3 *v)
+t_vec3	ft_add_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3 p;
 
-	p.x = u->x + v->x;
-	p.y = u->y + v->y;
-	p.z = u->z + v->z;
+	p.x = u.x + v.x;
+	p.y = u.y + v.y;
+	p.z = u.z + v.z;
 	return (p);
 }
 
-t_vec3	ft_sub_vec3(t_vec3 *u, t_vec3 *v)
+t_vec3	ft_sub_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3 p;
 
-	p.x = u->x - v->x;
-	p.y = u->y - v->y;
-	p.z = u->z - v->z;
+	p.x = u.x - v.x;
+	p.y = u.y - v.y;
+	p.z = u.z - v.z;
 	return (p);
 }
 
@@ -74,11 +84,14 @@ void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
 	u->z *= dir->z;
 }
 
-void	ft_multby_vec3(t_vec3 *u, float mult)
+t_vec3	ft_multby_vec3(t_vec3 *u, float mult)
 {
-	u->x *= mult;
-	u->y *= mult;
-	u->z *= mult;
+	t_vec3 p;
+
+	p.x = u->x * mult;
+	p.y = u->y * mult;
+	p.z = u->z * mult;
+	return (p);
 }
 
 void	ft_normalize(t_vec3 *vec)
@@ -96,11 +109,8 @@ void	ft_normalize(t_vec3 *vec)
 
 t_vec3	ft_get_normalized(t_vec3 vec)
 {
-	t_vec3	p;
-
-	p = vec;
-	ft_normalize(&p);
-	return (p);
+	ft_normalize(&vec);
+	return (vec);
 }
 
 double	ft_get_dist(t_vec3 u, t_vec3 v)
