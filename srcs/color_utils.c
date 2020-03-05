@@ -6,11 +6,16 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 15:53:12 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 19:59:11 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/05 18:14:22 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int		rgb_to_int(int r, int g, int b)
+{
+	return(r << 16 | g << 8 | b);
+}
 
 t_col	int_to_col(int r, int g, int b)
 {
@@ -49,6 +54,16 @@ t_col	add_colors(t_col col, t_col add)
 	new_col.r = ft_min(col.r + add.r, 255);
 	new_col.g = ft_min(col.g + add.g, 255);
 	new_col.b = ft_min(col.b + add.b, 255);
+	return (new_col);
+}
+
+t_col	sub_colors(t_col col, t_col sub)
+{
+	t_col new_col;
+
+	new_col.r = ft_min(col.r - sub.r, 255);
+	new_col.g = ft_min(col.g - sub.g, 255);
+	new_col.b = ft_min(col.b - sub.b, 255);
 	return (new_col);
 }
 

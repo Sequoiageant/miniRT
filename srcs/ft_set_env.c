@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/02 16:27:44 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/05 18:45:21 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	print_lights(t_light *lights)
 {
 	while (lights)
 	{
-		printf("	-->%f\n", lights->pos.x);
-		printf("	-->%f\n", lights->pos.y);
-		printf("	-->%f\n", lights->pos.z);
+		printf("	--> %f %f %f \n", lights->pos.x, lights->pos.y, lights->pos.z);
 		lights = lights->next;
 	}
 }

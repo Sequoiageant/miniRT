@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 19:59:16 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/05 20:50:47 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	reset_image(t_data *data)
 		x = 0;
 		while (x < win.w - 1)
 		{
-			ft_pixel_put(&data->mlx, x, y, create_rgb(255, 255, 255));
+			ft_pixel_put(&data->mlx, x, y, rgb_to_int(255, 255, 255));
 			x++;
 		}
 		y++;
@@ -175,80 +175,109 @@ int		set_color(t_col color, double intensity, t_col lum_col)
 {
 	t_col	tmp_col;
 
-	tmp_col = add_colors(color, lum_col);
+	tmp_col = color;
+	tmp_col = add_colors(tmp_col, lum_col);
+	// printf("%d %d %d \n", tmp_col.r, tmp_col.g, tmp_col.b);
 	tmp_col = mult_col_float(tmp_col, intensity);
 	return (color_encode(tmp_col));
 }
 
+void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
+{
+	t_inter inter;
+	t_obj *objlst;
+	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
+	
+	objlst = data->objlst;
+	while (objlst)
+	{
+		reset_inter(&inter);
+		if (intersec[objlst->type](dir, data, objlst, &inter))
+		{
+			finter->set = true;
+			if (inter.t <= finter->min_t)
+			{
+				finter->min_t = inter.t;
+				finter->pos = inter.pos;
+				finter->normal = inter.normal;
+				finter->obj_num = objlst->num;
+				finter->col = objlst->col;
+			}
+		}
+		objlst = objlst->next;
+	}
+}
+
+int		calc_pixel_color(t_light *lights, t_inter finter)
+{
+	t_vec3	p;
+	double	int_pix;
+	double	int_lum;
+	t_light	*lights_cpy;
+	t_col	col;
+
+	col = finter.col;
+	lights_cpy = lights;
+	int_pix = 0.0;
+	while (lights_cpy)
+	{
+		int_lum = lights_cpy->lum * 500000.0;
+		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
+		int_pix = int_lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+	int_pix /=  255.0;
+	if (int_pix < 0.0)
+		int_pix = 0.0;
+	if (int_pix > 1.0)
+		int_pix = 1.0;
+		col = add_colors(col, lights_cpy->color);
+		col = mult_col_float(col, int_pix);
+		lights_cpy = lights_cpy->next;
+	}
+	// printf("%s\n", "________");
+	return (color_encode(col));
+}
+
+int		modulate_color(t_data *data, t_inter finter, double back_color)
+{
+	int		color;
+	double	int_pix;
+
+	int_pix = 0.0;
+	if (finter.set)
+	{
+		color = calc_pixel_color(data->lights, finter);
+	}
+	else
+		color = rgb_to_int(back_color * 255, 255, 69);
+	return (color);
+}
+
 void	ft_raytracing(t_data *data)
 {
-	t_inter	inter;
 	t_inter	finter;
-	float x;
-	float y;
-	float fov;
-	t_obj *objlst;
-	double min_t;
-	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
-	t_vec3 p;
-	t_win win;
-	t_vec3 dir;
-	double  int_pix = 0;
-	double int_lum;
-	int color;
+	t_win	win;
+	t_vec3	dir;
+	float	fov;
+	int		color;
 
-	// reset_image(data);
 	win = data->win;
 	fov = rad(select_cam(*data).fov);
-	int_lum = data->lights->lum * 500000;
-	y = 0;
-	while (y < win.h - 1)
+	win.y = 0;
+	while (win.y < win.h - 1)
 	{
-		x = 0;
-		while (x < win.w - 1)
+		win.x = 0;
+		while (win.x < win.w - 1)
 		{
-			objlst = data->objlst;
-			min_t = INFINITY;
-			inter.set = false;
-			dir = trace_ray_normalized(win, x, y, fov);
-			while (objlst)
-			{
-				reset_inter(&inter);
-				if (intersec[objlst->type](&dir, data, objlst, &inter))
-				{
-					inter.set = true;
-					if (inter.t <= min_t)
-					{
-						min_t = inter.t;
-						finter.pos = inter.pos;
-						finter.normal = inter.normal;
-						finter.obj_num = objlst->num;
-						finter.col = objlst->col;
-					}
-				}
-				objlst = objlst->next;
-			}
-			if (inter.set)
-			{
-				int_pix = 0;
-				p = ft_sub_vec3(data->lights->pos, finter.pos);
-				int_pix = int_lum * ft_max(0.0, ft_dot_product3(ft_get_normalized(p), finter.normal));
-				int_pix /=  ft_norm_vec3_2(&p);
-				int_pix /=  255;
-				if (int_pix < 0.0)
-					int_pix = 0;
-				if (int_pix > 1)
-					int_pix = 1;
+			finter.min_t = INFINITY;
+			finter.set = false;
+			dir = trace_ray_normalized(win, win.x, win.y, fov);
+			find_closest_inter(data, &finter, &dir);
+			color = modulate_color(data, finter, (win.y/win.h));
+			ft_pixel_put(&data->mlx, win.x, win.y, color);
 
-				color = set_color(finter.col, int_pix, data->lights->color);
-				ft_pixel_put(&data->mlx, x, y, color);
-			}
-			else
-				ft_pixel_put(&data->mlx, x, y, create_rgb((y/win.h)*255, 255, 69));
-
-			x++;
+			win.x++;
 		}
-		y++;
+		win.y++;
 	}
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);
 }

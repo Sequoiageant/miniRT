@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 19:36:17 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/05 17:12:20 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@
 #  define ESC		53
 #  define LEFT		123
 #  define RIGHT		124
-#  define UP			126
+#  define UP		126
 #  define DOWN		125
 #  define KEY_A		0
 #  define KEY_S		1
@@ -176,7 +176,9 @@ typedef struct		s_image {
 typedef struct		s_win
 {
 	double		w;
-	double		h;
+	double		h;	
+	double		x;
+	double		y;
 	enum e_bool	set;
 	char		pad[4];
 }					t_win;
@@ -232,6 +234,7 @@ typedef struct		s_intersection
 	enum e_bool	set;
 	enum e_obj	obj_num;
 	double		t;
+	double		min_t;
 	t_vec3		pos;
 	t_vec3		normal;
 	t_col		col;
@@ -427,7 +430,7 @@ t_vec3				ft_multby_vec3(t_vec3 *u, float mult);
 
 int					ft_launch_window(t_data *data);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
-int					create_rgb(int r, int g, int b);
+int					rgb_to_int(int r, int g, int b);
 double				ft_atof(const char *str);
 void				ft_free_tab2(char **tab);
 float 				ft_max(float a, float b);
@@ -443,6 +446,7 @@ t_col				char_to_col(char *r, char *g, char *b);
 int					color_encode(t_col col);
 t_col				mult_col_float(t_col col, float mult);
 t_col				add_colors(t_col col, t_col add);
+t_col				sub_colors(t_col col, t_col sub);
 
 /*
 ** ---------------------------------- forms ---------------------------------
