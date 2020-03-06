@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 15:53:12 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/05 18:14:22 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/06 11:35:47 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ t_col	mult_col_float(t_col col, float mult)
 	return (int_to_col(col.r * mult, col.g * mult, col.b * mult));
 }
 
+t_col	mult_col(t_col col1, t_col col2)
+{
+	return (int_to_col(col1.r * (col2.r / 255.0), col1.g * (col2.g / 255.0), col1.b * (col2.b / 255.0)));
+}
+
 int		color_encode(t_col col)
 {
 	return(col.r << 16 | col.g << 8 | col.b);
@@ -66,6 +71,17 @@ t_col	sub_colors(t_col col, t_col sub)
 	new_col.b = ft_min(col.b - sub.b, 255);
 	return (new_col);
 }
+
+t_col	ft_min_col(t_col col)
+{
+		t_col new_col;
+
+	new_col.r = ft_min(col.r, 255);
+	new_col.g = ft_min(col.g, 255);
+	new_col.b = ft_min(col.b, 255);
+	return (new_col);
+}
+
 
 /*
 

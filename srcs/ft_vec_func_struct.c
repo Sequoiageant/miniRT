@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 16:03:24 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/06 14:12:24 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ t_vec3	new_vec(float a, float b, float c)
 	vec.y = b;
 	vec.z = c;
 	return (vec);
+}
+
+void	reset_vec(t_vec3 *vec)
+{
+	vec->x = 0;
+	vec->y = 0;
+	vec->z = 0;
 }
 
 t_vec3	new_vec_from_char(char *a, char *b, char *c)

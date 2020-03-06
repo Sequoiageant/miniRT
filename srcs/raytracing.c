@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/05 20:50:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/06 18:23:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int		rt_tr(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	(void)dir;
 	(void)inter;
 	// printf("%s\n", "raytracing of triangle");
-	return (0);
+	return (FALSE);
 }
 int		rt_cy(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 {
@@ -81,7 +81,7 @@ int		rt_cy(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	(void)dir;
 	(void)inter;
 	// printf("%s\n", "raytracing of cylinder");
-	return (0);
+	return (FALSE);
 }
 int		rt_sq(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 {
@@ -90,16 +90,7 @@ int		rt_sq(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	(void)dir;
 	(void)inter;
 	// printf("%s\n", "raytracing of square");
-	return (0);
-}
-int		rt_pl(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
-{
-	(void)data;
-	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of plane");
-	return (0);
+	return (FALSE);
 }
 
 void	reset_image(t_data *data)
@@ -120,6 +111,29 @@ void	reset_image(t_data *data)
 		}
 		y++;
 	}
+}
+
+int		rt_pl(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+{
+	t_vec3		origin;
+	t_vec3		p;
+	float		denom;
+
+	p = objlst->u_obj.pl.pos;
+	origin = select_cam(*data).pos;
+	inter->normal = objlst->u_obj.pl.dir;
+	// ft_normalize(&inter->normal);
+
+    // assuming vectors are all normalized
+	denom = ft_dot_product3(*dir, inter->normal);
+	if (denom > EPSILON)
+	{	
+		inter->t = ft_dot_product3(ft_sub_vec3(p, origin), inter->normal) / denom; 
+		inter->pos = ft_add_vec3(origin, ft_multby_vec3(dir, inter->t));
+		if (inter->t >= 0.0 && inter->t < INFINITY)
+			return (TRUE);
+	} 
+	return (FALSE);
 }
 
 void reset_inter(t_inter *inter)
@@ -212,28 +226,28 @@ int		calc_pixel_color(t_light *lights, t_inter finter)
 {
 	t_vec3	p;
 	double	int_pix;
-	double	int_lum;
 	t_light	*lights_cpy;
 	t_col	col;
+	t_col	col_tmp;
 
 	col = finter.col;
 	lights_cpy = lights;
 	int_pix = 0.0;
 	while (lights_cpy)
 	{
-		int_lum = lights_cpy->lum * 500000.0;
 		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
-		int_pix = int_lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
-	int_pix /=  255.0;
-	if (int_pix < 0.0)
-		int_pix = 0.0;
-	if (int_pix > 1.0)
-		int_pix = 1.0;
-		col = add_colors(col, lights_cpy->color);
-		col = mult_col_float(col, int_pix);
+		int_pix = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+		int_pix /=  255.0;
+		if (int_pix < 0.0)
+			int_pix = 0.0;
+		if (int_pix > 1.0)
+			int_pix = 1.0;
+		// int_pix = ft_min(int_pix, 255.0);
+		// int_pix = ft_max(0.0, int_pix);
+		col_tmp = mult_col_float(col, int_pix);
+		col = mult_col(lights_cpy->color, col_tmp);
 		lights_cpy = lights_cpy->next;
 	}
-	// printf("%s\n", "________");
 	return (color_encode(col));
 }
 

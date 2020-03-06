@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/05 17:12:20 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/06 14:12:43 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,6 +412,7 @@ float				*ft_mult_vec3(float *u, float m);
 */
 
 t_vec3				new_vec(float a, float b, float c);
+void				reset_vec(t_vec3 *vec);
 t_vec3				new_vec_from_char(char *a, char *b, char *c);
 float				ft_dot_product3(t_vec3 u, t_vec3 v);
 t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
@@ -447,6 +448,8 @@ int					color_encode(t_col col);
 t_col				mult_col_float(t_col col, float mult);
 t_col				add_colors(t_col col, t_col add);
 t_col				sub_colors(t_col col, t_col sub);
+t_col				mult_col(t_col col1, t_col col2);
+t_col				ft_min_col(t_col col);
 
 /*
 ** ---------------------------------- forms ---------------------------------

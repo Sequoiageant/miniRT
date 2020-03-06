@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/05 18:45:21 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/06 10:45:56 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_add_light(t_light **lights, t_light *light)
 	if (new)
 	{
 		new->pos = light->pos;
-		new->lum = light->lum;
+		new->lum = light->lum * 500000.0;
 		new->color = light->color;
 		new->next = (*lights);
 		(*lights) = new;
