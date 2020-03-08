@@ -222,7 +222,7 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 	}
 }
 
-int		calc_pixel_color(t_light *lights, t_inter finter)
+/*int		calc_pixel_color(t_light *lights, t_inter finter)
 {
 	t_vec3	p;
 	double	int_pix;
@@ -248,6 +248,39 @@ int		calc_pixel_color(t_light *lights, t_inter finter)
 		col = mult_col(lights_cpy->color, col_tmp);
 		lights_cpy = lights_cpy->next;
 	}
+	return (color_encode(col));
+}
+*/
+int		calc_pixel_color(t_light *lights, t_inter finter)
+{
+	t_vec3	p;
+	double	int_pix;
+	t_light	*lights_cpy;
+	t_col	col;
+	t_col	col_tmp;
+	t_col	col_tmp2;
+
+	col = finter.col;
+	init_color(&col_tmp);
+	init_color(&col_tmp2);
+	lights_cpy = lights;
+	int_pix = 0.0;
+	while (lights_cpy)
+	{
+		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
+		int_pix = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+		int_pix /=  255.0;
+		if (int_pix < 0.0)
+			int_pix = 0.0;
+		if (int_pix > 1.0)
+			int_pix = 1.0;
+		// int_pix = ft_min(int_pix, 255.0);
+		// int_pix = ft_max(0.0, int_pix);
+		col_tmp = mult_col_float(lights_cpy->color, int_pix);
+		col_tmp2 = add_colors(col_tmp2, col_tmp);
+		lights_cpy = lights_cpy->next;
+	}
+	col = add_colors(col, col_tmp2);
 	return (color_encode(col));
 }
 

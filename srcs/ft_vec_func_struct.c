@@ -24,9 +24,9 @@ t_vec3	new_vec(float a, float b, float c)
 
 void	reset_vec(t_vec3 *vec)
 {
-	vec->x = 0;
-	vec->y = 0;
-	vec->z = 0;
+	vec->x = 0.0;
+	vec->y = 0.0;
+	vec->z = 0.0;
 }
 
 t_vec3	new_vec_from_char(char *a, char *b, char *c)

@@ -17,6 +17,13 @@ int		rgb_to_int(int r, int g, int b)
 	return(r << 16 | g << 8 | b);
 }
 
+void	init_color(t_col *col)
+{
+	col->r = 0;
+	col->g = 0;
+	col->b = 0;
+}
+
 t_col	int_to_col(int r, int g, int b)
 {
 	t_col	col;

@@ -450,6 +450,7 @@ t_col				add_colors(t_col col, t_col add);
 t_col				sub_colors(t_col col, t_col sub);
 t_col				mult_col(t_col col1, t_col col2);
 t_col				ft_min_col(t_col col);
+void				init_color(t_col *col);
 
 /*
 ** ---------------------------------- forms ---------------------------------
