@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/06 14:12:43 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/11 18:07:21 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -438,6 +438,7 @@ float 				ft_max(float a, float b);
 float 				ft_min(float a, float b);
 int					ft_close(t_data *data);
 float				rad(float alpha);
+float				normalize_and_markout(float to_mod, float denom);
 
 /*
 ** ---------------------------------- Colors ---------------------------------

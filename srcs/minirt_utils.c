@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/05 11:46:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/11 16:49:58 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,14 @@ float	ft_min(float a, float b)
 float	rad(float alpha)
 {
 	return (alpha * M_PI / 180);
+}
+
+float	normalize_and_markout(float to_mod, float denom)
+{
+	float modified;
+
+	modified = to_mod / denom;
+	modified = ft_min(modified, 1.0);
+	modified = ft_max(0.0, modified);
+	return (modified);
 }

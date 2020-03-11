@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/06 18:23:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/11 19:25:19 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,31 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	return (TRUE);
 }
 
+int		rt_sp2(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+{
+		(void)data;
+
+	t_vec3		origin;
+	t_vec3		oc;
+	t_quadra	q;
+	float		r;
+
+	r = objlst->u_obj.sp.dia;
+	origin = inter->pos;
+	oc = ft_sub_vec3(origin, objlst->u_obj.sp.pos);
+	q.a = ft_norm_vec3_2(dir);
+	q.b = 2.0 * ft_dot_product3(*dir, oc);
+	q.c = ft_norm_vec3_2(&oc) - (r * r);
+	q.delta = q.b * q.b - 4.0 * q.a * q.c;
+	if (q.delta < 0.)
+		return (FALSE);
+	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
+	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
+	if (q.t2 < 0.)
+		return (FALSE);
+	return (TRUE);
+}
+
 t_vec3	trace_ray_normalized(t_win win, float x, float y, float fov)
 {
 	t_vec3 ray;
@@ -225,75 +250,91 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 /*int		calc_pixel_color(t_light *lights, t_inter finter)
 {
 	t_vec3	p;
-	double	int_pix;
+	double	light_power;
 	t_light	*lights_cpy;
 	t_col	col;
 	t_col	col_tmp;
 
 	col = finter.col;
 	lights_cpy = lights;
-	int_pix = 0.0;
+	light_power = 0.0;
 	while (lights_cpy)
 	{
 		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
-		int_pix = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
-		int_pix /=  255.0;
-		if (int_pix < 0.0)
-			int_pix = 0.0;
-		if (int_pix > 1.0)
-			int_pix = 1.0;
-		// int_pix = ft_min(int_pix, 255.0);
-		// int_pix = ft_max(0.0, int_pix);
-		col_tmp = mult_col_float(col, int_pix);
+		light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+		light_power /=  255.0;
+		if (light_power < 0.0)
+			light_power = 0.0;
+		if (light_power > 1.0)
+			light_power = 1.0;
+		// light_power = ft_min(light_power, 255.0);
+		// light_power = ft_max(0.0, light_power);
+		col_tmp = mult_col_float(col, light_power);
 		col = mult_col(lights_cpy->color, col_tmp);
 		lights_cpy = lights_cpy->next;
 	}
 	return (color_encode(col));
 }
 */
-int		calc_pixel_color(t_light *lights, t_inter finter)
+
+float	add_shade(float luminosity, t_data *data, t_vec3 ray, t_vec3 pos)
+{
+	t_obj			*objlst;
+	t_inter			inter;
+	static t_ray	intersec[NB_OBJ] = {rt_sp2, rt_pl, rt_sq, rt_cy, rt_tr};
+	
+	ray = ft_get_normalized(ray);
+	// ray = ft_multby_vec3(&ray, -1.0);
+	objlst = data->objlst;
+	while (objlst)
+	{
+		inter.pos = pos;
+		if (intersec[objlst->type](&ray, data, objlst, &inter))
+		{
+			luminosity = 0.0;
+			return (luminosity);
+		}
+		objlst = objlst->next;
+	}
+	// printf("%f\n", luminosity);
+	return (luminosity);
+}
+
+int		calc_pixel_color(t_data *data, t_inter finter)
 {
 	t_vec3	p;
-	double	int_pix;
+	double	light_power;
 	t_light	*lights_cpy;
 	t_col	col;
 	t_col	col_tmp;
 	t_col	col_tmp2;
 
-	col = finter.col;
+	init_color(&col);
 	init_color(&col_tmp);
 	init_color(&col_tmp2);
-	lights_cpy = lights;
-	int_pix = 0.0;
+	lights_cpy = data->lights;
+	light_power = 0.0;
 	while (lights_cpy)
 	{
 		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
-		int_pix = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
-		int_pix /=  255.0;
-		if (int_pix < 0.0)
-			int_pix = 0.0;
-		if (int_pix > 1.0)
-			int_pix = 1.0;
-		// int_pix = ft_min(int_pix, 255.0);
-		// int_pix = ft_max(0.0, int_pix);
-		col_tmp = mult_col_float(lights_cpy->color, int_pix);
-		col_tmp2 = add_colors(col_tmp2, col_tmp);
+		// lights_cpy->lum = add_shade(lights_cpy->lum, data, p, finter.pos);
+		light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+		light_power = normalize_and_markout(light_power, 255);
+		
+		col_tmp = mult_col_float(lights_cpy->color, light_power);
+		col = add_colors(mult_col(finter.col, col_tmp), col);
 		lights_cpy = lights_cpy->next;
 	}
-	col = add_colors(col, col_tmp2);
+	col = add_colors(mult_col(finter.col, data->al.color), col);
 	return (color_encode(col));
 }
 
 int		modulate_color(t_data *data, t_inter finter, double back_color)
 {
-	int		color;
-	double	int_pix;
+	int	color;
 
-	int_pix = 0.0;
 	if (finter.set)
-	{
-		color = calc_pixel_color(data->lights, finter);
-	}
+		color = calc_pixel_color(data, finter);
 	else
 		color = rgb_to_int(back_color * 255, 255, 69);
 	return (color);

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/06 10:45:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/11 14:11:15 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,9 @@ int		set_al(char **tab, t_data *data)
 	al_set = ft_split(tab[2], ',');
 	if (al_set != NULL)
 	{
-		al.color.r = ft_atoi(al_set[0]);
-		al.color.g = ft_atoi(al_set[1]);
-		al.color.b = ft_atoi(al_set[2]);
+		al.color.r = ft_atoi(al_set[0]) * al.lum;
+		al.color.g = ft_atoi(al_set[1]) * al.lum;
+		al.color.b = ft_atoi(al_set[2]) * al.lum;
 		ft_free_tab2(al_set);
 	}
 	data->al = al;
