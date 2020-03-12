@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/11 18:07:21 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/12 19:44:51 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define NB_ENV		4
 
 # define EPSILON	1.0e-6
+# define BIAS		1.0e-4
 # define LARGE_NUMB	1.0e99
 
 # define P_R		"R"
@@ -237,6 +238,7 @@ typedef struct		s_intersection
 	double		min_t;
 	t_vec3		pos;
 	t_vec3		normal;
+	t_vec3		origin;
 	t_col		col;
 }					t_inter;
 
@@ -386,7 +388,7 @@ typedef	int			(*t_func)(t_data *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **, t_data *, int);
 typedef	int			(*t_func3)(char **, t_data *);
 // typedef	int			(*t_ray)(t_data *, t_obj *);
-typedef	int			(*t_ray)(t_vec3 *, t_data *, t_obj *, t_inter *);
+typedef	int			(*t_ray)(t_vec3 *, t_obj *, t_inter *);
 int					set_res(char **tab, t_data *data);
 int					set_light(char **tab, t_data *data);
 int					set_al(char **tab, t_data *data);
@@ -424,6 +426,8 @@ float				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
 float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
 t_vec3				ft_multby_vec3(t_vec3 *u, float mult);
+t_vec3				ft_decal_vec3(t_vec3 *u, float sub);
+void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
 
 /*
 ** ---------------------------------- Utils ---------------------------------

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/11 19:25:19 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/12 20:21:31 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,31 +65,20 @@ t_cam	select_cam(t_data data)
 }
 
 
-int		rt_tr(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_tr(t_vec3 *dir, t_obj *objlst, t_inter *inter)
 {
-	(void)data;
 	(void)objlst;
 	(void)dir;
 	(void)inter;
 	// printf("%s\n", "raytracing of triangle");
 	return (FALSE);
 }
-int		rt_cy(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_cy(t_vec3 *dir, t_obj *objlst, t_inter *inter)
 {
-	(void)data;
 	(void)objlst;
 	(void)dir;
 	(void)inter;
 	// printf("%s\n", "raytracing of cylinder");
-	return (FALSE);
-}
-int		rt_sq(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
-{
-	(void)data;
-	(void)objlst;
-	(void)dir;
-	(void)inter;
-	// printf("%s\n", "raytracing of square");
 	return (FALSE);
 }
 
@@ -113,26 +102,40 @@ void	reset_image(t_data *data)
 	}
 }
 
-int		rt_pl(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_pl(t_vec3 *dir, t_obj *objlst, t_inter *inter)
 {
 	t_vec3		origin;
 	t_vec3		p;
 	float		denom;
 
 	p = objlst->u_obj.pl.pos;
-	origin = select_cam(*data).pos;
+	origin = inter->origin;
 	inter->normal = objlst->u_obj.pl.dir;
-	// ft_normalize(&inter->normal);
-
-    // assuming vectors are all normalized
 	denom = ft_dot_product3(*dir, inter->normal);
-	if (denom > EPSILON)
+	if (fabs(denom) > EPSILON)
 	{	
 		inter->t = ft_dot_product3(ft_sub_vec3(p, origin), inter->normal) / denom; 
 		inter->pos = ft_add_vec3(origin, ft_multby_vec3(dir, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
 	} 
+	return (FALSE);
+}
+
+int		rt_sq(t_vec3 *dir, t_obj *objlst, t_inter *inter)
+{
+	float t_min;
+	float t_max;
+
+	if (rt_pl(dir, objlst, inter))
+	{
+		t_min = 0.0; // calcul trigo pour tmin et tmax ?
+		t_max = 0.0;
+
+		if (inter->t > t_min && inter->t < t_max)
+			return (TRUE);
+	}
+
 	return (FALSE);
 }
 
@@ -147,7 +150,7 @@ void reset_inter(t_inter *inter)
 	inter->normal.z = 0.0;
 }
 
-int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
+int		rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	t_vec3		origin;
 	t_vec3		oc;
@@ -155,10 +158,10 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	float		r;
 
 	r = objlst->u_obj.sp.dia;
-	origin = select_cam(*data).pos;
+	origin = inter->origin;
 	oc = ft_sub_vec3(origin, objlst->u_obj.sp.pos);
-	q.a = ft_norm_vec3_2(dir);
-	q.b = 2.0 * ft_dot_product3(*dir, oc);
+	q.a = ft_norm_vec3_2(ray);
+	q.b = 2.0 * ft_dot_product3(*ray, oc);
 	q.c = ft_norm_vec3_2(&oc) - (r * r);
 	q.delta = q.b * q.b - 4.0 * q.a * q.c;
 	if (q.delta < 0.)
@@ -168,34 +171,9 @@ int		rt_sp(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
 	if (q.t2 < 0.)
 		return (FALSE);
 	inter->t = ft_min(q.t1, q.t2);
-	inter->pos = ft_add_vec3(origin, ft_multby_vec3(dir, inter->t));
+	inter->pos = ft_add_vec3(origin, ft_multby_vec3(ray, inter->t));
 	inter->normal = ft_sub_vec3(inter->pos, objlst->u_obj.sp.pos);
 	ft_normalize(&inter->normal);
-	return (TRUE);
-}
-
-int		rt_sp2(t_vec3 *dir, t_data *data, t_obj *objlst, t_inter *inter)
-{
-		(void)data;
-
-	t_vec3		origin;
-	t_vec3		oc;
-	t_quadra	q;
-	float		r;
-
-	r = objlst->u_obj.sp.dia;
-	origin = inter->pos;
-	oc = ft_sub_vec3(origin, objlst->u_obj.sp.pos);
-	q.a = ft_norm_vec3_2(dir);
-	q.b = 2.0 * ft_dot_product3(*dir, oc);
-	q.c = ft_norm_vec3_2(&oc) - (r * r);
-	q.delta = q.b * q.b - 4.0 * q.a * q.c;
-	if (q.delta < 0.)
-		return (FALSE);
-	q.t1 = (-q.b - sqrt(q.delta)) / (2 * q.a);
-	q.t2 = (-q.b + sqrt(q.delta)) / (2 * q.a);
-	if (q.t2 < 0.)
-		return (FALSE);
 	return (TRUE);
 }
 
@@ -227,11 +205,12 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 	t_obj *objlst;
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	
+	inter.origin = select_cam(*data).pos;
 	objlst = data->objlst;
 	while (objlst)
 	{
 		reset_inter(&inter);
-		if (intersec[objlst->type](dir, data, objlst, &inter))
+		if (intersec[objlst->type](dir, objlst, &inter))
 		{
 			finter->set = true;
 			if (inter.t <= finter->min_t)
@@ -247,57 +226,31 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 	}
 }
 
-/*int		calc_pixel_color(t_light *lights, t_inter finter)
-{
-	t_vec3	p;
-	double	light_power;
-	t_light	*lights_cpy;
-	t_col	col;
-	t_col	col_tmp;
-
-	col = finter.col;
-	lights_cpy = lights;
-	light_power = 0.0;
-	while (lights_cpy)
-	{
-		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
-		light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
-		light_power /=  255.0;
-		if (light_power < 0.0)
-			light_power = 0.0;
-		if (light_power > 1.0)
-			light_power = 1.0;
-		// light_power = ft_min(light_power, 255.0);
-		// light_power = ft_max(0.0, light_power);
-		col_tmp = mult_col_float(col, light_power);
-		col = mult_col(lights_cpy->color, col_tmp);
-		lights_cpy = lights_cpy->next;
-	}
-	return (color_encode(col));
-}
-*/
-
-float	add_shade(float luminosity, t_data *data, t_vec3 ray, t_vec3 pos)
+float	is_in_shade(t_data *data, t_vec3 ray, t_inter finter)
 {
 	t_obj			*objlst;
 	t_inter			inter;
-	static t_ray	intersec[NB_OBJ] = {rt_sp2, rt_pl, rt_sq, rt_cy, rt_tr};
+	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
+	t_vec3			normalized_ray;
 	
-	ray = ft_get_normalized(ray);
-	// ray = ft_multby_vec3(&ray, -1.0);
+	finter.set = FALSE;
+	normalized_ray = ft_get_normalized(ray);
+	finter.normal = ft_multby_vec3(&finter.normal, BIAS);
+	inter.origin = ft_add_vec3(finter.pos, finter.normal);
 	objlst = data->objlst;
 	while (objlst)
 	{
-		inter.pos = pos;
-		if (intersec[objlst->type](&ray, data, objlst, &inter))
+		if (intersec[objlst->type](&normalized_ray, objlst, &inter))
 		{
-			luminosity = 0.0;
-			return (luminosity);
+			if ((inter.t * inter.t) < ft_norm_vec3_2(&ray))
+			{
+				finter.set = TRUE;
+				break ;
+			}
 		}
 		objlst = objlst->next;
 	}
-	// printf("%f\n", luminosity);
-	return (luminosity);
+	return (finter.set);
 }
 
 int		calc_pixel_color(t_data *data, t_inter finter)
@@ -307,20 +260,22 @@ int		calc_pixel_color(t_data *data, t_inter finter)
 	t_light	*lights_cpy;
 	t_col	col;
 	t_col	col_tmp;
-	t_col	col_tmp2;
 
 	init_color(&col);
 	init_color(&col_tmp);
-	init_color(&col_tmp2);
 	lights_cpy = data->lights;
 	light_power = 0.0;
 	while (lights_cpy)
 	{
 		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
-		// lights_cpy->lum = add_shade(lights_cpy->lum, data, p, finter.pos);
-		light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
-		light_power = normalize_and_markout(light_power, 255);
-		
+		if (is_in_shade(data, p, finter))
+			light_power = 0.0;
+		else
+		{
+			light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+			light_power = normalize_and_markout(light_power, 255);
+			// light_power = pow(light_power, 1/2.2);
+		}
 		col_tmp = mult_col_float(lights_cpy->color, light_power);
 		col = add_colors(mult_col(finter.col, col_tmp), col);
 		lights_cpy = lights_cpy->next;
@@ -332,11 +287,12 @@ int		calc_pixel_color(t_data *data, t_inter finter)
 int		modulate_color(t_data *data, t_inter finter, double back_color)
 {
 	int	color;
+	(void)back_color;
 
 	if (finter.set)
 		color = calc_pixel_color(data, finter);
 	else
-		color = rgb_to_int(back_color * 255, 255, 69);
+		color = rgb_to_int(0, 0, 0);
 	return (color);
 }
 

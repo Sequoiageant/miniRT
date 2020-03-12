@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/06 14:12:24 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/12 16:02:44 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,16 @@ t_vec3	ft_multby_vec3(t_vec3 *u, float mult)
 	p.x = u->x * mult;
 	p.y = u->y * mult;
 	p.z = u->z * mult;
+	return (p);
+}
+
+t_vec3	ft_decal_vec3(t_vec3 *u, float sub)
+{
+	t_vec3 p;
+
+	p.x = u->x + sub;
+	p.y = u->y + sub;
+	p.z = u->z + sub;
 	return (p);
 }
 
