@@ -206,7 +206,7 @@ int	set_pl(char **tab, t_obj **objlst, t_data *data, int num)
 	pl_set = ft_split(tab[2], ',');
 	if (pl_set != NULL)
 	{
-		pl.dir = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
+		pl.normal = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
 		ft_free_tab2(pl_set);
 	}
 	pl_set = ft_split(tab[3], ',');

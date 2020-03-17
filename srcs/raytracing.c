@@ -65,18 +65,18 @@ t_cam	select_cam(t_data data)
 }
 
 
-int		rt_tr(t_vec3 *dir, t_obj *objlst, t_inter *inter)
+int		rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	(void)objlst;
-	(void)dir;
+	(void)ray;
 	(void)inter;
 	// printf("%s\n", "raytracing of triangle");
 	return (FALSE);
 }
-int		rt_cy(t_vec3 *dir, t_obj *objlst, t_inter *inter)
+int		rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	(void)objlst;
-	(void)dir;
+	(void)ray;
 	(void)inter;
 	// printf("%s\n", "raytracing of cylinder");
 	return (FALSE);
@@ -84,8 +84,8 @@ int		rt_cy(t_vec3 *dir, t_obj *objlst, t_inter *inter)
 
 void	reset_image(t_data *data)
 {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 	t_win	win;
 	win = data->win;
 
@@ -102,37 +102,43 @@ void	reset_image(t_data *data)
 	}
 }
 
-int		rt_pl(t_vec3 *dir, t_obj *objlst, t_inter *inter)
+int		rt_pl(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	t_vec3		origin;
 	t_vec3		p;
-	float		denom;
+	double		denom;
 
 	p = objlst->u_obj.pl.pos;
 	origin = inter->origin;
-	inter->normal = objlst->u_obj.pl.dir;
-	denom = ft_dot_product3(*dir, inter->normal);
+	inter->normal = objlst->u_obj.pl.normal;
+	denom = ft_dot_product3(*ray, inter->normal);
 	if (fabs(denom) > EPSILON)
 	{	
 		inter->t = ft_dot_product3(ft_sub_vec3(p, origin), inter->normal) / denom; 
-		inter->pos = ft_add_vec3(origin, ft_multby_vec3(dir, inter->t));
+		inter->pos = ft_add_vec3(origin, ft_multby_vec3(ray, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
 	} 
 	return (FALSE);
 }
 
-int		rt_sq(t_vec3 *dir, t_obj *objlst, t_inter *inter)
+int		rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
-	float t_min;
-	float t_max;
+	double t_min;
+	double t_max;
+	t_vec3 p1;
+	t_vec3 p3;
 
-	if (rt_pl(dir, objlst, inter))
+	p1.x = -8; p1.y = -8; p1.z = -50;
+	p3.x = 8; p3.y = 8; p3.z = -50;
+
+	if (rt_pl(ray, objlst, inter))
 	{
 		t_min = 0.0; // calcul trigo pour tmin et tmax ?
 		t_max = 0.0;
 
-		if (inter->t > t_min && inter->t < t_max)
+		if (inter->pos.x >= p1.x && inter->pos.x <= p3.x
+			&& inter->pos.y >= p1.y && inter->pos.y <= p3.y)
 			return (TRUE);
 	}
 
@@ -155,7 +161,7 @@ int		rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	t_vec3		origin;
 	t_vec3		oc;
 	t_quadra	q;
-	float		r;
+	double		r;
 
 	r = objlst->u_obj.sp.dia;
 	origin = inter->origin;
@@ -177,7 +183,7 @@ int		rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	return (TRUE);
 }
 
-t_vec3	trace_ray_normalized(t_win win, float x, float y, float fov)
+t_vec3	trace_ray_normalized(t_win win, double x, double y, double fov)
 {
 	t_vec3 ray;
 
@@ -188,18 +194,7 @@ t_vec3	trace_ray_normalized(t_win win, float x, float y, float fov)
 	return (ray);
 }
 
-int		set_color(t_col color, double intensity, t_col lum_col)
-{
-	t_col	tmp_col;
-
-	tmp_col = color;
-	tmp_col = add_colors(tmp_col, lum_col);
-	// printf("%d %d %d \n", tmp_col.r, tmp_col.g, tmp_col.b);
-	tmp_col = mult_col_float(tmp_col, intensity);
-	return (color_encode(tmp_col));
-}
-
-void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
+void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *ray)
 {
 	t_inter inter;
 	t_obj *objlst;
@@ -210,7 +205,7 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 	while (objlst)
 	{
 		reset_inter(&inter);
-		if (intersec[objlst->type](dir, objlst, &inter))
+		if (intersec[objlst->type](ray, objlst, &inter))
 		{
 			finter->set = true;
 			if (inter.t <= finter->min_t)
@@ -218,7 +213,6 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 				finter->min_t = inter.t;
 				finter->pos = inter.pos;
 				finter->normal = inter.normal;
-				finter->obj_num = objlst->num;
 				finter->col = objlst->col;
 			}
 		}
@@ -226,14 +220,13 @@ void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *dir)
 	}
 }
 
-float	is_in_shade(t_data *data, t_vec3 ray, t_inter finter)
+double	is_in_shade(t_data *data, t_vec3 ray, t_inter finter)
 {
 	t_obj			*objlst;
 	t_inter			inter;
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	t_vec3			normalized_ray;
 	
-	finter.set = FALSE;
 	normalized_ray = ft_get_normalized(ray);
 	finter.normal = ft_multby_vec3(&finter.normal, BIAS);
 	inter.origin = ft_add_vec3(finter.pos, finter.normal);
@@ -243,14 +236,11 @@ float	is_in_shade(t_data *data, t_vec3 ray, t_inter finter)
 		if (intersec[objlst->type](&normalized_ray, objlst, &inter))
 		{
 			if ((inter.t * inter.t) < ft_norm_vec3_2(&ray))
-			{
-				finter.set = TRUE;
-				break ;
-			}
+				return (TRUE);
 		}
 		objlst = objlst->next;
 	}
-	return (finter.set);
+	return (FALSE);
 }
 
 int		calc_pixel_color(t_data *data, t_inter finter)
@@ -276,7 +266,7 @@ int		calc_pixel_color(t_data *data, t_inter finter)
 			light_power = normalize_and_markout(light_power, 255);
 			// light_power = pow(light_power, 1/2.2);
 		}
-		col_tmp = mult_col_float(lights_cpy->color, light_power);
+		col_tmp = mult_col_double(lights_cpy->color, light_power);
 		col = add_colors(mult_col(finter.col, col_tmp), col);
 		lights_cpy = lights_cpy->next;
 	}
@@ -300,12 +290,12 @@ void	ft_raytracing(t_data *data)
 {
 	t_inter	finter;
 	t_win	win;
-	t_vec3	dir;
-	float	fov;
+	t_vec3	ray;
+	double	fov;
 	int		color;
 
 	win = data->win;
-	fov = rad(select_cam(*data).fov);
+	fov = select_cam(*data).fov;
 	win.y = 0;
 	while (win.y < win.h - 1)
 	{
@@ -314,8 +304,8 @@ void	ft_raytracing(t_data *data)
 		{
 			finter.min_t = INFINITY;
 			finter.set = false;
-			dir = trace_ray_normalized(win, win.x, win.y, fov);
-			find_closest_inter(data, &finter, &dir);
+			ray = trace_ray_normalized(win, win.x, win.y, fov);
+			find_closest_inter(data, &finter, &ray);
 			color = modulate_color(data, finter, (win.y/win.h));
 			ft_pixel_put(&data->mlx, win.x, win.y, color);
 

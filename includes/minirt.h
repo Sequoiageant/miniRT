@@ -19,7 +19,7 @@
 # include <string.h>
 # include <mlx.h>
 # include <limits.h>
-# include <stdio.h> //<====== A ENLEVER
+# include <stdio.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -41,8 +41,9 @@
 # define NB_ENV		4
 
 # define EPSILON	1.0e-6
-# define BIAS		1.0e-4
+# define BIAS		1.0e-3
 # define LARGE_NUMB	1.0e99
+# define PI			3.1415927
 
 # define P_R		"R"
 # define P_A		"A"
@@ -67,8 +68,8 @@
 /*
 ** Keycodes and screen size LINUX
 */
-#  define MAX_W		2560
-#  define MAX_H		1440
+#  define MAX_W		1920
+#  define MAX_H		1080
 
 #  define ESC		65307
 #  define LEFT		65361
@@ -176,8 +177,8 @@ typedef struct		s_image {
 
 typedef struct		s_win
 {
-	double		w;
-	double		h;	
+	int			w;
+	int			h;	
 	double		x;
 	double		y;
 	enum e_bool	set;
@@ -217,13 +218,13 @@ typedef struct		s_color
 
 typedef struct		s_quadra
 {
-	float a;
-	float b;
-	float c;
-	float delta;
-	float t;
-	float t1;
-	float t2;
+	double a;
+	double b;
+	double c;
+	double delta;
+	double t;
+	double t1;
+	double t2;
 }					t_quadra;
 
 /*
@@ -233,7 +234,6 @@ typedef struct		s_quadra
 typedef struct		s_intersection
 {
 	enum e_bool	set;
-	enum e_obj	obj_num;
 	double		t;
 	double		min_t;
 	t_vec3		pos;
@@ -277,7 +277,7 @@ typedef struct		s_camera
 	int				nbr;	
 	t_vec3			pos;
 	t_vec3			dir;
-	int				fov;
+	double			fov;
 	struct s_camera	*next;
 }					t_cam;
 
@@ -303,7 +303,7 @@ typedef struct		s_sphere
 typedef struct		s_plane
 {
 	t_vec3	pos;
-	t_vec3	dir;
+	t_vec3	normal;
 	t_col	color;
 }					t_pl;
 
@@ -387,7 +387,6 @@ typedef struct		s_data
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
 typedef	int			(*t_func2)(char **, t_obj **, t_data *, int);
 typedef	int			(*t_func3)(char **, t_data *);
-// typedef	int			(*t_ray)(t_data *, t_obj *);
 typedef	int			(*t_ray)(t_vec3 *, t_obj *, t_inter *);
 int					set_res(char **tab, t_data *data);
 int					set_light(char **tab, t_data *data);
@@ -401,32 +400,22 @@ int					set_tr(char **tab, t_obj **objlst, t_data *data, int num);
 
 /*
 ** --------------------------------- Vectors --------------------------------
-
-float				ft_dot_product(float *u, float *v, int dim);
-void				ft_cross_product(float *u, float *v, float *p);
-void				ft_add_vec(float *u, float *v, float *p, int dim);
-void				ft_sub_vec(float *u, float *v, float *p, int dim);
-float				ft_norm_vec(float *u, int dim);
-void				ft_normalize(float *vec, int dim);
-float				ft_norm_vec2(float *vec, int dim);
-float				*ft_get_normalize(float *vec, int dim);
-float				*ft_mult_vec3(float *u, float m);
 */
 
-t_vec3				new_vec(float a, float b, float c);
+t_vec3				new_vec(double a, double b, double c);
 void				reset_vec(t_vec3 *vec);
 t_vec3				new_vec_from_char(char *a, char *b, char *c);
-float				ft_dot_product3(t_vec3 u, t_vec3 v);
+double				ft_dot_product3(t_vec3 u, t_vec3 v);
 t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
 t_vec3				ft_add_vec3(t_vec3 u, t_vec3 v);
 t_vec3				ft_sub_vec3(t_vec3 u, t_vec3 v);
-float				ft_norm_vec3(t_vec3 *u);
+double				ft_norm_vec3(t_vec3 *u);
 void				ft_normalize(t_vec3 *vec);
-float				ft_norm_vec3_2(t_vec3 *vec);
+double				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
-float				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
-t_vec3				ft_multby_vec3(t_vec3 *u, float mult);
-t_vec3				ft_decal_vec3(t_vec3 *u, float sub);
+double				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
+t_vec3				ft_multby_vec3(t_vec3 *u, double mult);
+t_vec3				ft_decal_vec3(t_vec3 *u, double sub);
 void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
 
 /*
@@ -436,21 +425,21 @@ void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
 int					ft_launch_window(t_data *data);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					rgb_to_int(int r, int g, int b);
-double				ft_atof(const char *str);
 void				ft_free_tab2(char **tab);
-float 				ft_max(float a, float b);
-float 				ft_min(float a, float b);
+double 				ft_max(double a, double b);
+double 				ft_min(double a, double b);
 int					ft_close(t_data *data);
-float				rad(float alpha);
-float				normalize_and_markout(float to_mod, float denom);
+double				deg_to_rad(double alpha);
+double				normalize_and_markout(double to_mod, double denom);
 
-/*
+/*20
+20
 ** ---------------------------------- Colors ---------------------------------
 */
 
 t_col				char_to_col(char *r, char *g, char *b);
 int					color_encode(t_col col);
-t_col				mult_col_float(t_col col, float mult);
+t_col				mult_col_double(t_col col, double mult);
 t_col				add_colors(t_col col, t_col add);
 t_col				sub_colors(t_col col, t_col sub);
 t_col				mult_col(t_col col1, t_col col2);

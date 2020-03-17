@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-float	ft_norm_vec(float *vec, int dim)
+double	ft_norm_vec(double *vec, int dim)
 {
 	int		i;
 	double	norm;
@@ -27,7 +27,7 @@ float	ft_norm_vec(float *vec, int dim)
 	return (sqrt(norm));
 }
 
-float	ft_norm_vec2(float *vec, int dim)
+double	ft_norm_vec2(double *vec, int dim)
 {
 	int		i;
 	double	norm;
@@ -42,10 +42,10 @@ float	ft_norm_vec2(float *vec, int dim)
 	return (norm);
 }
 
-float 	ft_dot_product(float *u, float *v, int dim)
+double 	ft_dot_product(double *u, double *v, int dim)
 {
     int		i;
-    float	result;
+    double	result;
 
     i = 0;
     result = 0.0;
@@ -57,16 +57,16 @@ float 	ft_dot_product(float *u, float *v, int dim)
     return (result);
 }
 
-void	ft_cross_product3(float *u, float *v, float *p)
+void	ft_cross_product3(double *u, double *v, double *p)
 {
 	p[0] = v[2] * u[1] - v[1] * u[2]; 
 	p[1] = v[0] * u[2] - v[2] * u[0]; 
 	p[2] = v[1] * u[0] - v[0] * u[1]; 
 }
 
-float	*ft_mult_vec3(float *u, float m)
+double	*ft_mult_vec3(double *u, double m)
 {
-	float *mult;
+	double *mult;
 
 	mult[0] = m * u[0]; 
 	mult[1] = m * u[1]; 
@@ -74,7 +74,7 @@ float	*ft_mult_vec3(float *u, float m)
 	return (mult);
 }
 
-void	ft_add_vec(float *u, float *v, float *p, int dim)
+void	ft_add_vec(double *u, double *v, double *p, int dim)
 {
 	int		i;
 
@@ -86,7 +86,7 @@ void	ft_add_vec(float *u, float *v, float *p, int dim)
 	}
 }
 
-void	ft_sub_vec(float *u, float *v, float *p, int dim)
+void	ft_sub_vec(double *u, double *v, double *p, int dim)
 {
 	int		i;
 
@@ -98,9 +98,9 @@ void	ft_sub_vec(float *u, float *v, float *p, int dim)
 	}
 }
 
-void	ft_normalize(float *vec, int dim)
+void	ft_normalize(double *vec, int dim)
 {
-	float norm;
+	double norm;
 
 	norm = ft_norm_vec(vec, dim);
 	if (norm != 1 && norm != 0)
@@ -111,9 +111,9 @@ void	ft_normalize(float *vec, int dim)
 	}
 }
 
-float	*ft_get_normalize(float *vec, int dim)
+double	*ft_get_normalize(double *vec, int dim)
 {
-	float *n;
+	double *n;
 
 	n = vec;
 	ft_normalize(n, dim);

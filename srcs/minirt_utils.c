@@ -26,24 +26,24 @@ void	ft_free_tab2(char **tab)
 	tab = NULL;
 }
 
-float	ft_max(float a, float b)
+double	ft_max(double a, double b)
 {
 	return ((a > b) ? a : b);
 }
 
-float	ft_min(float a, float b)
+double	ft_min(double a, double b)
 {
 	return ((a < b) ? a : b);
 }
 
-float	rad(float alpha)
+double	deg_to_rad(double alpha)
 {
-	return (alpha * M_PI / 180);
+	return (alpha * PI / 180);
 }
 
-float	normalize_and_markout(float to_mod, float denom)
+double	normalize_and_markout(double to_mod, double denom)
 {
-	float modified;
+	double modified;
 
 	modified = to_mod / denom;
 	modified = ft_min(modified, 1.0);

@@ -44,7 +44,7 @@ t_col	char_to_col(char *r, char *g, char *b)
 	return (col);
 }
 
-t_col	mult_col_float(t_col col, float mult)
+t_col	mult_col_double(t_col col, double mult)
 {
 	return (int_to_col(col.r * mult, col.g * mult, col.b * mult));
 }
@@ -88,41 +88,3 @@ t_col	ft_min_col(t_col col)
 	new_col.b = ft_min(col.b, 255);
 	return (new_col);
 }
-
-
-/*
-
-t_col	*mult_col_col(t_col col, t_col mult)
-{
-	return (int_to_col(col.r * (mult.r / 255.), col.g * (mult.g / 255.), col.b * (mult.b / 255.)));
-}
-
-
-
-void		min_col(t_col *color)
-{
-	color->r = ft_min_int(color->r, 255);
-	color->g = ft_min_int(color->g, 255);
-	color->b = ft_min_int(color->b, 255);
-}
-
-int		get_t(int color)
-{
-	return (color & 0xFF);
-}
-
-int		get_r(int color)
-{
-	return (color & 0xFF00);
-}
-
-int		get_g(int color)
-{
-	return (color & 0xFF0000);
-}
-
-int		get_b(int color)
-{
-	return (color & 0xFF000000);
-}
-*/

@@ -27,20 +27,21 @@ int	ft_lstsize(t_obj *lst)
 	}
 	return (size);
 }
-
-// void	ft_lstclear(t_obj **lst)
-// {
-// 	if (lst != NULL && *lst != NULL)
-// 	{
-// 		while (*lst != NULL)
-// 		{
-// 			free(*lst->content);
-// 			(*lst) = (*lst)->next;
-// 		}
-// 		free(*lst);
-// 		*lst = NULL;
-// 	}
-// }
+/*
+void	ft_lstclear(t_obj **lst)
+{
+	if (lst != NULL && *lst != NULL)
+	{
+		while (*lst != NULL)
+		{
+			free(*lst->content);
+			(*lst) = (*lst)->next;
+		}
+		free(*lst);
+		*lst = NULL;
+	}
+}
+*/
 
 int		ft_strnequ(char *s1, char *s2, int n)
 {
@@ -58,7 +59,6 @@ int		ft_strnequ(char *s1, char *s2, int n)
 
 void	print_list(t_obj *objlst)
 {
-	//printf("	-->list size: %d\n", ft_lstsize(objlst));
 	if (objlst)
 	{
 		while (objlst)
@@ -70,11 +70,6 @@ void	print_list(t_obj *objlst)
 	else
 		printf("%s\n", "LISTE VIDE");
 }
-
-/*void	sort_list(t_obj *objlst)
-{
-	print_list(objlst);
-}*/
 
 int	ft_list_env(char **tab, t_data *data, int i)
 {
@@ -167,7 +162,6 @@ int	ft_launch_window(t_data *data)
 	data->mlx = mlx;
 	mlx_hook(mlx.mlx_win, 3, 1L << 1, key_event, data);
 	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, data);
-	// mlx_loop_hook(&mlx, ft_raytracing, data);
 	data->cam_num = 1;
 	ft_raytracing(data);
 	mlx_loop(mlx.mlx_ptr);
@@ -289,6 +283,6 @@ int	main(int ac, char **av)
 	}
 	else
 		return (FAILURE);
-	// system("leaks a.out");
+	/*system("leaks a.out");*/
 	return (SUCCESS);
 }

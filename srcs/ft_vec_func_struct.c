@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-t_vec3	new_vec(float a, float b, float c)
+t_vec3	new_vec(double a, double b, double c)
 {
 	t_vec3 vec;
 
@@ -39,17 +39,17 @@ t_vec3	new_vec_from_char(char *a, char *b, char *c)
 	return (vec);
 }
 
-float	ft_norm_vec3_2(t_vec3 *vec)
+double	ft_norm_vec3_2(t_vec3 *vec)
 {
 	return (vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
 }
 
-float	ft_norm_vec3(t_vec3 *vec)
+double	ft_norm_vec3(t_vec3 *vec)
 {
 	return (sqrt(ft_norm_vec3_2(vec)));
 }
 
-float 	ft_dot_product3(t_vec3 u, t_vec3 v)
+double 	ft_dot_product3(t_vec3 u, t_vec3 v)
 {
 	return (u.x * v.x + u.y * v.y + u.z * v.z);
 }
@@ -91,7 +91,7 @@ void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
 	u->z *= dir->z;
 }
 
-t_vec3	ft_multby_vec3(t_vec3 *u, float mult)
+t_vec3	ft_multby_vec3(t_vec3 *u, double mult)
 {
 	t_vec3 p;
 
@@ -101,7 +101,7 @@ t_vec3	ft_multby_vec3(t_vec3 *u, float mult)
 	return (p);
 }
 
-t_vec3	ft_decal_vec3(t_vec3 *u, float sub)
+t_vec3	ft_decal_vec3(t_vec3 *u, double sub)
 {
 	t_vec3 p;
 
@@ -113,7 +113,7 @@ t_vec3	ft_decal_vec3(t_vec3 *u, float sub)
 
 void	ft_normalize(t_vec3 *vec)
 {
-	float norm;
+	double norm;
 
 	norm = ft_norm_vec3(vec);
 	if (norm != 1 && norm != 0)

@@ -26,7 +26,7 @@ void	print_cams(t_cam *cams)
 	while (cams)
 	{
 		printf("	-->num %d\n", cams->nbr);
-		printf("	-->%d\n", cams->fov);
+		printf("	-->%f\n", cams->fov);
 		cams = cams->next;
 	}
 }
@@ -48,7 +48,7 @@ void	ft_add_cam(t_cam **cams, t_cam *cam)
 		(*cams) = new;
 	}
 	ft_putendl("	-->cam added");
-	// print_cams((*cams));
+	print_cams((*cams));
 }
 
 void	ft_add_light(t_light **lights, t_light *light)
@@ -148,7 +148,7 @@ int		set_cam(char **tab, t_data *data)
 		cam.dir.z = ft_atof(cam_set[2]);
 		ft_free_tab2(cam_set);
 	}
-	cam.fov = ft_atoi(tab[3]);
+	cam.fov = deg_to_rad(ft_atoi(tab[3]));
 	ft_add_cam(&cams, &cam);
 	data->cams = cams;
 	return (0);
