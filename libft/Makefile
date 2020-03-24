@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
+#    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/04 16:32:55 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/24 19:12:52 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ SRCS	+= 	ft_putstr.c
 SRCS	+= 	ft_putendl.c
 SRCS	+= 	ft_putnbr.c
 SRCS	+= 	ft_atoi.c
-SRCS	+= 	ft_split2.c
+SRCS	+= 	ft_split.c
+SRCS	+= 	ft_split_whitespaces.c
 SRCS	+= 	ft_strcmp.c
 SRCS	+= 	ft_memcpy.c
 SRCS	+= 	ft_strdup.c

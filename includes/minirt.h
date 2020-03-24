@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/12 19:44:51 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/23 19:03:30 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,7 +313,7 @@ typedef struct		s_plane
 
 typedef struct		s_square
 {
-	t_vec3	pos;
+	t_vec3	p0;
 	t_vec3	dir;
 	double	h;
 	t_col	color;
@@ -338,9 +338,9 @@ typedef struct		s_cylindre
 
 typedef struct		s_triangle
 {
-	t_vec3	pos1;
-	t_vec3	pos2;
-	t_vec3	pos3;
+	t_vec3	p1;
+	t_vec3	p2;
+	t_vec3	p3;
 	t_col	color;
 }					t_tr;
 
@@ -415,8 +415,20 @@ double				ft_norm_vec3_2(t_vec3 *vec);
 t_vec3				ft_get_normalized(t_vec3 vec);
 double				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
 t_vec3				ft_multby_vec3(t_vec3 *u, double mult);
+t_vec3				ft_divby_vec3(t_vec3 *u, double div);
 t_vec3				ft_decal_vec3(t_vec3 *u, double sub);
 void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
+void   				rot_3d(t_vec3 *v, double rot);
+
+/*
+** ------------------------------ Intersections -----------------------------
+*/
+
+int					rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter);
+int					rt_pl(t_vec3 *ray, t_obj *objlst, t_inter *inter);
+int					rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter);
+int					rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter);
+int					rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -430,10 +442,10 @@ double 				ft_max(double a, double b);
 double 				ft_min(double a, double b);
 int					ft_close(t_data *data);
 double				deg_to_rad(double alpha);
+double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
 
-/*20
-20
+/*
 ** ---------------------------------- Colors ---------------------------------
 */
 

@@ -1,18 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_charset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 13:23:00 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 19:16:43 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/24 18:50:16 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char		*ft_store_word(char const *src, size_t *i, char c)
+static int		is_charset(char c, char *charset)
+{
+	size_t i;
+
+	i = 0;
+	while (charset[i] != 0)
+	{
+		if (charset[i] == c)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
+static char		*ft_store_word(char *src, size_t *i, char *charset)
 {
 	char	*dest;
 	size_t	j;
@@ -20,7 +34,7 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 
 	j = *i;
 	len = 0;
-	while (src[j] != c && src[j] != '\0')
+	while (!is_charset(src[j], charset) && src[j] != '\0')
 	{
 		j++;
 		len++;
@@ -30,7 +44,7 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 	if (dest)
 	{
 		j = 0;
-		while (src[*i] != 0 && src[*i] != c)
+		while (src[*i] != 0 && !is_charset(src[*i], charset))
 		{
 			dest[j] = src[*i];
 			(*i)++;
@@ -41,7 +55,7 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 	return (dest);
 }
 
-static size_t	count_words(char const *str, char c)
+static size_t	count_words(char *str, char *charset)
 {
 	size_t i;
 	size_t count;
@@ -50,11 +64,12 @@ static size_t	count_words(char const *str, char c)
 	count = 0;
 	while (str[i] != 0)
 	{
-		if (str[i] == c && str[i + 1] != c && str[i + 1] != '\0')
+		if (is_charset(str[i], charset) && !is_charset(str[i + 1], charset)
+			&& str[i + 1] != 0)
 			count++;
 		i++;
 	}
-	if (str[0] != c)
+	if (!is_charset(str[0], charset))
 		count++;
 	return (count);
 }
@@ -76,25 +91,25 @@ static char		**ft_free_split(char ***tab, size_t stop)
 	return (NULL);
 }
 
-char	**ft_split(char const *str, char c)
+char	**ft_split_charset(char *str, char *charset)
 {
 	char	**tab;
 	size_t	i;
 	size_t	j;
 
 	tab = NULL;
-	tab = malloc(sizeof(char *) * (count_words(str, c) + 1));
+	tab = malloc(sizeof(char *) * (count_words(str, charset) + 1));
 	if (tab)
 	{
 		i = 0;
 		j = 0;
 		while (str[i] != 0)
 		{
-			if (str[i] == c)
+			if (is_charset(str[i], charset))
 				i++;
 			else
 			{
-				if (!(tab[j] = ft_store_word(str, &i, c)))
+				if (!(tab[j] = ft_store_word(str, &i, charset)))
 					return (ft_free_split(&tab, i));
 				j++;
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/11 16:49:58 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/23 18:55:16 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,15 @@ void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 
 void	ft_free_tab2(char **tab)
 {
+	int i;
+
+	i = 0;
+	while (tab[i] != 0)
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
 	free(tab);
 	tab = NULL;
 }
@@ -41,6 +50,11 @@ double	deg_to_rad(double alpha)
 	return (alpha * PI / 180);
 }
 
+double	rad_to_deg(double alpha)
+{
+	return (alpha * 180 / PI);
+}
+
 double	normalize_and_markout(double to_mod, double denom)
 {
 	double modified;
@@ -50,3 +64,32 @@ double	normalize_and_markout(double to_mod, double denom)
 	modified = ft_max(0.0, modified);
 	return (modified);
 }
+
+/*t_obj *copy_list(t_obj *head)
+{
+	t_obj *current = head;	// used to iterate over original list
+	t_obj *newList = NULL; // head of the new list
+	t_obj *tail = NULL;	// point to last node in new list
+
+	while (current != NULL)
+	{
+		// special case for the first new Node
+		if (newList == NULL)
+		{
+			newList = (t_obj *)malloc(sizeof(t_obj));
+			newList->type = current->type;
+			newList->next = NULL;
+			tail = newList;
+		}
+		else
+		{
+			tail->next = (t_obj *)malloc(sizeof(t_obj));
+			tail = tail->next;
+			tail->type = current->type;
+			tail->next = NULL;
+		}
+		current = current->next;
+	}
+
+	return (newList);
+}*/

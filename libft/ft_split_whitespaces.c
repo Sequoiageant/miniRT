@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_whitespaces.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 13:23:00 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 19:16:43 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/24 19:24:42 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char		*ft_store_word(char const *src, size_t *i, char c)
+static int		is_space(char c)
+{
+	return (c == ' ' || c == '\t');
+}
+
+static char		*ft_store_word(char const *str, size_t *i)
 {
 	char	*dest;
 	size_t	j;
@@ -20,7 +25,7 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 
 	j = *i;
 	len = 0;
-	while (src[j] != c && src[j] != '\0')
+	while (!is_space(str[j]) && str[j] != '\0')
 	{
 		j++;
 		len++;
@@ -30,9 +35,9 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 	if (dest)
 	{
 		j = 0;
-		while (src[*i] != 0 && src[*i] != c)
+		while (str[*i] != 0 && !is_space(str[*i]))
 		{
-			dest[j] = src[*i];
+			dest[j] = str[*i];
 			(*i)++;
 			j++;
 		}
@@ -41,7 +46,7 @@ static char		*ft_store_word(char const *src, size_t *i, char c)
 	return (dest);
 }
 
-static size_t	count_words(char const *str, char c)
+static size_t	count_words(char const *str)
 {
 	size_t i;
 	size_t count;
@@ -50,11 +55,12 @@ static size_t	count_words(char const *str, char c)
 	count = 0;
 	while (str[i] != 0)
 	{
-		if (str[i] == c && str[i + 1] != c && str[i + 1] != '\0')
+		if (is_space(str[i]) && !is_space(str[i + 1])
+			&& str[i + 1] != 0)
 			count++;
 		i++;
 	}
-	if (str[0] != c)
+	if (!is_space(str[0]))
 		count++;
 	return (count);
 }
@@ -76,25 +82,25 @@ static char		**ft_free_split(char ***tab, size_t stop)
 	return (NULL);
 }
 
-char	**ft_split(char const *str, char c)
+char	**ft_split_whitespaces(char const *str)
 {
 	char	**tab;
 	size_t	i;
 	size_t	j;
 
 	tab = NULL;
-	tab = malloc(sizeof(char *) * (count_words(str, c) + 1));
+	tab = malloc(sizeof(char *) * (count_words(str) + 1));
 	if (tab)
 	{
 		i = 0;
 		j = 0;
 		while (str[i] != 0)
 		{
-			if (str[i] == c)
+			if (is_space(str[i]))
 				i++;
 			else
 			{
-				if (!(tab[j] = ft_store_word(str, &i, c)))
+				if (!(tab[j] = ft_store_word(str, &i)))
 					return (ft_free_split(&tab, i));
 				j++;
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 10:02:42 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/02 17:19:21 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/24 19:25:09 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
+
+# define SUCCESS	0
+# define FAILURE	-1
+# define TRUE		1
+# define FALSE		0
 
 typedef	struct	s_list
 {
@@ -73,6 +78,7 @@ void			ft_strjoin_front(char *front, char **src);
 char			*ft_itoa_base(long nb, char *base);
 int				ft_strcmp(const char *s1, const char *s2);
 double			ft_atof(const char *str);
-
+char			**ft_split_charset(char const *str, char *charset);
+char			**ft_split_whitespaces(char const *str);
 
 #endif

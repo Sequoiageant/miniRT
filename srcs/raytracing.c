@@ -3,53 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/30 14:18:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/12 20:21:31 by julnolle         ###   ########.fr       */
+/*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
+/*   Updated: 2020/03/23 18:54:47 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "libft.h"
-
-
-/*	ALGO :
-** Place the eye and the frame as desired (1)
-** For each pixel on the screen
-**     Determine the square on the grid corresponding to this pixel (2)
-**     Determine the color seen through that square (3)
-**     Paint the pixel with that color (4)
-*/
-
-t_obj *copy_list(t_obj *head)
-{
-	t_obj *current = head;	// used to iterate over original list
-	t_obj *newList = NULL; // head of the new list
-	t_obj *tail = NULL;	// point to last node in new list
-
-	while (current != NULL)
-	{
-		// special case for the first new Node
-		if (newList == NULL)
-		{
-			newList = (t_obj *)malloc(sizeof(t_obj));
-			newList->type = current->type;
-			newList->next = NULL;
-			tail = newList;
-		}
-		else
-		{
-			tail->next = (t_obj *)malloc(sizeof(t_obj));
-			tail = tail->next;
-			tail->type = current->type;
-			tail->next = NULL;
-		}
-		current = current->next;
-	}
-
-	return (newList);
-}
 
 t_cam	select_cam(t_data data)
 {
@@ -62,24 +24,6 @@ t_cam	select_cam(t_data data)
 		data.cams = data.cams->next;
 	}
 	return (*data.cams);
-}
-
-
-int		rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
-{
-	(void)objlst;
-	(void)ray;
-	(void)inter;
-	// printf("%s\n", "raytracing of triangle");
-	return (FALSE);
-}
-int		rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
-{
-	(void)objlst;
-	(void)ray;
-	(void)inter;
-	// printf("%s\n", "raytracing of cylinder");
-	return (FALSE);
 }
 
 void	reset_image(t_data *data)
@@ -105,43 +49,20 @@ void	reset_image(t_data *data)
 int		rt_pl(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	t_vec3		origin;
-	t_vec3		p;
+	t_vec3		p0;
 	double		denom;
 
-	p = objlst->u_obj.pl.pos;
+	p0 = objlst->u_obj.pl.pos;
 	origin = inter->origin;
 	inter->normal = objlst->u_obj.pl.normal;
 	denom = ft_dot_product3(*ray, inter->normal);
 	if (fabs(denom) > EPSILON)
 	{	
-		inter->t = ft_dot_product3(ft_sub_vec3(p, origin), inter->normal) / denom; 
+		inter->t = ft_dot_product3(ft_sub_vec3(p0, origin), inter->normal) / denom; 
 		inter->pos = ft_add_vec3(origin, ft_multby_vec3(ray, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
 	} 
-	return (FALSE);
-}
-
-int		rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter)
-{
-	double t_min;
-	double t_max;
-	t_vec3 p1;
-	t_vec3 p3;
-
-	p1.x = -8; p1.y = -8; p1.z = -50;
-	p3.x = 8; p3.y = 8; p3.z = -50;
-
-	if (rt_pl(ray, objlst, inter))
-	{
-		t_min = 0.0; // calcul trigo pour tmin et tmax ?
-		t_max = 0.0;
-
-		if (inter->pos.x >= p1.x && inter->pos.x <= p3.x
-			&& inter->pos.y >= p1.y && inter->pos.y <= p3.y)
-			return (TRUE);
-	}
-
 	return (FALSE);
 }
 

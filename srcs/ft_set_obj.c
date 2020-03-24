@@ -172,7 +172,7 @@ int	set_sq(char **tab, t_obj **objlst, t_data *data, int num)
 	sq_set = ft_split(tab[1], ',');
 	if (sq_set != NULL)
 	{
-		sq.pos = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
+		sq.p0 = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
 		ft_free_tab2(sq_set);
 	}
 	sq_set = ft_split(tab[2], ',');
@@ -256,19 +256,19 @@ int	set_tr(char **tab, t_obj **objlst, t_data *data, int num)
 	tr_set = ft_split(tab[1], ',');
 	if (tr_set != NULL)
 	{
-		tr.pos1 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
+		tr.p1 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
 		ft_free_tab2(tr_set);
 	}
 	tr_set = ft_split(tab[2], ',');
 	if (tr_set != NULL)
 	{
-		tr.pos2 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
+		tr.p2 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
 		ft_free_tab2(tr_set);
 	}
 	tr_set = ft_split(tab[3], ',');
 	if (tr_set != NULL)
 	{
-		tr.pos3 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
+		tr.p3 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
 		ft_free_tab2(tr_set);
 	}
 	tr_set = ft_split(tab[4], ',');

@@ -26,6 +26,7 @@ double	ft_atof(const char *str)
 	if (*str == '.')
 		str++;
 	len = 0;
+	d = 0.0;
 	while (str[len] >= '0' && str[len] <= '9')
 	{
 		d = d * 10 + str[len] - 48;

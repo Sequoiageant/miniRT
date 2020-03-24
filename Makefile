@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
+#    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/04 16:35:21 by julnolle         ###   ########.fr        #
+#    Updated: 2020/03/23 18:56:04 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,9 @@ SRCS += ft_set_obj.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
 SRCS += color_utils.c
+SRCS += inter_triangle.c
+SRCS += inter_square.c
+SRCS += inter_cylindre.c
 
 # Gnl Sources
 SRCS += get_next_line.c

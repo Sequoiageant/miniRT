@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 14:45:49 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/24 18:51:53 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ int	parser(t_data *data, int fd)
 		ret = get_next_line(fd, &line);
 		if (ret != FAILURE)
 		{
-			tab = ft_split(line, ' ');
+			tab = ft_split_whitespaces(line);
 			if (tab)
 			{
 				ret_machine = MACHINE_AGAIN;
