@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/25 11:31:31 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/31 20:36:32 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,19 @@ int	main(int ac, char **av)
 	int		fd;
 	t_data	data;
 
-	if (ac == 2)
+	if (ac == 2 || ac == 3)
 	{
 		fd = open(av[1], O_RDONLY);
 		if (fd != -1)
 		{
 			parser(&data, fd);
 			close(fd);
-			ft_launch_window(&data);
+			if (ac == 2)
+				ft_launch_window(&data);
+			else if (ac == 3 && ft_strcmp(av[2], "-save") == 0)
+				ft_save_image(&data);
+			else
+				return (FAILURE);
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/03/31 19:22:49 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/31 20:18:58 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,13 +181,8 @@ void	ft_raytracing(t_data *data)
 			find_closest_inter(data, &finter, &ray);
 			color = modulate_color(data, finter, (win.y/win.h));
 			ft_pixel_put(&data->mlx, win.x, win.y, color);
-
 			win.x++;
 		}
 		win.y++;
 	}
-	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);
-	data->mlx.data = (unsigned char*)mlx_get_data_addr(data->mlx.img, &(data->mlx.bits_per_pixel), &(data->mlx.line_length), &(data->mlx.endian));
-	save_bmp("minirt_", data->mlx.data, data->win);
-
 }

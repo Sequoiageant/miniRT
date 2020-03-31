@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/31 16:51:53 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/31 20:18:53 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,6 +397,7 @@ typedef struct		s_data
 */
 
 int					ft_launch_window(t_data *data);
+int					ft_save_image(t_data *data);
 int					key_event(int key, t_data *data);
 int					ft_close(t_data *data);
 
@@ -471,7 +472,6 @@ int					rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 ** ---------------------------------- Utils ---------------------------------
 */
 int					ft_strnequ(char *s1, char *s2, int n);
-int					ft_launch_window(t_data *data);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					rgb_to_int(int r, int g, int b);
 void				ft_free_tab2(char ***tab);

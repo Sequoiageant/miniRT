@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 21:00:38 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/31 20:35:40 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,27 @@ int	ft_launch_window(t_data *data)
 	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, data);
 	data->cam_num = 1;
 	ft_raytracing(data);
+	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);
+	data->mlx.data = (unsigned char*)mlx_get_data_addr(data->mlx.img, &(data->mlx.bits_per_pixel), &(data->mlx.line_length), &(data->mlx.endian));
+	save_bmp("minirt_", data->mlx.data, data->win);
 	mlx_loop(mlx.mlx_ptr);
+	return (EXIT_SUCCESS);
+}
+
+int	ft_save_image(t_data *data)
+{
+	t_mlx	mlx;
+	t_win	win;
+
+	win = data->win;
+	if ((mlx.mlx_ptr = mlx_init()) == NULL)
+		return (EXIT_FAILURE);
+	mlx.img = mlx_new_image(mlx.mlx_ptr, win.w, win.h);
+	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel, &mlx.line_length, &mlx.endian);
+	data->mlx = mlx;
+	data->cam_num = 1;
+	ft_raytracing(data);
+	data->mlx.data = (unsigned char*)mlx_get_data_addr(data->mlx.img, &(data->mlx.bits_per_pixel), &(data->mlx.line_length), &(data->mlx.endian));
+	save_bmp("minirt_", data->mlx.data, data->win);
 	return (EXIT_SUCCESS);
 }
