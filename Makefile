@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/23 18:56:04 by julien           ###   ########.fr        #
+#    Updated: 2020/03/30 16:09:31 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,6 +68,9 @@ endif
 
 # Main Sources
 SRCS += main.c
+SRCS += parser.c
+SRCS += cam_handler.c
+SRCS += event_handler.c
 SRCS += minirt_utils.c 
 SRCS += ft_vec_func_struct.c
 SRCS += ft_set_env.c
@@ -75,15 +78,21 @@ SRCS += ft_set_obj.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
 SRCS += color_utils.c
+SRCS += inter_sphere.c
+SRCS += inter_plane.c
 SRCS += inter_triangle.c
 SRCS += inter_square.c
-SRCS += inter_cylindre.c
+SRCS += inter_cylinder.c
+
+# bmp handler Sources
+SRCS += bmp_create.c
 
 # Gnl Sources
 SRCS += get_next_line.c
 
 vpath %.c srcs/
 vpath %.c srcs/gnl/
+vpath %.c srcs/bmp_handler/
 
 # ---------------- INC --------------- #
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 15:53:12 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/06 11:35:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/31 15:08:28 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 int		rgb_to_int(int r, int g, int b)
 {
-	return(r << 16 | g << 8 | b);
+	return (r << 16 | g << 8 | b);
+}
+
+int		color_encode(t_col col)
+{
+	return (col.r << 16 | col.g << 8 | col.b);
 }
 
 void	init_color(t_col *col)
@@ -51,12 +56,8 @@ t_col	mult_col_double(t_col col, double mult)
 
 t_col	mult_col(t_col col1, t_col col2)
 {
-	return (int_to_col(col1.r * (col2.r / 255.0), col1.g * (col2.g / 255.0), col1.b * (col2.b / 255.0)));
-}
-
-int		color_encode(t_col col)
-{
-	return(col.r << 16 | col.g << 8 | col.b);
+	return (int_to_col(col1.r * (col2.r / 255.0), col1.g * (col2.g / 255.0),
+		col1.b * (col2.b / 255.0)));
 }
 
 t_col	add_colors(t_col col, t_col add)
@@ -81,7 +82,7 @@ t_col	sub_colors(t_col col, t_col sub)
 
 t_col	ft_min_col(t_col col)
 {
-		t_col new_col;
+	t_col new_col;
 
 	new_col.r = ft_min(col.r, 255);
 	new_col.g = ft_min(col.g, 255);

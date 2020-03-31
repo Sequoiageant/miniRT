@@ -11,3 +11,4 @@ valgrind-out.txt
 ressource.c
 *.swp
 result*
+bmp_saved/*

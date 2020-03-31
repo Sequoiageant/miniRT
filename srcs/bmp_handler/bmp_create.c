@@ -3,57 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   bmp_create.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/03 11:40:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 13:44:52 by julnolle         ###   ########.fr       */
+/*   Created: 2020/03/30 15:52:08 by julien            #+#    #+#             */
+/*   Updated: 2020/03/31 19:26:17 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "bmp.h"
+#include <time.h>
 
-struct rgb_data {
-	float r, g, b;
-};
-
-int fill_file()
+unsigned char	*file_header_bmp(int filesize)
 {
-	int width = 400;
-	int height = 400;
-	t_col pixels[width*height];
+	unsigned char	*bmpfileheader;
 
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
-			int a = y * width + x;
-
-			if ((x > 50 && x < 350) && (y > 50 && y < 350)) {
-				pixels[a].r = 255;
-				pixels[a].g = 255;
-				pixels[a].b = 5;
-			} else {
-				pixels[a].r = 55;
-				pixels[a].g = 55;
-				pixels[a].b = 55;
-			}
-		}
-	}
-	return (0);
+	if(!(bmpfileheader = (unsigned char*)malloc(14 * sizeof(unsigned char))))
+		return (0);
+	ft_bzero(bmpfileheader, 14);
+	bmpfileheader[0] = 'B';
+	bmpfileheader[1] = 'M';
+	bmpfileheader[2] = (unsigned char)(filesize);
+	bmpfileheader[3] = (unsigned char)(filesize >> 8);
+	bmpfileheader[4] = (unsigned char)(filesize >> 16);
+	bmpfileheader[5] = (unsigned char)(filesize >> 24);
+	bmpfileheader[10] = 54;
+	return (bmpfileheader);
 }
 
-int	main(void)
+unsigned char	*info_header_bmp(t_win resolution)
 {
-	int fd;
-	char *name = ft_strjoin(BMP_LOCATION, "test");
-	if (name)
+	unsigned char	*bmpinfoheader;
+
+	if(!(bmpinfoheader = (unsigned char*)malloc(40 * sizeof(unsigned char))))
+		return (0);
+	ft_bzero(bmpinfoheader, 40);
+	bmpinfoheader[0] = 40;
+	bmpinfoheader[4] = (unsigned char)(resolution.w);
+	bmpinfoheader[5] = (unsigned char)(resolution.w >> 8);
+	bmpinfoheader[6] = (unsigned char)(resolution.w >> 16);
+	bmpinfoheader[7] = (unsigned char)(resolution.w >> 24);
+	bmpinfoheader[8] = (unsigned char)(resolution.h);
+	bmpinfoheader[9] = (unsigned char)(resolution.h >> 8);
+	bmpinfoheader[10] = (unsigned char)(resolution.h >> 16);
+	bmpinfoheader[11] = (unsigned char)(resolution.h >> 24);
+	bmpinfoheader[12] = 1;
+	bmpinfoheader[14] = 32;
+	// bmpinfoheader[20] = (unsigned char)(imgsize);
+	// bmpinfoheader[21] = (unsigned char)(imgsize >> 8);
+	// bmpinfoheader[22] = (unsigned char)(imgsize >> 16);
+	// bmpinfoheader[23] = (unsigned char)(imgsize >> 24);
+	return (bmpinfoheader);
+}
+
+void			write_img(int fd, const unsigned char *img, t_win resolution)
+{
+	int 			line;
+
+	line = resolution.h - 1;
+	while(line >= 0)
 	{
-		if ((fd = open(name, O_WRONLY | O_CREAT, OPEN_FLAG)) != -1)
-		{
-			write (fd, "ca marche", ft_strlen("ca marche"));
-			printf("Saved to : %s\n", name);
-			fill_file();
-		}
-		free(name);
+		write(fd, img + resolution.w * line * 4, resolution.w * 4);
+		line--;
 	}
-	return (0);
+}
+
+void			save_bmp(const char *filename, const unsigned char *img, const t_win resolution)
+{
+	int				filesize;
+	int				fd;
+	unsigned char	*bmpfileheader;
+	unsigned char	*bmpinfoheader;
+	char			*name;
+
+	name = ft_strjoin(BMP_LOCATION, filename);
+	ft_strjoin_back(ft_itoa(time(NULL)), &name);
+	ft_strjoin_back(".bmp", &name);
+	filesize = 14 + 40 + 3 * resolution.w * resolution.h;
+	printf("%d\n", filesize);	
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
+	free(name);
+	bmpfileheader = file_header_bmp(filesize);
+	write(fd, bmpfileheader, 14);
+	free(bmpfileheader);
+	bmpinfoheader = info_header_bmp(resolution);
+	write(fd, bmpinfoheader, 40);
+	free(bmpinfoheader);
+	write_img(fd, img, resolution);
+	close(fd);
 }

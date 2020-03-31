@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_set_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/11 14:11:15 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/25 11:22:52 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		set_light(char **tab, t_data *data)
 		light.pos.x = ft_atoi(light_set[0]);
 		light.pos.y = ft_atoi(light_set[1]);
 		light.pos.z = ft_atoi(light_set[2]);
-		ft_free_tab2(light_set);
+		ft_free_tab2(&light_set);
 	}
 	light.lum = ft_atof(tab[2]);
 	light_set = ft_split(tab[3], ',');
@@ -101,7 +101,7 @@ int		set_light(char **tab, t_data *data)
 		light.color.r = ft_atoi(light_set[0]);
 		light.color.g = ft_atoi(light_set[1]);
 		light.color.b = ft_atoi(light_set[2]);
-		ft_free_tab2(light_set);
+		ft_free_tab2(&light_set);
 	}
 	ft_add_light(&lights, &light);
 	data->lights = lights;
@@ -120,7 +120,7 @@ int		set_al(char **tab, t_data *data)
 		al.color.r = ft_atoi(al_set[0]) * al.lum;
 		al.color.g = ft_atoi(al_set[1]) * al.lum;
 		al.color.b = ft_atoi(al_set[2]) * al.lum;
-		ft_free_tab2(al_set);
+		ft_free_tab2(&al_set);
 	}
 	data->al = al;
 	return (0);
@@ -138,7 +138,7 @@ int		set_cam(char **tab, t_data *data)
 		cam.pos.x = ft_atof(cam_set[0]);
 		cam.pos.y = ft_atof(cam_set[1]);
 		cam.pos.z = ft_atof(cam_set[2]);
-		ft_free_tab2(cam_set);
+		ft_free_tab2(&cam_set);
 	}
 	cam_set = ft_split(tab[2], ',');
 	if (cam_set != NULL)
@@ -146,7 +146,7 @@ int		set_cam(char **tab, t_data *data)
 		cam.dir.x = ft_atof(cam_set[0]);
 		cam.dir.y = ft_atof(cam_set[1]);
 		cam.dir.z = ft_atof(cam_set[2]);
-		ft_free_tab2(cam_set);
+		ft_free_tab2(&cam_set);
 	}
 	cam.fov = deg_to_rad(ft_atoi(tab[3]));
 	ft_add_cam(&cams, &cam);

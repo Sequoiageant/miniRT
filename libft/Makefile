@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/24 19:12:52 by julien           ###   ########.fr        #
+#    Updated: 2020/03/31 19:40:47 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,14 @@ SRCS	+= 	ft_atoi.c
 SRCS	+= 	ft_split.c
 SRCS	+= 	ft_split_whitespaces.c
 SRCS	+= 	ft_strcmp.c
+SRCS	+= 	ft_bzero.c
 SRCS	+= 	ft_memcpy.c
 SRCS	+= 	ft_strdup.c
 SRCS	+= 	ft_strjoin.c
-SRCS	+= 	ft_substr.c
+SRCS	+= 	ft_strjoin_back.c
 SRCS	+= 	ft_atof.c
+SRCS	+= 	ft_itoa.c
+SRCS	+= 	ft_nbrsize.c
 
 # Bonus Sources
 

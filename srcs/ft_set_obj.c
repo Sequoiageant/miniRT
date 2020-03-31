@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_set_obj.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/04 18:19:52 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/25 11:23:09 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,14 +150,14 @@ int	set_sp(char **tab, t_obj **objlst, t_data *data, int num)
 	if (sp_set != NULL)
 	{
 		sp.pos = new_vec_from_char(sp_set[0], sp_set[1], sp_set[2]);
-		ft_free_tab2(sp_set);
+		ft_free_tab2(&sp_set);
 	}
 	sp.dia = ft_atof(tab[2]);
 	sp_set = ft_split(tab[3], ',');
 	if (sp_set != NULL)
 	{
 		sp.color = char_to_col(sp_set[0], sp_set[1], sp_set[2]);
-		ft_free_tab2(sp_set);
+		ft_free_tab2(&sp_set);
 	}
 	ft_add_sp(objlst, sp, data, num);
 	// print_list2((*objlst));
@@ -173,20 +173,20 @@ int	set_sq(char **tab, t_obj **objlst, t_data *data, int num)
 	if (sq_set != NULL)
 	{
 		sq.p0 = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
-		ft_free_tab2(sq_set);
+		ft_free_tab2(&sq_set);
 	}
 	sq_set = ft_split(tab[2], ',');
 	if (sq_set != NULL)
 	{
 		sq.dir = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
-		ft_free_tab2(sq_set);
+		ft_free_tab2(&sq_set);
 	}
 	sq.h = ft_atof(tab[3]);
 	sq_set = ft_split(tab[4], ',');
 	if (sq_set != NULL)
 	{
 		sq.color = char_to_col(sq_set[0], sq_set[1], sq_set[2]);
-		ft_free_tab2(sq_set);
+		ft_free_tab2(&sq_set);
 	}
 	ft_add_sq(objlst, sq, data, num);
 	return (0);
@@ -201,19 +201,19 @@ int	set_pl(char **tab, t_obj **objlst, t_data *data, int num)
 	if (pl_set != NULL)
 	{
 		pl.pos = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
-		ft_free_tab2(pl_set);
+		ft_free_tab2(&pl_set);
 	}
 	pl_set = ft_split(tab[2], ',');
 	if (pl_set != NULL)
 	{
 		pl.normal = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
-		ft_free_tab2(pl_set);
+		ft_free_tab2(&pl_set);
 	}
 	pl_set = ft_split(tab[3], ',');
 	if (pl_set != NULL)
 	{
 		pl.color = char_to_col(pl_set[0], pl_set[1], pl_set[2]);
-		ft_free_tab2(pl_set);
+		ft_free_tab2(&pl_set);
 	}
 	ft_add_pl(objlst, pl, data, num);
 	return (0);
@@ -228,19 +228,19 @@ int	set_cy(char **tab, t_obj **objlst, t_data *data, int num)
 	if (cy_set != NULL)
 	{
 		cy.pos = new_vec_from_char(cy_set[0], cy_set[1], cy_set[2]);
-		ft_free_tab2(cy_set);
+		ft_free_tab2(&cy_set);
 	}
 	cy_set = ft_split(tab[2], ',');
 	if (cy_set != NULL)
 	{
 		cy.dir = new_vec_from_char(cy_set[0], cy_set[1], cy_set[2]);
-		ft_free_tab2(cy_set);
+		ft_free_tab2(&cy_set);
 	}
 	cy_set = ft_split(tab[3], ',');
 	if (cy_set != NULL)
 	{
 		cy.color = char_to_col(cy_set[0], cy_set[1], cy_set[2]);
-		ft_free_tab2(cy_set);
+		ft_free_tab2(&cy_set);
 	}
 	cy.dia = ft_atof(tab[4]);
 	cy.h = ft_atof(tab[5]);
@@ -257,25 +257,25 @@ int	set_tr(char **tab, t_obj **objlst, t_data *data, int num)
 	if (tr_set != NULL)
 	{
 		tr.p1 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		ft_free_tab2(tr_set);
+		ft_free_tab2(&tr_set);
 	}
 	tr_set = ft_split(tab[2], ',');
 	if (tr_set != NULL)
 	{
 		tr.p2 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		ft_free_tab2(tr_set);
+		ft_free_tab2(&tr_set);
 	}
 	tr_set = ft_split(tab[3], ',');
 	if (tr_set != NULL)
 	{
 		tr.p3 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		ft_free_tab2(tr_set);
+		ft_free_tab2(&tr_set);
 	}
 	tr_set = ft_split(tab[4], ',');
 	if (tr_set != NULL)
 	{
 		tr.color = char_to_col(tr_set[0], tr_set[1], tr_set[2]);
-		ft_free_tab2(tr_set);
+		ft_free_tab2(&tr_set);
 	}
 	ft_add_tr(objlst, tr, data, num);
 	return (0);

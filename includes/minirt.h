@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/23 19:03:30 by julien           ###   ########.fr       */
+/*   Updated: 2020/03/31 16:51:53 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,8 @@ typedef struct		s_mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	char	pad[4];
+	unsigned char	*data;
+	// char	pad[4];
 }					t_mlx;
 
 /*
@@ -241,6 +242,17 @@ typedef struct		s_intersection
 	t_vec3		origin;
 	t_col		col;
 }					t_inter;
+
+/*
+** truncature structure
+*/
+
+typedef struct		s_truncature
+{
+	double t;
+	double tin;
+	double tout;
+}					t_trunc;
 
 /*
 ** <===========< environment structures >===========>
@@ -381,6 +393,31 @@ typedef struct		s_data
 }					t_data;
 
 /*
+** ------------------------------- MLX Events -------------------------------
+*/
+
+int					ft_launch_window(t_data *data);
+int					key_event(int key, t_data *data);
+int					ft_close(t_data *data);
+
+/*
+** --------------------------------- Camera ---------------------------------
+*/
+
+int					choose_cam(int key, t_data *data);
+
+/*
+** --------------------------------- Parser ---------------------------------
+*/
+
+int					parser(t_data *data, int fd);
+int					empty(t_data *data, char **tab, t_stm *machine);
+int					set_env(t_data *data, char **tab, t_stm *machine);
+int					set_obj(t_data *data, char **tab, t_stm *machine);
+int					error(t_data *data, char **tab, t_stm *machine);
+int					ft_list_objects(char **tab, t_data *data, int i);
+
+/*
 ** ------------------------------- Environment ------------------------------
 */
 
@@ -433,11 +470,11 @@ int					rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 /*
 ** ---------------------------------- Utils ---------------------------------
 */
-
+int					ft_strnequ(char *s1, char *s2, int n);
 int					ft_launch_window(t_data *data);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					rgb_to_int(int r, int g, int b);
-void				ft_free_tab2(char **tab);
+void				ft_free_tab2(char ***tab);
 double 				ft_max(double a, double b);
 double 				ft_min(double a, double b);
 int					ft_close(t_data *data);
@@ -473,5 +510,12 @@ void				ft_draw_hex(t_mlx *mlx);
 */
 
 void				ft_raytracing(t_data *data);
+
+/*
+** ------------------------------- bmp Handler ------------------------------
+*/
+
+void				save_bmp(const char *filename, const unsigned char *data,
+						const t_win resolution);
 
 #endif

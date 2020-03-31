@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 11:34:04 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/03 12:21:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/03/31 18:56:38 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BMP_H
 
 # ifndef BMP_LOCATION
-#  define BMP_LOCATION "../../bmp_saved/"
+#  define BMP_LOCATION "./bmp_saved/"
 # endif
 
 # ifndef OPEN_FLAG
