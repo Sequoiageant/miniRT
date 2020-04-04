@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 13:23:00 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 19:24:42 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/02 15:15:24 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static size_t	count_words(char const *str)
 	return (count);
 }
 
-static char		**ft_free_split(char ***tab, size_t stop)
+static char		**ft_free_split(char **tab, size_t stop)
 {
 	size_t i;
 
@@ -74,12 +74,12 @@ static char		**ft_free_split(char ***tab, size_t stop)
 		stop--;
 	while (i < stop)
 	{
-		free((*tab)[i]);
+		free(tab[i]);
 		i++;
 	}
-	free(*tab);
-	*tab = NULL;
-	return (NULL);
+	free(tab);
+	tab = NULL;
+	return (tab);
 }
 
 char	**ft_split_whitespaces(char const *str)
@@ -101,7 +101,7 @@ char	**ft_split_whitespaces(char const *str)
 			else
 			{
 				if (!(tab[j] = ft_store_word(str, &i)))
-					return (ft_free_split(&tab, i));
+					return (ft_free_split(tab, i));
 				j++;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/25 11:22:27 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/03 11:05:48 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,21 @@ void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 
     dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
     *(unsigned int*)dst = color;
+}
+
+void free_split(char **tab)
+{
+	int i;
+
+	i = 0;
+	while (tab[i] != 0)
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	free(tab);
+	tab = NULL;
 }
 
 void	ft_free_tab2(char ***tab)

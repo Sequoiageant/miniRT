@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/31 20:18:53 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/04 16:11:12 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <mlx.h>
 # include <limits.h>
 # include <stdio.h>
+# include <errno.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -31,6 +32,27 @@
 # define FAILURE	-1
 # define TRUE		1
 # define FALSE		0
+
+/*
+** Errors
+*/
+
+# define SAVE_ERROR		"Use '-save' as 2nd arg to save image as [.bmp]."
+# define ARGS_ERROR		"1 or 2 args allowed\nUse '-save' as 2nd arg to save image as [.bmp]."
+# define FD_ERROR		"The path to configuration file must be valid."
+# define PARSE_ERROR	"The configuration file is not valid."
+# define TYPE_ERROR		"Unidentified Type in configuration file."
+# define ENV_ERROR		"The R & A are unique properties."
+# define INT_ERROR		"The resolution (Type A) must be positive int or float."
+
+# define SAVE_ERROR_MASK	0x000001
+# define ARGS_ERROR_MASK	0x000002
+# define FD_ERROR_MASK		0x000004
+# define PARSE_ERROR_MASK	0x000008
+# define TYPE_ERROR_MASK	0x000010
+# define ENV_ERROR_MASK		0x000020
+# define INT_ERROR_MASK		0x000040
+
 
 # define MACHINE_ERROR		-1
 # define MACHINE_CONTINUE	1
@@ -63,8 +85,8 @@
 # define CY			0x000008
 # define TR			0x000010
 
-
 # ifdef LINUX
+
 /*
 ** Keycodes and screen size LINUX
 */
@@ -75,7 +97,8 @@
 #  define LEFT		65361
 #  define RIGHT		65363
 
-#  else
+# else
+
 /*
 ** Keycodes and screen size MAC 42
 */
@@ -140,7 +163,7 @@ enum			e_obj
 typedef struct		s_state_machine
 {
 	enum e_state	state;
-	int				obj;
+	int				error;
 }					t_stm;
 
 /*
@@ -153,15 +176,14 @@ typedef struct		s_state_machine
 
 typedef struct		s_mlx
 {
-	void	*mlx_ptr;
-	void	*mlx_win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	unsigned char	*data;
-	// char	pad[4];
+	void			*mlx_ptr;
+	void			*mlx_win;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	char			pad[4];
 }					t_mlx;
 
 /*
@@ -179,11 +201,11 @@ typedef struct		s_image {
 typedef struct		s_win
 {
 	int			w;
-	int			h;	
+	int			h;
 	double		x;
 	double		y;
-	enum e_bool	set;
-	char		pad[4];
+	// enum e_bool	set;
+	// char		pad[4];
 }					t_win;
 
 /*
@@ -234,13 +256,14 @@ typedef struct		s_quadra
 
 typedef struct		s_intersection
 {
-	enum e_bool	set;
 	double		t;
 	double		min_t;
 	t_vec3		pos;
 	t_vec3		normal;
 	t_vec3		origin;
 	t_col		col;
+	enum e_bool	set;
+	char		pad[4];
 }					t_inter;
 
 /*
@@ -286,7 +309,8 @@ typedef struct		s_light
 
 typedef struct		s_camera
 {
-	int				nbr;	
+	int				nbr;
+	char			pad[4];
 	t_vec3			pos;
 	t_vec3			dir;
 	double			fov;
@@ -388,8 +412,10 @@ typedef struct		s_data
 	t_win	win;
 	t_mlx	mlx;
 	t_ambl	al;
-	int		cam_num;
-	char	pad[4];
+	short	cam_num;
+	short	objlst_set;
+	short	cams_set;
+	short	lights_set;
 }					t_data;
 
 /*
@@ -400,6 +426,8 @@ int					ft_launch_window(t_data *data);
 int					ft_save_image(t_data *data);
 int					key_event(int key, t_data *data);
 int					ft_close(t_data *data);
+void				free_minirt(t_data *data);
+
 
 /*
 ** --------------------------------- Camera ---------------------------------
@@ -423,18 +451,18 @@ int					ft_list_objects(char **tab, t_data *data, int i);
 */
 
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **, t_data *, int);
-typedef	int			(*t_func3)(char **, t_data *);
+typedef	int			(*t_func2)(char **, t_obj **, t_data *);
+typedef	int			(*t_func3)(char **, t_data *, int *);
 typedef	int			(*t_ray)(t_vec3 *, t_obj *, t_inter *);
-int					set_res(char **tab, t_data *data);
-int					set_light(char **tab, t_data *data);
-int					set_al(char **tab, t_data *data);
-int					set_cam(char **tab, t_data *data);
-int					set_sp(char **tab, t_obj **objlst, t_data *data, int num);
-int					set_sq(char **tab, t_obj **objlst, t_data *data, int num);
-int					set_pl(char **tab, t_obj **objlst, t_data *data, int num);
-int					set_cy(char **tab, t_obj **objlst, t_data *data, int num);
-int					set_tr(char **tab, t_obj **objlst, t_data *data, int num);
+int					set_res(char **tab, t_data *data, int *error);
+int					set_light(char **tab, t_data *data, int *error);
+int					set_al(char **tab, t_data *data, int *error);
+int					set_cam(char **tab, t_data *data, int *error);
+int					set_sp(char **tab, t_obj **objlst, t_data *data);
+int					set_sq(char **tab, t_obj **objlst, t_data *data);
+int					set_pl(char **tab, t_obj **objlst, t_data *data);
+int					set_cy(char **tab, t_obj **objlst, t_data *data);
+int					set_tr(char **tab, t_obj **objlst, t_data *data);
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -456,7 +484,7 @@ t_vec3				ft_multby_vec3(t_vec3 *u, double mult);
 t_vec3				ft_divby_vec3(t_vec3 *u, double div);
 t_vec3				ft_decal_vec3(t_vec3 *u, double sub);
 void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
-void   				rot_3d(t_vec3 *v, double rot);
+void				rot_3d(t_vec3 *v, double rot);
 
 /*
 ** ------------------------------ Intersections -----------------------------
@@ -475,12 +503,14 @@ int					ft_strnequ(char *s1, char *s2, int n);
 void				ft_pixel_put(t_mlx *mlx, int x, int y, int color);
 int					rgb_to_int(int r, int g, int b);
 void				ft_free_tab2(char ***tab);
-double 				ft_max(double a, double b);
-double 				ft_min(double a, double b);
+void				free_split(char **tab);
+double				ft_max(double a, double b);
+double				ft_min(double a, double b);
 int					ft_close(t_data *data);
 double				deg_to_rad(double alpha);
 double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
+int					print_error(char *error);
 
 /*
 ** ---------------------------------- Colors ---------------------------------

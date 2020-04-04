@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 19:16:50 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 19:19:42 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/02 15:02:21 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int        main()
 	char *strs;
 	char **new;
 	char *c;
-	strs = " 	   je 				suis le test de split";
+	strs = "c 0.0,0.0,0.0   0,0,1   60";
 	c = " ";
 	new = ft_split_whitespaces(strs);
 	int i = 0;

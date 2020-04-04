@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/03/31 19:53:13 by julien           ###   ########.fr        #
+#    Updated: 2020/04/04 18:51:59 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,9 @@ SRCS	+= 	ft_strjoin_back.c
 SRCS	+= 	ft_atof.c
 SRCS	+= 	ft_itoa.c
 SRCS	+= 	ft_nbrsize.c
+SRCS	+= 	ft_isdigit.c
+SRCS	+= 	ft_isalpha.c
+SRCS	+= 	ft_isalnum.c
 
 # Bonus Sources
 
