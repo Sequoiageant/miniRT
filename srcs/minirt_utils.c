@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/03 11:05:48 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/06 18:34:55 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int		ft_strnequ(char *s1, char *s2, int n)
 
 void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
-    char	*dst;
+	char	*dst;
 
-    dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }
 
 void free_split(char **tab)

@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:29:44 by julien            #+#    #+#             */
-/*   Updated: 2020/04/04 19:29:01 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 16:34:23 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,52 @@
 	return (0);
 }
 */
+
+int	ft_lstsize(t_obj *lst)
+{
+	int size;
+
+	size = 0;
+	if (lst != NULL)
+	{
+		while (lst)
+		{
+			size++;
+			lst = lst->next;
+		}
+	}
+	return (size);
+}
+
+void	print_obj(t_obj *objlst)
+{
+	while (objlst)
+	{
+		printf("	-->Type %d\n", objlst->type);
+		objlst = objlst->next;
+	}
+}
+
+void select_error(int error, size_t line_nb)
+{
+	const char *str_error[] = {SAVE_ERROR, ARGS_ERROR, FD_ERROR,
+								VECTOR_ERROR, TYPE_ERROR, ENV_ERROR,
+								SIGN_ERROR, INT_ERROR, COL_ERROR,
+								RANGE_ERROR, RANGE2_ERROR, FOV_ERROR,
+								MALLOC_ERROR};
+	size_t		i;
+	size_t		nb_error;
+
+	i = 0;
+	nb_error = sizeof(str_error) / sizeof(str_error[0]);
+	while (i < nb_error)
+	{
+		if (error & (1 << i))
+			print_error(str_error[i], line_nb);
+		i++;
+	}
+}
+
 int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
@@ -48,51 +94,32 @@ int	error(t_data *data, char **tab, t_stm *machine)
 
 int	set_obj(t_data *data, char **tab, t_stm *machine)
 {
-	static char	*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
+	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
 	static t_obj	*objlst;
-	int			i;
+	int				ret;
+	int				i;
 
 	i = 0;
+	machine->error = 0;
 	while (i < NB_OBJ)
 	{
 		if (ft_strnequ(tab[0], str_obj[i], 2) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
-			func[i](tab, &objlst, data);
-			return (MACHINE_CONTINUE);
+			ret = func[i](tab, &objlst, data, &machine->error);
+			if (ret == SUCCESS)
+			{
+				// print_obj(data->objlst);
+				return (MACHINE_CONTINUE);
+			}
+			else
+				return (MACHINE_ERROR);
 		}
 		i++;
 	}
 	machine->state = ERROR;
 	return (MACHINE_AGAIN);
-}
-
-/*int	check_env_unicity(char c)
-{
-	static int	is_res_set = FALSE;
-	static int	is_amb_set = FALSE;
-	
-	if (c == 'R' && is_res_set == TRUE)
-		return (FALSE);
-	if (c == 'A' && is_amb_set == TRUE)
-		return (FALSE);
-	if (c == 'R' && is_res_set == FALSE)
-		is_res_set = TRUE;
-	else if (c == 'A' && is_amb_set == FALSE)
-		is_amb_set = TRUE;
-	return (TRUE);
-}
-*/
-
-void select_error(int error)
-{
-	if (error & (INT_ERROR_MASK))
-		print_error(INT_ERROR);
-	else if (error & ENV_ERROR_MASK)
-		print_error(ENV_ERROR);
-	else if (error & TYPE_ERROR_MASK)
-		print_error(TYPE_ERROR);
 }
 
 int	set_env(t_data *data, char **tab, t_stm *machine)
@@ -184,37 +211,32 @@ int	parser(t_data *data, int fd)
 	char			**tab;
 	char			*line;
 	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
+	size_t			line_nb;
 
 	ret = 1;
+	line_nb = 0;
 	machine.state = EMPTY;
 	init_data(data);
 	while (ret > 0)
 	{
 		line = NULL;
 		ret = get_next_line(fd, &line);
+		line_nb++;
 		if (ret != FAILURE)
 		{
 			tab = ft_split_whitespaces(line);
 			if (tab)
 			{
-				if (check_tab(tab))
+				ret_machine = MACHINE_AGAIN;
+				while (ret_machine == MACHINE_AGAIN)
+					ret_machine = func[machine.state](data, tab, &machine);
+				machine.state = EMPTY;
+				if (ret_machine == MACHINE_ERROR)
 				{
-					ret_machine = MACHINE_AGAIN;
-					while (ret_machine == MACHINE_AGAIN)
-						ret_machine = func[machine.state](data, tab, &machine);
-					machine.state = EMPTY;
-					if (ret_machine == MACHINE_ERROR)
-					{
-						select_error(machine.error);
-						ret = FAILURE;
-					}
-					free_split(tab);
-				}
-				else
-				{
-					print_error("Argument error");
+					select_error(machine.error, line_nb);
 					ret = FAILURE;
 				}
+				free_split(tab);
 			}
 			free(line);
 		}

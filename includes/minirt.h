@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/04 16:11:12 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 16:34:13 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,32 @@
 */
 
 # define SAVE_ERROR		"Use '-save' as 2nd arg to save image as [.bmp]."
-# define ARGS_ERROR		"1 or 2 args allowed\nUse '-save' as 2nd arg to save image as [.bmp]."
+# define ARGS_ERROR		"2 args max\nUse '-save' as 2nd arg to make [.bmp]."
 # define FD_ERROR		"The path to configuration file must be valid."
-# define PARSE_ERROR	"The configuration file is not valid."
+# define VECTOR_ERROR	"One or more vector(s), position or dir. is not valid"
 # define TYPE_ERROR		"Unidentified Type in configuration file."
-# define ENV_ERROR		"The R & A are unique properties."
-# define INT_ERROR		"The resolution (Type A) must be positive int or float."
+# define ENV_ERROR		"The R & A must be unique properties."
+# define SIGN_ERROR		"The value must be positive int or float."
+# define INT_ERROR		"The value must be of positive int"
+# define COL_ERROR		"A color is defined by three ints in range [0; 255]."
+# define RANGE_ERROR	"The value must be in the range [0.0; 1.0]"
+# define RANGE2_ERROR	"The normal vector must be in the range [-1.0; 1.0]"
+# define FOV_ERROR		"The FOV must be in the range [0; 180]"
+# define MALLOC_ERROR	"Malloc error."
 
 # define SAVE_ERROR_MASK	0x000001
 # define ARGS_ERROR_MASK	0x000002
 # define FD_ERROR_MASK		0x000004
-# define PARSE_ERROR_MASK	0x000008
+# define VECTOR_ERROR_MASK	0x000008
 # define TYPE_ERROR_MASK	0x000010
 # define ENV_ERROR_MASK		0x000020
-# define INT_ERROR_MASK		0x000040
-
+# define SIGN_ERROR_MASK	0x000040
+# define INT_ERROR_MASK		0x000080
+# define COL_ERROR_MASK		0x000100
+# define RANGE_ERROR_MASK	0x000200
+# define RANGE2_ERROR_MASK	0x000400
+# define FOV_ERROR_MASK		0x000800
+# define MALLOC_ERROR_MASK	0x001000
 
 # define MACHINE_ERROR		-1
 # define MACHINE_CONTINUE	1
@@ -204,8 +215,6 @@ typedef struct		s_win
 	int			h;
 	double		x;
 	double		y;
-	// enum e_bool	set;
-	// char		pad[4];
 }					t_win;
 
 /*
@@ -428,7 +437,6 @@ int					key_event(int key, t_data *data);
 int					ft_close(t_data *data);
 void				free_minirt(t_data *data);
 
-
 /*
 ** --------------------------------- Camera ---------------------------------
 */
@@ -445,24 +453,32 @@ int					set_env(t_data *data, char **tab, t_stm *machine);
 int					set_obj(t_data *data, char **tab, t_stm *machine);
 int					error(t_data *data, char **tab, t_stm *machine);
 int					ft_list_objects(char **tab, t_data *data, int i);
+int					is_int_or_float(char *str, char sign);
+int					ckeck_vec(char *str);
+int					set_vector(char *str, t_vec3 *vec, int *err);
+int					set_normal_vec(char *str, t_vec3 *vec, int *err);
+int					ckeck_col(char *str);
+int					set_color(char *str, t_col *col, int *err);
+int					set_if_in_rnge(char *s, double *d, double min, double max);
+int					is_int(char *str, char sign);
 
 /*
 ** ------------------------------- Environment ------------------------------
 */
 
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **, t_data *);
+typedef	int			(*t_func2)(char **, t_obj **, t_data *, int *);
 typedef	int			(*t_func3)(char **, t_data *, int *);
 typedef	int			(*t_ray)(t_vec3 *, t_obj *, t_inter *);
 int					set_res(char **tab, t_data *data, int *error);
 int					set_light(char **tab, t_data *data, int *error);
 int					set_al(char **tab, t_data *data, int *error);
 int					set_cam(char **tab, t_data *data, int *error);
-int					set_sp(char **tab, t_obj **objlst, t_data *data);
-int					set_sq(char **tab, t_obj **objlst, t_data *data);
-int					set_pl(char **tab, t_obj **objlst, t_data *data);
-int					set_cy(char **tab, t_obj **objlst, t_data *data);
-int					set_tr(char **tab, t_obj **objlst, t_data *data);
+int					set_sp(char **tab, t_obj **objlst, t_data *data, int *err);
+int					set_sq(char **tab, t_obj **objlst, t_data *data, int *err);
+int					set_pl(char **tab, t_obj **objlst, t_data *data, int *err);
+int					set_cy(char **tab, t_obj **objlst, t_data *data, int *err);
+int					set_tr(char **tab, t_obj **objlst, t_data *data, int *err);
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -510,7 +526,7 @@ int					ft_close(t_data *data);
 double				deg_to_rad(double alpha);
 double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
-int					print_error(char *error);
+int					print_error(const char *error, int line_nb);
 
 /*
 ** ---------------------------------- Colors ---------------------------------

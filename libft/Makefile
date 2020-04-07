@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 13:56:26 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/04 18:51:59 by julien           ###   ########.fr        #
+#    Updated: 2020/04/06 11:53:34 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,13 @@ no_color	= \033[1;0m
 # Main Sources
 
 SRCS	+= 	ft_putchar.c
+SRCS	+= 	ft_putchar_fd.c
 SRCS	+= 	ft_strlen.c
 SRCS	+= 	ft_putstr.c
+SRCS	+= 	ft_putstr_fd.c
 SRCS	+= 	ft_putendl.c
 SRCS	+= 	ft_putnbr.c
+SRCS	+= 	ft_putnbr_fd.c
 SRCS	+= 	ft_atoi.c
 SRCS	+= 	ft_split.c
 SRCS	+= 	ft_split_whitespaces.c

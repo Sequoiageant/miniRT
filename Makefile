@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/01 12:16:56 by julien           ###   ########.fr        #
+#    Updated: 2020/04/07 16:40:23 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,12 @@ endif
 
 # Main Sources
 SRCS += main.c
+
+# Parsing Sources
 SRCS += parser.c
+SRCS += parsing_utils.c
+
+# Raytracing Sources
 SRCS += cam_handler.c
 SRCS += event_handler.c
 SRCS += minirt_utils.c 
@@ -84,7 +89,7 @@ SRCS += inter_triangle.c
 SRCS += inter_square.c
 SRCS += inter_cylinder.c
 
-# bmp handler Sources
+# Bmp handler Sources
 SRCS += bmp_create.c
 
 # Gnl Sources

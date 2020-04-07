@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/04 12:05:40 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 16:29:34 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_add_sp(t_obj **objlst, t_sp sp, t_data *data)
 {
 	t_obj *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_obj*)malloc(sizeof(t_obj));
 	if (new)
 	{
 		new->type = SPHERE;
@@ -68,7 +68,7 @@ void	ft_add_sq(t_obj **objlst, t_sq sq, t_data *data)
 {
 	t_obj *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_obj*)malloc(sizeof(t_obj));
 	if (new)
 	{
 		new->type = SQUARE;
@@ -87,7 +87,7 @@ void	ft_add_pl(t_obj **objlst, t_pl pl, t_data *data)
 {
 	t_obj *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_obj*)malloc(sizeof(t_obj));
 	if (new)
 	{
 		new->type = PLANE;
@@ -106,7 +106,7 @@ void	ft_add_cy(t_obj **objlst, t_cy cy, t_data *data)
 {
 	t_obj *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_obj*)malloc(sizeof(t_obj));
 	if (new)
 	{
 		new->type = CYLINDER;
@@ -125,7 +125,7 @@ void	ft_add_tr(t_obj **objlst, t_tr tr, t_data *data)
 {
 	t_obj *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_obj*)malloc(sizeof(t_obj));
 	if (new)
 	{
 		new->type = TRIANGLE;
@@ -140,142 +140,109 @@ void	ft_add_tr(t_obj **objlst, t_tr tr, t_data *data)
 	ft_putendl("	-->element added");
 }
 
-int	set_sp(char **tab, t_obj **objlst, t_data *data)
+int	set_sp(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_sp	sp;
-	char	**sp_set;
+	int		ret;
 
-	sp_set = ft_split(tab[1], ',');
-	if (sp_set != NULL)
-	{
-		sp.pos = new_vec_from_char(sp_set[0], sp_set[1], sp_set[2]);
-		free_split(sp_set);
-	}
+	ret = SUCCESS;
+	ret = set_vector(tab[1], &sp.pos, err);
 	sp.dia = ft_atof(tab[2]);
-	sp_set = ft_split(tab[3], ',');
-	if (sp_set != NULL)
+	if (sp.dia < 0.0)
 	{
-		sp.color = char_to_col(sp_set[0], sp_set[1], sp_set[2]);
-		free_split(sp_set);
+		*err |= SIGN_ERROR_MASK;
+		ret = FAILURE;
 	}
-	ft_add_sp(objlst, sp, data);
+	if (ret != FAILURE)
+	{
+		ret = set_color(tab[3], &sp.color, err);
+		ft_add_sp(objlst, sp, data);
+	}
 	// print_list2((*objlst));
-	return (0);
+	return (ret);
 }
 
-int	set_sq(char **tab, t_obj **objlst, t_data *data)
+int	set_sq(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_sq	sq;
-	char	**sq_set;
+	int		ret;
 
-	sq_set = ft_split(tab[1], ',');
-	if (sq_set != NULL)
+	ret = SUCCESS;
+	ret = set_vector(tab[1], &sq.p0, err);
+	if (ret != FAILURE)
+		ret = set_normal_vec(tab[2], &sq.dir, err);
+	if (is_int_or_float(tab[3], '+'))
+		sq.h = ft_atof(tab[3]);
+	else
 	{
-		sq.p0 = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
-		free_split(sq_set);
+		*err |= SIGN_ERROR_MASK;
+		ret = FAILURE;
 	}
-	sq_set = ft_split(tab[2], ',');
-	if (sq_set != NULL)
+	if (ret != FAILURE)
 	{
-		sq.dir = new_vec_from_char(sq_set[0], sq_set[1], sq_set[2]);
-		free_split(sq_set);
+		ret = set_color(tab[4], &sq.color, err);
+		ft_add_sq(objlst, sq, data);
 	}
-	sq.h = ft_atof(tab[3]);
-	sq_set = ft_split(tab[4], ',');
-	if (sq_set != NULL)
-	{
-		sq.color = char_to_col(sq_set[0], sq_set[1], sq_set[2]);
-		free_split(sq_set);
-	}
-	ft_add_sq(objlst, sq, data);
-	return (0);
+	return (ret);
 }
 
-int	set_pl(char **tab, t_obj **objlst, t_data *data)
+int	set_pl(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_pl	pl;
-	char	**pl_set;
+	int		ret;
 
-	pl_set = ft_split(tab[1], ',');
-	if (pl_set != NULL)
+	ret = set_vector(tab[1], &pl.pos, err);
+	if (ret != FAILURE)
+		ret = set_normal_vec(tab[2], &pl.normal, err);
+	if (ret != FAILURE)
 	{
-		pl.pos = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
-		free_split(pl_set);
+		ret = set_color(tab[3], &pl.color, err);
+		ft_add_pl(objlst, pl, data);
 	}
-	pl_set = ft_split(tab[2], ',');
-	if (pl_set != NULL)
-	{
-		pl.normal = new_vec_from_char(pl_set[0], pl_set[1], pl_set[2]);
-		free_split(pl_set);
-	}
-	pl_set = ft_split(tab[3], ',');
-	if (pl_set != NULL)
-	{
-		pl.color = char_to_col(pl_set[0], pl_set[1], pl_set[2]);
-		free_split(pl_set);
-	}
-	ft_add_pl(objlst, pl, data);
-	return (0);
+	return (ret);
 }
 
-int	set_cy(char **tab, t_obj **objlst, t_data *data)
+int	set_cy(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_cy	cy;
-	char	**cy_set;
+	int ret;
 
-	cy_set = ft_split(tab[1], ',');
-	if (cy_set != NULL)
+	ret = set_vector(tab[1], &cy.pos, err);
+	if (ret != FAILURE)
+		ret = set_normal_vec(tab[2], &cy.dir, err);
+	if (is_int_or_float(tab[3], '+') && is_int_or_float(tab[4], '+'))
 	{
-		cy.pos = new_vec_from_char(cy_set[0], cy_set[1], cy_set[2]);
-		free_split(cy_set);
+		cy.dia = ft_atof(tab[3]);
+		cy.h = ft_atof(tab[4]);
 	}
-	cy_set = ft_split(tab[2], ',');
-	if (cy_set != NULL)
+	else
 	{
-		cy.dir = new_vec_from_char(cy_set[0], cy_set[1], cy_set[2]);
-		free_split(cy_set);
+		*err |= SIGN_ERROR_MASK;
+		ret = FAILURE;
 	}
-	cy_set = ft_split(tab[3], ',');
-	if (cy_set != NULL)
+	if (ret != FAILURE)
 	{
-		cy.color = char_to_col(cy_set[0], cy_set[1], cy_set[2]);
-		free_split(cy_set);
+		ret = set_color(tab[5], &cy.color, err);
+		ft_add_cy(objlst, cy, data);
 	}
-	cy.dia = ft_atof(tab[4]);
-	cy.h = ft_atof(tab[5]);
-	ft_add_cy(objlst, cy, data);
-	return (0);
+	return (ret);
 }
 
-int	set_tr(char **tab, t_obj **objlst, t_data *data)
+int	set_tr(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_tr	tr;
-	char	**tr_set;
+	int		ret;
 
-	tr_set = ft_split(tab[1], ',');
-	if (tr_set != NULL)
+	ret = SUCCESS;
+	ret = set_vector(tab[1], &tr.p1, err);
+	if (ret != FAILURE)
+		ret = set_vector(tab[2], &tr.p2, err);
+	if (ret != FAILURE)
+		ret = set_vector(tab[3], &tr.p3, err);
+	if (ret != FAILURE)
 	{
-		tr.p1 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		free_split(tr_set);
+		ret = set_color(tab[4], &tr.color, err);
+		ft_add_tr(objlst, tr, data);
 	}
-	tr_set = ft_split(tab[2], ',');
-	if (tr_set != NULL)
-	{
-		tr.p2 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		free_split(tr_set);
-	}
-	tr_set = ft_split(tab[3], ',');
-	if (tr_set != NULL)
-	{
-		tr.p3 = new_vec_from_char(tr_set[0], tr_set[1], tr_set[2]);
-		free_split(tr_set);
-	}
-	tr_set = ft_split(tab[4], ',');
-	if (tr_set != NULL)
-	{
-		tr.color = char_to_col(tr_set[0], tr_set[1], tr_set[2]);
-		free_split(tr_set);
-	}
-	ft_add_tr(objlst, tr, data);
-	return (0);
+	return (ret);
 }

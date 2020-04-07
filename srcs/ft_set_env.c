@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/04 17:09:57 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 15:55:18 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_add_cam(t_cam **cams, t_cam *cam)
 	t_cam 		*new;
 
 	cam_num++;
-	new = malloc(sizeof(*new));
+	new = (t_cam*)malloc(sizeof(t_cam));
 	if (new)
 	{
 		new->nbr = cam_num;
@@ -55,7 +55,7 @@ void	ft_add_light(t_light **lights, t_light *light)
 {
 	t_light *new;
 
-	new = malloc(sizeof(*new));
+	new = (t_light*)malloc(sizeof(t_light));
 	if (new)
 	{
 		new->pos = light->pos;
@@ -68,39 +68,20 @@ void	ft_add_light(t_light **lights, t_light *light)
 	ft_putendl("	-->light added");
 }
 
-int		is_int_or_float(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str[0] == '+' || str[0] == '-')
-		i++;
-	while (str[i] != '\0')
-	{
-		if (!ft_isdigit(str[i]) && str[i] != '.')
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
-
 int		set_res(char **tab, t_data *data, int *error)
 {
 	static int set = FAILURE;
 
 	if (set != SUCCESS)
 	{
-		if (is_int_or_float(tab[1]) && is_int_or_float(tab[2]))
+		if (is_int_or_float(tab[1], '+') && is_int_or_float(tab[2], '+'))
 		{
 			data->win.w = ft_min(ft_atoi(tab[1]), MAX_W);
 			data->win.h = ft_min(ft_atoi(tab[2]), MAX_H);
-			if (data->win.w > 0.0 && data->win.h > 0.0)
-				set = SUCCESS;
-			else
-				*error |= INT_ERROR_MASK;
+			set = SUCCESS;
 		}
 		else
-			*error |= INT_ERROR_MASK;
+			*error |= SIGN_ERROR_MASK;
 	}
 	else
 	{
@@ -110,76 +91,53 @@ int		set_res(char **tab, t_data *data, int *error)
 	return (set);
 }
 
-/*
-int		set_res(char **tab, t_data *data, int *error)
-{
-	static int set = FALSE;
-
-	if (set != TRUE)
-	{
-		if (is_int_or_float(tab[1]) && is_int_or_float(tab[2]))
-			set = TRUE;
-		else
-			set = FAILURE;
-		if (set == TRUE)
-		{
-			data->win.w = ft_min(ft_atoi(tab[1]), MAX_W);
-			data->win.h = ft_min(ft_atoi(tab[2]), MAX_H);
-			if (data->win.w < 0.0 && data->win.w < 0.0)
-				set = FAILURE;
-		}
-	}
-	else
-		set = FALSE;
-	return (set);
-}
-
-*/int		set_light(char **tab, t_data *data, int *error)
+int		set_light(char **tab, t_data *data, int *error)
 {
 	static	t_light *lights;
 	t_light			light;
-	char			**lt_set;
-	(void)error;
+	int				ret;
 
-	lt_set = ft_split(tab[1], ',');
-	if (lt_set != NULL)
+	ret = set_vector(tab[1], &light.pos, error);
+	if (is_int_or_float(tab[2], '+'))
 	{
-		light.pos = new_vec_from_char(lt_set[0], lt_set[1], lt_set[2]);
-		ft_free_tab2(&lt_set);
+		ret = set_if_in_rnge(tab[2], &light.lum, 0.0, 1.0);
+		if (ret == FAILURE)
+			*error |= RANGE_ERROR_MASK;
 	}
-	light.lum = ft_atof(tab[2]);
-	lt_set = ft_split(tab[3], ',');
-	if (lt_set != NULL)
+	else
 	{
-		light.color = char_to_col(lt_set[0], lt_set[1], lt_set[2]);
-		ft_free_tab2(&lt_set);
+		*error |= SIGN_ERROR_MASK;
+		ret = FAILURE;
 	}
-	ft_add_light(&lights, &light);
-	data->lights = lights;
-	data->lights_set = TRUE;
-	return (SUCCESS);
+	if (ret != FAILURE)
+	{
+		ret = set_color(tab[3], &light.color, error);
+		ft_add_light(&lights, &light);
+		data->lights = lights;
+		data->lights_set = TRUE;
+	}
+	return (ret);
 }
 
 int		set_al(char **tab, t_data *data, int *error)
 {
-	t_ambl		al;
-	char		**al_set;
 	static int	set = FAILURE;
-	(void)error;
 
 	if (set != SUCCESS)
 	{
-		al.lum = ft_atof(tab[1]);
-		al_set = ft_split(tab[2], ',');
-		if (al_set != NULL)
+		if (is_int_or_float(tab[1], '+'))
 		{
-			al.color.r = ft_atoi(al_set[0]) * al.lum;
-			al.color.g = ft_atoi(al_set[1]) * al.lum;
-			al.color.b = ft_atoi(al_set[2]) * al.lum;
-			ft_free_tab2(&al_set);
+			set = set_if_in_rnge(tab[1], &data->al.lum, 0.0, 1.0);
+			if (set == FAILURE)
+				*error |= RANGE_ERROR_MASK;
 		}
-		data->al = al;
-		set = SUCCESS;
+		else
+			*error |= SIGN_ERROR_MASK;
+		if (set != FAILURE)
+		{
+			set = set_color(tab[2], &data->al.color, error);
+			data->al.color = mult_col_double(data->al.color, data->al.lum);
+		}
 	}
 	else
 	{
@@ -191,26 +149,28 @@ int		set_al(char **tab, t_data *data, int *error)
 
 int		set_cam(char **tab, t_data *data, int *error)
 {
-	static	t_cam	*cams;
-	t_cam			cam;
-	char			**cam_set;
-	(void)error;
+	t_cam	cam;
+	int		ret;
 
-	cam_set = ft_split(tab[1], ',');
-	if (cam_set != NULL)
+	ret = set_vector(tab[1], &cam.pos, error);
+	if (ret != FAILURE)
+		ret = set_normal_vec(tab[2], &cam.dir, error);
+	if (is_int(tab[3], '+'))
 	{
-		cam.pos = new_vec_from_char(cam_set[0], cam_set[1], cam_set[2]);
-		ft_free_tab2(&cam_set);
+		cam.fov = deg_to_rad(ft_atoi(tab[3]));
+		if (cam.fov < 0 || (double)cam.fov > PI)
+		{
+			ret = FAILURE;
+			*error |= FOV_ERROR_MASK;
+		}
 	}
-	cam_set = ft_split(tab[2], ',');
-	if (cam_set != NULL)
+	else
 	{
-		cam.dir = new_vec_from_char(cam_set[0], cam_set[1], cam_set[2]);
-		ft_free_tab2(&cam_set);
+		*error |= INT_ERROR_MASK;
+		ret = FAILURE;
 	}
-	cam.fov = deg_to_rad(ft_atoi(tab[3]));
-	ft_add_cam(&cams, &cam);
-	data->cams = cams;
+
+	ft_add_cam(&data->cams, &cam);
 	data->cams_set = TRUE;
-	return (SUCCESS);
+	return (ret);
 }

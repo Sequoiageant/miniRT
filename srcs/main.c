@@ -6,29 +6,13 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/03 17:58:52 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 11:51:04 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	ft_lstsize(t_obj *lst)
-{
-	int size;
-
-	size = 0;
-	if (lst != NULL)
-	{
-		while (lst)
-		{
-			size++;
-			lst = lst->next;
-		}
-	}
-	return (size);
-}
-
-int	print_error(char *error)
+int	print_main_error(const char *error)
 {
 	write(2, "Error:\n", 7);
 	write(2, error, ft_strlen(error));
@@ -36,7 +20,17 @@ int	print_error(char *error)
 	return (FAILURE);
 }
 
-/*int	main(int ac, char **av)
+int	print_error(const char *error, int line_nb)
+{
+	write(2, "Error:\nLine ", 12);
+	ft_putnbr_fd(line_nb, 2);
+	write(2, ": ", 2);
+	write(2, error, ft_strlen(error));
+	write(2, "\n", 1);
+	return (FAILURE);
+}
+
+int	main(int ac, char **av)
 {
 	int		fd;
 	int		ret;
@@ -55,21 +49,21 @@ int	print_error(char *error)
 				else if (ac == 3 && ft_strcmp(av[2], "-save") == 0)
 					ft_save_image(&data);
 				else
-					ret = print_error(SAVE_ERROR);
+					ret = print_main_error(SAVE_ERROR);
 			}
 			close(fd);
 			free_minirt(&data);
 		}
 		else
-			ret = print_error(FD_ERROR);
+			ret = print_main_error(FD_ERROR);
 	}
 	else
-		ret = print_error(ARGS_ERROR);
+		ret = print_main_error(ARGS_ERROR);
 	// system("leaks minirt");
 	return (ret);
 }
-*/
-int	main(int ac, char **av)
+
+/*int	main(int ac, char **av)
 {
 	int		fd;
 	int		ret;
@@ -97,3 +91,4 @@ int	main(int ac, char **av)
 	// system("leaks minirt");
 	return (ret);
 }
+*/
