@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/07 19:17:15 by julien           ###   ########.fr        #
+#    Updated: 2020/04/07 20:37:09 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ endif
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-	MLX_DIR 	= ./minilibx/
+	MLX_DIR 	= ./minilibx_linux//
 	LDFLAGS		= -lmlx -lX11 -lXext -lm
 	ENV			= -D LINUX
 else
@@ -126,7 +126,7 @@ all: $(NAME)
 fast:
 	$(MAKE) re -j8
 
-$(NAME):	$(LIBFT) $(OBJS)
+$(NAME):	$(LIBFT) $(MLX) $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
 			echo "$(_BOLD)$(_YELLOW)-> Linking $@...$(_END)"
 
