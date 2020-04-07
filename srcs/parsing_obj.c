@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_set_obj.c                                       :+:      :+:    :+:   */
+/*   parsing_obj.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/07 16:29:34 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 17:05:22 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void	ft_add_sp(t_obj **objlst, t_sp sp, t_data *data)
 	}
 	data->objlst = (*objlst);
 	data->objlst_set = TRUE;
-
-	ft_putendl("	-->element added");
 }
 
 void	ft_add_sq(t_obj **objlst, t_sq sq, t_data *data)
@@ -79,8 +77,6 @@ void	ft_add_sq(t_obj **objlst, t_sq sq, t_data *data)
 	}
 	data->objlst = (*objlst);
 	data->objlst_set = TRUE;
-
-	ft_putendl("	-->element added");
 }
 
 void	ft_add_pl(t_obj **objlst, t_pl pl, t_data *data)
@@ -98,8 +94,6 @@ void	ft_add_pl(t_obj **objlst, t_pl pl, t_data *data)
 	}
 	data->objlst = (*objlst);
 	data->objlst_set = TRUE;
-
-	ft_putendl("	-->element added");
 }
 
 void	ft_add_cy(t_obj **objlst, t_cy cy, t_data *data)
@@ -117,8 +111,6 @@ void	ft_add_cy(t_obj **objlst, t_cy cy, t_data *data)
 	}
 	data->objlst = (*objlst);
 	data->objlst_set = TRUE;
-
-	ft_putendl("	-->element added");
 }
 
 void	ft_add_tr(t_obj **objlst, t_tr tr, t_data *data)
@@ -136,8 +128,6 @@ void	ft_add_tr(t_obj **objlst, t_tr tr, t_data *data)
 	}
 	data->objlst = (*objlst);
 	data->objlst_set = TRUE;
-
-	ft_putendl("	-->element added");
 }
 
 int	set_sp(char **tab, t_obj **objlst, t_data *data, int *err)
@@ -205,7 +195,7 @@ int	set_pl(char **tab, t_obj **objlst, t_data *data, int *err)
 int	set_cy(char **tab, t_obj **objlst, t_data *data, int *err)
 {
 	t_cy	cy;
-	int ret;
+	int		ret;
 
 	ret = set_vector(tab[1], &cy.pos, err);
 	if (ret != FAILURE)

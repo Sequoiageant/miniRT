@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_set_env.c                                       :+:      :+:    :+:   */
+/*   parsing_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/07 15:55:18 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 19:50:18 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_cams(t_cam *cams)
 void	ft_add_cam(t_cam **cams, t_cam *cam)
 {
 	static	int	cam_num;
-	t_cam 		*new;
+	t_cam		*new;
 
 	cam_num++;
 	new = (t_cam*)malloc(sizeof(t_cam));
@@ -97,7 +97,8 @@ int		set_light(char **tab, t_data *data, int *error)
 	t_light			light;
 	int				ret;
 
-	ret = set_vector(tab[1], &light.pos, error);
+	if ((ret = set_vector(tab[1], &light.pos, error)) == FAILURE)
+		return (ret);
 	if (is_int_or_float(tab[2], '+'))
 	{
 		ret = set_if_in_rnge(tab[2], &light.lum, 0.0, 1.0);
@@ -169,7 +170,6 @@ int		set_cam(char **tab, t_data *data, int *error)
 		*error |= INT_ERROR_MASK;
 		ret = FAILURE;
 	}
-
 	ft_add_cam(&data->cams, &cam);
 	data->cams_set = TRUE;
 	return (ret);

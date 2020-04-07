@@ -6,7 +6,7 @@
 #    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/07 16:40:23 by julien           ###   ########.fr        #
+#    Updated: 2020/04/07 19:17:15 by julien           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,15 +71,17 @@ SRCS += main.c
 
 # Parsing Sources
 SRCS += parser.c
+SRCS += parsing_env.c
+SRCS += parsing_obj.c
+SRCS += parsing_tests.c
 SRCS += parsing_utils.c
+SRCS += parsing_utils2.c
 
 # Raytracing Sources
 SRCS += cam_handler.c
 SRCS += event_handler.c
 SRCS += minirt_utils.c 
 SRCS += ft_vec_func_struct.c
-SRCS += ft_set_env.c
-SRCS += ft_set_obj.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
 SRCS += color_utils.c

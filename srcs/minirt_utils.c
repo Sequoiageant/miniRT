@@ -6,25 +6,11 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/06 18:34:55 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 19:35:59 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-int		ft_strnequ(char *s1, char *s2, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n && s2[i] != '\0')
-	{
-		if (s1[i] != s2[i])
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
 
 void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
@@ -32,36 +18,6 @@ void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 
 	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
-}
-
-void free_split(char **tab)
-{
-	int i;
-
-	i = 0;
-	while (tab[i] != 0)
-	{
-		free(tab[i]);
-		tab[i] = NULL;
-		i++;
-	}
-	free(tab);
-	tab = NULL;
-}
-
-void	ft_free_tab2(char ***tab)
-{
-	int i;
-
-	i = 0;
-	while ((*tab)[i])
-	{
-		free((*tab)[i]);
-		(*tab)[i] = NULL;
-		i++;
-	}
-	free(*tab);
-	*tab = NULL;
 }
 
 double	ft_max(double a, double b)

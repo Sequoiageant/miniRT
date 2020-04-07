@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/07 16:34:13 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 19:40:47 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@
 # define FALSE		0
 
 /*
+** Some Constants
+*/
+
+# define EPSILON	1.0e-6
+# define BIAS		1.0e-3
+# define LARGE_NUMB	1.0e99
+# define PI			3.1415927
+
+/*
 ** Errors
 */
 
@@ -49,6 +58,7 @@
 # define RANGE_ERROR	"The value must be in the range [0.0; 1.0]"
 # define RANGE2_ERROR	"The normal vector must be in the range [-1.0; 1.0]"
 # define FOV_ERROR		"The FOV must be in the range [0; 180]"
+# define PROP_ERROR		"Incorrect number of properties."
 # define MALLOC_ERROR	"Malloc error."
 
 # define SAVE_ERROR_MASK	0x000001
@@ -63,20 +73,20 @@
 # define RANGE_ERROR_MASK	0x000200
 # define RANGE2_ERROR_MASK	0x000400
 # define FOV_ERROR_MASK		0x000800
-# define MALLOC_ERROR_MASK	0x001000
+# define PROP_ERROR_MASK	0x001000
+# define MALLOC_ERROR_MASK	0x002000
 
-# define MACHINE_ERROR		-1
-# define MACHINE_CONTINUE	1
-# define MACHINE_AGAIN		0
+/*
+** Finite State Machine
+*/
 
 # define NB_STATE	4
 # define NB_OBJ		5
 # define NB_ENV		4
 
-# define EPSILON	1.0e-6
-# define BIAS		1.0e-3
-# define LARGE_NUMB	1.0e99
-# define PI			3.1415927
+# define MACHINE_ERROR		-1
+# define MACHINE_CONTINUE	1
+# define MACHINE_AGAIN		0
 
 # define P_R		"R"
 # define P_A		"A"
@@ -87,6 +97,16 @@
 # define P_SQ		"sq"
 # define P_CY		"cy"
 # define P_TR		"tr"
+
+# define S_R		3
+# define S_A		3
+# define S_C		4
+# define S_L		4
+# define S_SP		4
+# define S_PL		4
+# define S_SQ		5
+# define S_CY		6
+# define S_TR		5
 
 # define STR_ENV	"RAcl"
 
@@ -461,6 +481,10 @@ int					ckeck_col(char *str);
 int					set_color(char *str, t_col *col, int *err);
 int					set_if_in_rnge(char *s, double *d, double min, double max);
 int					is_int(char *str, char sign);
+int					is_in_range_col(t_col *col);
+int					split_size_error(char **tab, size_t size, int *error);
+void				init_data(t_data *data);
+void				select_error(int error, size_t line_nb);
 
 /*
 ** ------------------------------- Environment ------------------------------

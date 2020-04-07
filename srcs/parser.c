@@ -6,7 +6,7 @@
 /*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:29:44 by julien            #+#    #+#             */
-/*   Updated: 2020/04/07 16:34:23 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/07 19:39:34 by julien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,6 @@ void	print_obj(t_obj *objlst)
 	}
 }
 
-void select_error(int error, size_t line_nb)
-{
-	const char *str_error[] = {SAVE_ERROR, ARGS_ERROR, FD_ERROR,
-								VECTOR_ERROR, TYPE_ERROR, ENV_ERROR,
-								SIGN_ERROR, INT_ERROR, COL_ERROR,
-								RANGE_ERROR, RANGE2_ERROR, FOV_ERROR,
-								MALLOC_ERROR};
-	size_t		i;
-	size_t		nb_error;
-
-	i = 0;
-	nb_error = sizeof(str_error) / sizeof(str_error[0]);
-	while (i < nb_error)
-	{
-		if (error & (1 << i))
-			print_error(str_error[i], line_nb);
-		i++;
-	}
-}
-
 int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
@@ -95,6 +75,7 @@ int	error(t_data *data, char **tab, t_stm *machine)
 int	set_obj(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
+	static int		size_tab[NB_OBJ] = {S_SP, S_PL, S_SQ, S_CY, S_TR};
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
 	static t_obj	*objlst;
 	int				ret;
@@ -102,12 +83,14 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 
 	i = 0;
 	machine->error = 0;
+	ret = FAILURE;
 	while (i < NB_OBJ)
 	{
 		if (ft_strnequ(tab[0], str_obj[i], 2) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
-			ret = func[i](tab, &objlst, data, &machine->error);
+			if (split_size_error(tab, size_tab[i], &machine->error))
+				ret = func[i](tab, &objlst, data, &machine->error);
 			if (ret == SUCCESS)
 			{
 				// print_obj(data->objlst);
@@ -125,18 +108,21 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 int	set_env(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_env[NB_ENV] = {P_R, P_A, P_C, P_L};
+	static int		size_tab[NB_ENV] = {S_R, S_A, S_C, S_L};
 	static t_func3	func[NB_ENV] = {set_res, set_al, set_cam, set_light};
 	int				ret;
 	int				i;
 
 	i = 0;
 	machine->error = 0;
+	ret = FAILURE;
 	while (i < NB_ENV)
 	{
 		if (ft_strcmp(tab[0], str_env[i]) == 0)
 		{
 			printf("[%s] -> ENV\n", str_env[i]);
-			ret = func[i](tab, data, &machine->error);
+			if (split_size_error(tab, size_tab[i], &machine->error))
+				ret = func[i](tab, data, &machine->error);
 			if (ret == SUCCESS)
 				return (MACHINE_CONTINUE);
 			else
@@ -158,49 +144,6 @@ int	empty(t_data *data, char **tab, t_stm *machine)
 	}
 	machine->state = ENV;
 	return (MACHINE_AGAIN);
-}
-
-void init_data(t_data *data)
-{
-	data->objlst_set = FALSE;
-	data->cams_set = FALSE;
-	data->lights_set = FALSE;
-}
-
-int	check_line(char *str)
-{
-	size_t i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		// printf("%c\n", str[i]);
-		if (!ft_isdigit(str[i]) && str[i] != '.' && str[i] != ','
-			&& str[i] != '+' && str[i] != '-'
-			&& str[i] != ' ' && str[i] != '\t' && str[i] != '#')
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
-
-int	check_tab(char **tab)
-{
-	size_t i;
-
-	if (tab[0] == NULL)
-		return (TRUE);
-	i = 1;
-	if (tab[0][0] == '#')
-		i++;
-	while (tab[i] != 0)
-	{
-		// printf("%s\n", "TOTO");
-		if (!check_line(tab[i]))
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
 }
 
 int	parser(t_data *data, int fd)
