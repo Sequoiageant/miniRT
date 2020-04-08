@@ -1,13 +1,14 @@
 # miniRT
 **In Progress...**
+
 *First graphic project in 42 School. Allows you to generate scenes in 3D containing simple objects like spheres, planes, squares, cylinders and triangles.*
 
 ## Installation and uses
 1. Compile using make
 
 2. Execute the binary made with:
-	* firt argument (mandatory): the path to the scene you want to generate
-	* second argument (optionnal): "-save" to save the generated image as [.bmp] into bmp_saved/
+	* firt argument (mandatory): the **path to the scene** you want to generate
+	* second argument (optionnal): **"-save"** to save the generated image as [.bmp] into bmp_saved/
 
 example.
 ```sh
@@ -43,29 +44,31 @@ $ ./minirt scenes/147_spheres.rt -save
 * Every other property as those mentioned obove will result in an error.
 
 **Example of configuration file**
->	# Image Resolution (unique)
->	R	850	620
->	
->	# Ambiant light (unique)
->	A	0.7		255,255,255
->	
->	# Cameras (at least one)
->	c	0.0,0.0,0.0		0,0,1	60
->	
->	# Spot lights
->	l	40.0,-10.0,0.0		0.5		255,255,255
->	l	30.0,-10.0,-50.0	0.8		255,255,255
->	
->	# Objects
->	sp	-6.0,3.0,-30.0	10.0  100,56,255
->	sp	0.0,-3.0,-30.0	10.0  255,69,255
->	sp	6.0,3.0,-30.0	10.0  255,69,50
->	sp	5.0,-8.0,-30.0	4.0  255,69,50
->	
->	pl	0.0,15.0,0.0		0.0,-1.0,0.0		255,255,0
->	pl	-8.0,0.0,0.0		1.0,0.0,0.0			50,255,200
->	pl	0.0,0.0,-51.0		0.0,0.0,1.0			150,200,0
->	
->	sq	3.0,-5.0,-20.0		1.0,0.0,0.5		14	255,150,0
->	tr	-4.0,2.0,-10.0		-2.0,10.0,-50.0		-8.0,-10.0,-25.0	150,50,0
->	cy 20.0,6.0,-50   0.0,-1.0,0.0    8.0 15.0	246,24,251
+```
+# Image Resolution (unique)
+R	850	620
+
+# Ambiant light (unique)
+A	0.7		255,255,255
+
+# Cameras (at least one)
+c	0.0,0.0,0.0		0,0,1	60
+
+# Spot lights
+l	40.0,-10.0,0.0		0.5		255,255,255
+l	30.0,-10.0,-50.0	0.8		255,255,255
+
+# Objects
+sp	-6.0,3.0,-30.0	10.0  100,56,255
+sp	0.0,-3.0,-30.0	10.0  255,69,255
+sp	6.0,3.0,-30.0	10.0  255,69,50
+sp	5.0,-8.0,-30.0	4.0  255,69,50
+
+pl	0.0,15.0,0.0		0.0,-1.0,0.0		255,255,0
+pl	-8.0,0.0,0.0		1.0,0.0,0.0			50,255,200
+pl	0.0,0.0,-51.0		0.0,0.0,1.0			150,200,0
+
+sq	3.0,-5.0,-20.0		1.0,0.0,0.5		14	255,150,0
+tr	-4.0,2.0,-10.0		-2.0,10.0,-50.0		-8.0,-10.0,-25.0	150,50,0
+cy 20.0,6.0,-50   0.0,-1.0,0.0    8.0 15.0	246,24,251
+```
