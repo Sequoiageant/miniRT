@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/04/03 17:36:48 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/08 17:18:49 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int	ft_save_image(t_data *data)
 	data->mlx = mlx;
 	data->cam_num = 1;
 	ft_raytracing(data);
-	save_bmp("minirt_", (unsigned char*)mlx.addr, data->win);
+	if (save_bmp((unsigned char*)mlx.addr, data->win) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/03/31 20:18:58 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/08 16:18:59 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ t_vec3	trace_ray_normalized(t_win win, double x, double y, double fov)
 {
 	t_vec3 ray;
 
-	ray.x = x - win.w / 2;
-	ray.y = y - win.h / 2;
+	ray.x = (x + 0.5) - win.w / 2;
+	ray.y = (y + 0.5) - win.h / 2;
 	ray.z = -win.w / (2.0 * tan(fov / 2.0));
 	ft_normalize(&ray);
 	return (ray);

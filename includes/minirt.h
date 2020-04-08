@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 14:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/07 19:40:47 by julien           ###   ########.fr       */
+/*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
+/*   Updated: 2020/04/08 19:06:11 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # define RANGE2_ERROR	"The normal vector must be in the range [-1.0; 1.0]"
 # define FOV_ERROR		"The FOV must be in the range [0; 180]"
 # define PROP_ERROR		"Incorrect number of properties."
+# define TYPE_NB_ERROR	"One type of properties is missing"
 # define MALLOC_ERROR	"Malloc error."
 
 # define SAVE_ERROR_MASK	0x000001
@@ -74,7 +75,8 @@
 # define RANGE2_ERROR_MASK	0x000400
 # define FOV_ERROR_MASK		0x000800
 # define PROP_ERROR_MASK	0x001000
-# define MALLOC_ERROR_MASK	0x002000
+# define TYPE_NB_ERROR_MASK	0x002000
+# define MALLOC_ERROR_MASK	0x004000
 
 /*
 ** Finite State Machine
@@ -585,7 +587,7 @@ void				ft_raytracing(t_data *data);
 ** ------------------------------- bmp Handler ------------------------------
 */
 
-void				save_bmp(const char *filename, const unsigned char *data,
+int					save_bmp(const unsigned char *data,
 						const t_win resolution);
 
 #endif

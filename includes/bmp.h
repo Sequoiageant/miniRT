@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 11:34:04 by julnolle          #+#    #+#             */
-/*   Updated: 2020/03/31 18:56:38 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/08 16:51:53 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BMP_H
 # define BMP_H
+
+# include <time.h>
 
 # ifndef BMP_LOCATION
 #  define BMP_LOCATION "./bmp_saved/"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/06 18:32:24 by julien            #+#    #+#             */
-/*   Updated: 2020/04/07 19:40:12 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/08 19:06:24 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	select_error(int error, size_t line_nb)
 		VECTOR_ERROR, TYPE_ERROR, ENV_ERROR,
 		SIGN_ERROR, INT_ERROR, COL_ERROR,
 		RANGE_ERROR, RANGE2_ERROR, FOV_ERROR,
-		PROP_ERROR, MALLOC_ERROR
+		PROP_ERROR, TYPE_NB_ERROR, MALLOC_ERROR
 	};
 	size_t		i;
 	size_t		nb_error;
