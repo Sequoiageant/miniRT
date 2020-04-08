@@ -3,7 +3,7 @@
 
 **In Progress...**
 
-![Screenshot](/bmp_saved/sample.bmp) 
+![Screenshot](/bmp_saved/sample.jpg) 
 
 ## Installation and uses
 1. Compile using make
