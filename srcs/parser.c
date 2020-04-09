@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/24 20:29:44 by julien            #+#    #+#             */
-/*   Updated: 2020/04/08 19:06:54 by julnolle         ###   ########.fr       */
+/*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
+/*   Updated: 2020/04/09 11:33:58 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,21 +174,24 @@ int	parser(t_data *data, int fd)
 				while (ret_machine == MACHINE_AGAIN)
 					ret_machine = func[machine.state](data, tab, &machine);
 				machine.state = EMPTY;
-				if (ret_machine == MACHINE_ERROR)
-				{
-					select_error(machine.error, line_nb);
-					ret = FAILURE;
-				}
 				free_split(tab);
 			}
 			free(line);
+			if (ret_machine == MACHINE_ERROR)
+			{
+				ret = FAILURE;
+			}
 		}
 	}
 	if (data->objlst_set == FALSE || data->lights_set == FALSE || data->cams_set == FALSE)
 	{
 		ret = FAILURE;
-		machine.error |= TYPE_NB_ERROR_MASK;
-		select_error(machine.error, line_nb);
+		if (machine.error == 0)
+		{
+			machine.error |= TYPE_NB_ERROR_MASK;
+			line_nb = 0;
+		}
 	}
+	select_error(machine.error, line_nb);
 	return (ret);
 }

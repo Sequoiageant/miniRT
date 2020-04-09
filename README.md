@@ -36,14 +36,14 @@ $ ./minirt scenes/147_spheres.rt -save
 * Each type is defined by its own set of properties, in **unique order** (see example).
 * The **R** is unique and represented by 2 integers > 0.
 * The **A** is unique and in the range [0.0; 1.0].
-* All **vectors** *(ie. 30.0,-10.0,-50.0)* must contain 3 integers or floats components, separated by a ',', without spaces.
+* All **vectors** *(ie. 30.0,-10.0,-50.0)* must contain 3 integers or floats components, separated by a "," without spaces.
 	* In addition **directionals vectors** *(ie. 0.0,1.0,-1.0)* are in range [-1.0; 1.0].
 * Cameras are in the range [0; 180] degrees.
 * Lights are in the range [0.0; 1.0].
 * Unique properties of Objects (**radius** for sp and cy, **height** for sq and cy) must be positive.
-* A color *(ie. 246,24,251)* is defined by three integers in range [0; 255].
+* A color *(ie. 100,56,255)* is defined by three integers in range [0; 255].
 * A commented line by **"#"** will not been taken into consideration by the program.
-* Every other type as those mentioned above will result in an error.
+* Every other Type as those mentioned above will result in an error.
 
 
 **Example of configuration file:**

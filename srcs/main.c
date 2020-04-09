@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/08 19:43:26 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/09 10:47:55 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@ int	print_main_error(const char *error)
 
 int	print_error(const char *error, int line_nb)
 {
-	write(2, "Error:\nLine ", 12);
-	ft_putnbr_fd(line_nb, 2);
-	write(2, ": ", 2);
+	if (line_nb == 0)
+		write(2, "Error:\n", 7);
+	else
+	{
+		write(2, "Error:\nLine ", 12);
+		ft_putnbr_fd(line_nb, 2);
+		write(2, ": ", 2);
+	}
 	write(2, error, ft_strlen(error));
 	write(2, "\n", 1);
 	return (FAILURE);
@@ -49,16 +54,16 @@ int	main(int ac, char **av)
 				else if (ac == 3 && ft_strcmp(av[2], "-save") == 0)
 					ft_save_image(&data);
 				else
-					ret = print_main_error(SAVE_ERROR);
+					ret = print_error(SAVE_ERROR, 0);
 			}
 			close(fd);
 			free_minirt(&data);
 		}
 		else
-			ret = print_main_error(FD_ERROR);
+			ret = print_error(FD_ERROR, 0);
 	}
 	else
-		ret = print_main_error(ARGS_ERROR);
+		ret = print_error(ARGS_ERROR, 0);
 	// system("leaks minirt");
 	return (ret);
 }
