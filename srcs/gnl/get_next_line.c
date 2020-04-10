@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:41:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/03 16:51:48 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/10 12:01:06 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static	int		ft_fill_line(char **line, char **str)
 		tmp = NULL;
 		return (1);
 	}
-	else if (ft_strchr_pos(*str, '\0') != -1)
+	else
 	{
 		*line = ft_strdup(*str);
 		free(*str);

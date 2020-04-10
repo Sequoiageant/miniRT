@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/08 19:06:11 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:02:25 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,12 @@ typedef struct		s_state_machine
 {
 	enum e_state	state;
 	int				error;
+	short			objlst_set;
+	short			cams_set;
+	short			lights_set;
+	short			res_set;
+	short			al_set;
+	char			pad[2];
 }					t_stm;
 
 /*
@@ -485,7 +491,7 @@ int					set_if_in_rnge(char *s, double *d, double min, double max);
 int					is_int(char *str, char sign);
 int					is_in_range_col(t_col *col);
 int					split_size_error(char **tab, size_t size, int *error);
-void				init_data(t_data *data);
+void				init_data(t_data *data, t_stm *machine);
 void				select_error(int error, size_t line_nb);
 
 /*
@@ -493,18 +499,18 @@ void				select_error(int error, size_t line_nb);
 */
 
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
-typedef	int			(*t_func2)(char **, t_obj **, t_data *, int *);
-typedef	int			(*t_func3)(char **, t_data *, int *);
+typedef	int			(*t_func2)(char **, t_obj **, t_data *, t_stm *);
+typedef	int			(*t_func3)(char **, t_data *, t_stm *);
 typedef	int			(*t_ray)(t_vec3 *, t_obj *, t_inter *);
-int					set_res(char **tab, t_data *data, int *error);
-int					set_light(char **tab, t_data *data, int *error);
-int					set_al(char **tab, t_data *data, int *error);
-int					set_cam(char **tab, t_data *data, int *error);
-int					set_sp(char **tab, t_obj **objlst, t_data *data, int *err);
-int					set_sq(char **tab, t_obj **objlst, t_data *data, int *err);
-int					set_pl(char **tab, t_obj **objlst, t_data *data, int *err);
-int					set_cy(char **tab, t_obj **objlst, t_data *data, int *err);
-int					set_tr(char **tab, t_obj **objlst, t_data *data, int *err);
+int					set_res(char **tab, t_data *data, t_stm *machine);
+int					set_light(char **tab, t_data *data, t_stm *machine);
+int					set_al(char **tab, t_data *data, t_stm *machine);
+int					set_cam(char **tab, t_data *data, t_stm *machine);
+int					set_sp(char **tab, t_obj **objlst, t_data *data, t_stm *m);
+int					set_sq(char **tab, t_obj **objlst, t_data *data, t_stm *m);
+int					set_pl(char **tab, t_obj **objlst, t_data *data, t_stm *m);
+int					set_cy(char **tab, t_obj **objlst, t_data *data, t_stm *m);
+int					set_tr(char **tab, t_obj **objlst, t_data *data, t_stm *m);
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -587,7 +593,11 @@ void				ft_raytracing(t_data *data);
 ** ------------------------------- bmp Handler ------------------------------
 */
 
-int					save_bmp(const unsigned char *data,
-						const t_win resolution);
+int					save_bmp(const unsigned char *data,	const t_win res);
+/*
+** ------------------------------- bmp Handler ------------------------------
+*/
+
+void				print_split(char **tab);
 
 #endif

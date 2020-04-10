@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/09 10:47:55 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 16:51:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int	main(int ac, char **av)
 	// system("leaks minirt");
 	return (ret);
 }
-
-/*int	main(int ac, char **av)
+/*
+int	main(int ac, char **av)
 {
 	int		fd;
 	int		ret;
@@ -92,7 +92,7 @@ int	main(int ac, char **av)
 		}
 	}
 	else
-		ret = print_error(ARGS_ERROR);
+		ret = print_error(ARGS_ERROR, 0);
 	// system("leaks minirt");
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/06 18:32:24 by julien            #+#    #+#             */
-/*   Updated: 2020/04/09 11:01:52 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:02:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,16 @@ void	free_split(char **tab)
 	tab = NULL;
 }
 
-void	init_data(t_data *data)
+void	init_data(t_data *data, t_stm *machine)
 {
 	data->objlst_set = FALSE;
 	data->cams_set = FALSE;
 	data->lights_set = FALSE;
+	machine->objlst_set = FALSE;
+	machine->cams_set = FALSE;
+	machine->lights_set = FALSE;
+	machine->res_set = FALSE;
+	machine->al_set = FALSE;
 }
 
 /*void	ft_free_tab2(char ***tab)

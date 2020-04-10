@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:50:18 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/08 15:32:30 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 16:32:00 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	ft_add_light(t_light **lights, t_light *light)
 	ft_putendl("	-->light added");
 }
 
-int		set_res(char **tab, t_data *data, int *error)
+int		set_res(char **tab, t_data *data, t_stm *machine)
 {
 	static int set = FAILURE;
 
@@ -78,49 +78,53 @@ int		set_res(char **tab, t_data *data, int *error)
 		{
 			data->win.w = ft_min(ft_atoi(tab[1]), MAX_W);
 			data->win.h = ft_min(ft_atoi(tab[2]), MAX_H);
-			set = SUCCESS;
+			if (data->win.w > 0 && data->win.h > 0)
+				set = SUCCESS;
+			else
+				machine->error |= SIGN_ERROR_MASK;
 		}
 		else
-			*error |= SIGN_ERROR_MASK;
+			machine->error |= SIGN_ERROR_MASK;
 	}
 	else
 	{
 		set = FAILURE;
-		*error |= ENV_ERROR_MASK;
+		machine->error |= ENV_ERROR_MASK;
 	}
+	machine->res_set = TRUE;
 	return (set);
 }
 
-int		set_light(char **tab, t_data *data, int *error)
+int		set_light(char **tab, t_data *data, t_stm *machine)
 {
 	static	t_light *lights;
 	t_light			light;
 	int				ret;
 
-	if ((ret = set_vector(tab[1], &light.pos, error)) == FAILURE)
+	if ((ret = set_vector(tab[1], &light.pos, &machine->error)) == FAILURE)
 		return (ret);
 	if (is_int_or_float(tab[2], '+'))
 	{
 		ret = set_if_in_rnge(tab[2], &light.lum, 0.0, 1.0);
 		if (ret == FAILURE)
-			*error |= RANGE_ERROR_MASK;
+			machine->error |= RANGE_ERROR_MASK;
 	}
 	else
 	{
-		*error |= SIGN_ERROR_MASK;
+		machine->error |= SIGN_ERROR_MASK;
 		ret = FAILURE;
 	}
 	if (ret != FAILURE)
 	{
-		ret = set_color(tab[3], &light.color, error);
+		ret = set_color(tab[3], &light.color, &machine->error);
 		ft_add_light(&lights, &light);
 		data->lights = lights;
-		data->lights_set = TRUE;
+		machine->lights_set = TRUE;
 	}
 	return (ret);
 }
 
-int		set_al(char **tab, t_data *data, int *error)
+int		set_al(char **tab, t_data *data, t_stm *machine)
 {
 	static int	set = FAILURE;
 
@@ -130,47 +134,48 @@ int		set_al(char **tab, t_data *data, int *error)
 		{
 			set = set_if_in_rnge(tab[1], &data->al.lum, 0.0, 1.0);
 			if (set == FAILURE)
-				*error |= RANGE_ERROR_MASK;
+				machine->error |= RANGE_ERROR_MASK;
 		}
 		else
-			*error |= SIGN_ERROR_MASK;
+			machine->error |= SIGN_ERROR_MASK;
 		if (set != FAILURE)
 		{
-			set = set_color(tab[2], &data->al.color, error);
+			set = set_color(tab[2], &data->al.color, &machine->error);
 			data->al.color = mult_col_double(data->al.color, data->al.lum);
 		}
 	}
 	else
 	{
 		set = FAILURE;
-		*error |= ENV_ERROR_MASK;
+		machine->error |= ENV_ERROR_MASK;
 	}
+	machine->al_set = TRUE;
 	return (set);
 }
 
-int		set_cam(char **tab, t_data *data, int *error)
+int		set_cam(char **tab, t_data *data, t_stm *machine)
 {
 	t_cam	cam;
 	int		ret;
 
-	ret = set_vector(tab[1], &cam.pos, error);
+	ret = set_vector(tab[1], &cam.pos, &machine->error);
 	if (ret != FAILURE)
-		ret = set_normal_vec(tab[2], &cam.dir, error);
+		ret = set_normal_vec(tab[2], &cam.dir, &machine->error);
 	if (is_int(tab[3], '+'))
 	{
 		cam.fov = deg_to_rad(ft_atoi(tab[3]));
 		if (cam.fov < 0 || (double)cam.fov > PI)
 		{
 			ret = FAILURE;
-			*error |= FOV_ERROR_MASK;
+			machine->error |= FOV_ERROR_MASK;
 		}
 	}
 	else
 	{
-		*error |= INT_ERROR_MASK;
+		machine->error |= INT_ERROR_MASK;
 		ret = FAILURE;
 	}
 	ft_add_cam(&data->cams, &cam);
-	data->cams_set = TRUE;
+	machine->cams_set = TRUE;
 	return (ret);
 }

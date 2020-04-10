@@ -111,7 +111,16 @@ typedef struct	s_xvar
   int		decrgb[6];
 } t_xvar;
 
-
+/*
+**added declaration
+*/
+int	mlx_int_get_visual(t_xvar *xvar);
+int	mlx_int_set_win_event_mask(t_xvar *xvar);
+int	mlx_int_str_str(char *str, char *find, int len);
+int	mlx_int_str_str_cote(char *str, char *find, int len);
+/*
+**
+*/
 int	mlx_int_do_nothing();
 int	mlx_int_get_good_color();
 int	mlx_int_find_in_pcm();
@@ -123,9 +132,3 @@ void	*mlx_int_new_xshm_image();
 char    **mlx_int_str_to_wordtab();
 void	*mlx_new_image();
 int	shm_att_pb();
-
-// I add that to silent warnings
-int   mlx_int_get_visual(t_xvar *xvar);
-int mlx_int_set_win_event_mask(t_xvar *xvar);
-// int mlx_int_str_str_cote(char *str,char *find,int len)
-// unsigned int  mlx_get_color_value(void *mlx_ptr, int color);

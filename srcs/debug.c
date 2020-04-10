@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/06 15:39:14 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/09 20:32:04 by julnolle         ###   ########.fr       */
+/*   Created: 2020/04/10 11:34:47 by julnolle          #+#    #+#             */
+/*   Updated: 2020/04/10 11:42:01 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
-void	ft_putnbr_fd(int n, int fd)
+void	print_split(char **tab)
 {
-	if (n == -2147483648)
-		ft_putstr_fd("-2147483648", fd);
-	else
+	size_t i;
+
+	i = 0;
+	while (tab[i] != 0)
 	{
-		if (n < 0)
-		{
-			n = -n;
-			ft_putchar_fd('-', fd);
-		}
-		if (n <= 9)
-			ft_putchar_fd(n + 48, fd);
-		else
-		{
-			ft_putnbr_fd(n / 10, fd);
-			ft_putnbr_fd(n % 10, fd);
-		}
+		printf("%s\n", tab[i]);
+		i++;
 	}
 }

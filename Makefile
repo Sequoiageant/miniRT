@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: julien <julien@student.42.fr>              +#+  +:+       +#+         #
+#    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/07 20:37:09 by julien           ###   ########.fr        #
+#    Updated: 2020/04/10 11:39:39 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,16 +55,19 @@ endif
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-	MLX_DIR 	= ./minilibx_linux//
-	LDFLAGS		= -lmlx -lX11 -lXext -lm
+	MLX_DIR 	= ./minilibx_linux/
+	MLX			= -lmlx -lX11 -lXext -lm
 	ENV			= -D LINUX
 else
 	MLX_DIR 	= ./minilibx_opengl_20191021/
-	LDFLAGS		= -L $(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+	MLX			= -L $(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 	ENV			=
 endif
 
 # ---------------- SRC --------------- #
+
+# Debug Sources
+SRCS += debug.c
 
 # Main Sources
 SRCS += main.c
@@ -115,9 +118,9 @@ OBJS		= $(patsubst %.c, $(DIR_OBJS)%.o, $(SRCS))
 
 # ---------------- LIB --------------- #
 
-LIBFT_DIR 	= libft/
+LIBFT_DIR 	= ./libft/
 LIBFT 		= $(LIBFT_DIR)libft.a
-LIB_LINK	= $(LDFLAGS) -L$(LIBFT_DIR) -lft
+LIB_LINK	= $(MLX) -L$(LIBFT_DIR) -lft
 
 # --------- Compilation Rules -------- #
 
@@ -126,7 +129,7 @@ all: $(NAME)
 fast:
 	$(MAKE) re -j8
 
-$(NAME):	$(LIBFT) $(MLX) $(OBJS)
+$(NAME):	$(LIBFT) compmlx $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
 			echo "$(_BOLD)$(_YELLOW)-> Linking $@...$(_END)"
 
@@ -141,14 +144,15 @@ $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
 	echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
 
-$(MLX):
+compmlx:
 	$(MAKE) -C $(MLX_DIR)
-	echo "$(_BOLD)$(_RED)--> Creating $@...$(_END)"
+	echo "$(_BOLD)$(_RED)--> Creating MLX...$(_END)"
 
 FORCE:
 
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
+	$(MAKE) clean -C $(MLX_DIR)
 	$(RM) -R $(DIR_OBJS)
 	@echo "$(_BOLD)$(_RED)-> $@ made$(_END)"
 
@@ -160,5 +164,5 @@ fclean: clean
 re: fclean
 	$(MAKE)
 
-.PHONY:		all exec clean fclean re bonus test
-.SILENT:	$(OBJS) $(DIR_OBJS) $(NAME) $(LIBFT)
+.PHONY:		all exec clean fclean re bonus test compmlx
+.SILENT:	$(OBJS) $(DIR_OBJS) $(NAME) $(LIBFT) compmlx

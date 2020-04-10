@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/04/08 17:18:49 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 16:52:00 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,12 @@ void free_minirt(t_data *data)
 
 int ft_close(t_data *data)
 {
+	mlx_clear_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
 	mlx_destroy_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
 	// print_list(data->objlst);
-	free_minirt(data);
+	// free_minirt(data);
 	// print_list(data->objlst);
+	printf("%s\n", "CLOSED");
 	exit(EXIT_SUCCESS);
 }
 
@@ -111,8 +113,8 @@ int	ft_launch_window(t_data *data)
 	mlx.img = mlx_new_image(mlx.mlx_ptr, win.w, win.h);
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel, &mlx.line_length, &mlx.endian);
 	data->mlx = mlx;
-	mlx_hook(mlx.mlx_win, 3, 1L << 1, key_event, data);
-	mlx_hook(mlx.mlx_win, 17, 1L << 17, ft_close, data);
+	mlx_hook(mlx.mlx_win, 3, (1 << 1), key_event, data);
+	mlx_hook(mlx.mlx_win, 17, (1L << 17), ft_close, data);
 	data->cam_num = 1;
 	ft_raytracing(data);
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.mlx_win, data->mlx.img, 0, 0);

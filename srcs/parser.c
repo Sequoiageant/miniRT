@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/09 11:33:58 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:01:55 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
 			if (split_size_error(tab, size_tab[i], &machine->error))
-				ret = func[i](tab, &objlst, data, &machine->error);
+				ret = func[i](tab, &objlst, data, machine);
 			if (ret == SUCCESS)
 			{
 				// print_obj(data->objlst);
@@ -122,7 +122,7 @@ int	set_env(t_data *data, char **tab, t_stm *machine)
 		{
 			printf("[%s] -> ENV\n", str_env[i]);
 			if (split_size_error(tab, size_tab[i], &machine->error))
-				ret = func[i](tab, data, &machine->error);
+				ret = func[i](tab, data, machine);
 			if (ret == SUCCESS)
 				return (MACHINE_CONTINUE);
 			else
@@ -146,7 +146,76 @@ int	empty(t_data *data, char **tab, t_stm *machine)
 	return (MACHINE_AGAIN);
 }
 
+int	run_machine(char *line, t_data * data, t_stm *machine)
+{
+	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
+	int				ret_machine;
+	char			**tab;
+	int				ret;
+
+	ret = SUCCESS;
+	tab = ft_split_whitespaces(line);
+	if (tab)
+	{
+		ret_machine = MACHINE_AGAIN;
+		while (ret_machine == MACHINE_AGAIN)
+		{
+			ret_machine = func[machine->state](data, tab, machine);
+			if (ret_machine == MACHINE_ERROR)
+				 ret = FAILURE;
+		}
+		machine->state = EMPTY;
+		free_split(tab);
+	}
+	return (ret);
+}
+
+int check_missing_type(t_stm *machine, size_t * line_nb)
+{
+	if (machine->objlst_set == FALSE || machine->lights_set == FALSE
+		|| machine->cams_set == FALSE || machine->res_set == FALSE
+		|| machine->al_set == FALSE)
+	{
+		if (machine->error == 0)
+		{
+			machine->error |= TYPE_NB_ERROR_MASK;
+			*line_nb = 0;
+			return (FAILURE);
+		}
+	}
+	return (SUCCESS);
+}
+
 int	parser(t_data *data, int fd)
+{
+	t_stm			machine;
+	int				ret;
+	char			*line;
+	size_t			line_nb;
+
+	ret = 1;
+	line_nb = 0;
+	machine.state = EMPTY;
+	init_data(data, &machine);
+	while (ret > 0)
+	{
+		line = NULL;
+		ret = get_next_line(fd, &line);
+		line_nb++;
+		if (ret != FAILURE)
+		{
+			if (run_machine(line, data, &machine) == FAILURE)
+				ret = FAILURE;
+			free(line);
+		}
+	}
+	if (check_missing_type(&machine, &line_nb) == FAILURE)
+		ret = FAILURE;
+	select_error(machine.error, line_nb);
+	return (ret);
+}
+
+/*int	parser(t_data *data, int fd)
 {
 	t_stm			machine;
 	int				ret;
@@ -195,3 +264,4 @@ int	parser(t_data *data, int fd)
 	select_error(machine.error, line_nb);
 	return (ret);
 }
+*/
