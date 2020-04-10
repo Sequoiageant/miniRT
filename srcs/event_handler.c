@@ -6,79 +6,13 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/04/10 16:52:00 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:45:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	print_list(t_obj *objlst)
-{
-	if (objlst)
-	{
-		while (objlst)
-		{
-			printf("	-->type: %d\n", objlst->type);
-			objlst = objlst->next;
-		}
-	}
-	else
-		printf("%s\n", "LISTE VIDE");
-}
-
-void free_objlist(t_obj **objlst)
-{
-	t_obj *tmp;
-
-	while (*objlst != NULL)
-	{
-		tmp = *objlst;
-		*objlst = (*objlst)->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	*objlst = NULL;
-}
-
-void free_camlist(t_cam **camlst)
-{
-	t_cam *tmp;
-
-	while (*camlst != NULL)
-	{
-		tmp = *camlst;
-		*camlst = (*camlst)->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	*camlst = NULL;
-}
-
-void free_lightlist(t_light **lightlst)
-{
-	t_light *tmp;
-
-	while (*lightlst != NULL)
-	{
-		tmp = *lightlst;
-		*lightlst = (*lightlst)->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	*lightlst = NULL;
-}
-
-void free_minirt(t_data *data)
-{
-	if (data->objlst_set)
-		free_objlist(&data->objlst);
-	if (data->lights_set)
-		free_lightlist(&data->lights);
-	if (data->cams_set)
-		free_camlist(&data->cams);
-}
-
-int ft_close(t_data *data)
+int	ft_close(t_data *data)
 {
 	mlx_clear_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
 	mlx_destroy_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
@@ -89,15 +23,15 @@ int ft_close(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-int key_event(int key, t_data *data)
+int	key_event(int key, t_data *data)
 {
 	ft_putnbr(key);
 	ft_putendl("");
-	if(key == LEFT || key == RIGHT)
+	if (key == LEFT || key == RIGHT)
 		choose_cam(key, data);
-	else if(key == ESC)
+	else if (key == ESC)
 		ft_close(data);
-	return(0);
+	return (0);
 }
 
 int	ft_launch_window(t_data *data)

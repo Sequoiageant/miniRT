@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 18:48:29 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:37:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 }
 */
 
-int	error(t_data *data, char **tab, t_stm *machine)
+static int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
 	(void)machine;
@@ -47,7 +47,7 @@ int	error(t_data *data, char **tab, t_stm *machine)
 	}
 }
 
-int	set_obj(t_data *data, char **tab, t_stm *machine)
+static int	set_obj(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
 	static int		size_tab[NB_OBJ] = {S_SP, S_PL, S_SQ, S_CY, S_TR};
@@ -80,7 +80,7 @@ int	set_obj(t_data *data, char **tab, t_stm *machine)
 	return (MACHINE_AGAIN);
 }
 
-int	set_env(t_data *data, char **tab, t_stm *machine)
+static int	set_env(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_env[NB_ENV] = {P_R, P_A, P_C, P_L};
 	static int		size_tab[NB_ENV] = {S_R, S_A, S_C, S_L};
@@ -109,7 +109,7 @@ int	set_env(t_data *data, char **tab, t_stm *machine)
 	return (MACHINE_AGAIN);
 }
 
-int	empty(t_data *data, char **tab, t_stm *machine)
+static int	empty(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
 	if (tab[0] == NULL)
@@ -121,7 +121,7 @@ int	empty(t_data *data, char **tab, t_stm *machine)
 	return (MACHINE_AGAIN);
 }
 
-int	run_machine(char *line, t_data *data, t_stm *machine)
+int			run_machine(char *line, t_data *data, t_stm *machine)
 {
 	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
 	int				ret_machine;
@@ -142,35 +142,6 @@ int	run_machine(char *line, t_data *data, t_stm *machine)
 		machine->state = EMPTY;
 		free_split(tab);
 	}
-	return (ret);
-}
-
-int	parser(t_data *data, int fd)
-{
-	t_stm			machine;
-	int				ret;
-	char			*line;
-	size_t			line_nb;
-
-	ret = 1;
-	line_nb = 0;
-	machine.state = EMPTY;
-	init_data(data, &machine);
-	while (ret > 0)
-	{
-		line = NULL;
-		ret = get_next_line(fd, &line);
-		line_nb++;
-		if (ret != FAILURE)
-		{
-			if (run_machine(line, data, &machine) == FAILURE)
-				ret = FAILURE;
-			free(line);
-		}
-	}
-	if (check_missing_type(data, &machine, &line_nb) == FAILURE)
-		ret = FAILURE;
-	select_error(machine.error, line_nb);
 	return (ret);
 }
 

@@ -6,21 +6,21 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 16:51:26 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:54:39 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	print_main_error(const char *error)
+/*int			print_main_error(const char *error)
 {
 	write(2, "Error:\n", 7);
 	write(2, error, ft_strlen(error));
 	write(2, "\n", 1);
 	return (FAILURE);
-}
+}*/
 
-int	print_error(const char *error, int line_nb)
+int			print_error(const char *error, int line_nb)
 {
 	if (line_nb == 0)
 		write(2, "Error:\n", 7);
@@ -35,7 +35,36 @@ int	print_error(const char *error, int line_nb)
 	return (FAILURE);
 }
 
-int	main(int ac, char **av)
+static int	parser(t_data *data, int fd)
+{
+	t_stm			machine;
+	int				ret;
+	char			*line;
+	size_t			line_nb;
+
+	ret = 1;
+	line_nb = 0;
+	machine.state = EMPTY;
+	init_data(data, &machine);
+	while (ret > 0)
+	{
+		line = NULL;
+		ret = get_next_line(fd, &line);
+		line_nb++;
+		if (ret != FAILURE)
+		{
+			if (run_machine(line, data, &machine) == FAILURE)
+				ret = FAILURE;
+			free(line);
+		}
+	}
+	if (check_missing_type(data, &machine, &line_nb) == FAILURE)
+		ret = FAILURE;
+	select_error(machine.error, line_nb);
+	return (ret);
+}
+
+int			main(int ac, char **av)
 {
 	int		fd;
 	int		ret;

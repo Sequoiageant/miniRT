@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:08:09 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:53:28 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,11 +471,7 @@ int					choose_cam(int key, t_data *data);
 ** --------------------------------- Parser ---------------------------------
 */
 
-int					parser(t_data *data, int fd);
-int					empty(t_data *data, char **tab, t_stm *machine);
-int					set_env(t_data *data, char **tab, t_stm *machine);
-int					set_obj(t_data *data, char **tab, t_stm *machine);
-int					error(t_data *data, char **tab, t_stm *machine);
+int					run_machine(char *line, t_data *data, t_stm *machine);
 int					ft_list_objects(char **tab, t_data *data, int i);
 int					is_int_or_float(char *str, char sign);
 int					ckeck_vec(char *str);
@@ -572,23 +568,14 @@ int					check_missing_type(t_data *data, t_stm *machine, size_t *line_nb);
 */
 
 t_col				char_to_col(char *r, char *g, char *b);
+t_col				int_to_col(int r, int g, int b);
 int					color_encode(t_col col);
+void				init_color(t_col *col);
 t_col				mult_col_double(t_col col, double mult);
 t_col				add_colors(t_col col, t_col add);
 t_col				sub_colors(t_col col, t_col sub);
 t_col				mult_col(t_col col1, t_col col2);
 t_col				ft_min_col(t_col col);
-void				init_color(t_col *col);
-
-/*
-** ---------------------------------- forms ---------------------------------
-*/
-
-void				ft_draw_circle(t_mlx *mlx);
-void				ft_draw_square(t_mlx *mlx);
-void				ft_draw_triangle(t_mlx *mlx);
-void				ft_draw_sphere(t_mlx *mlx);
-void				ft_draw_hex(t_mlx *mlx);
 
 /*
 ** ------------------------------- Ray tracing ------------------------------

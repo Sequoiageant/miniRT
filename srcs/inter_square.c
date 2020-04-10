@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inter_square.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 18:28:19 by julien            #+#    #+#             */
-/*   Updated: 2020/03/23 18:53:40 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/10 19:55:22 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@ static int		rt_pl_square(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 			return (TRUE);
 	} 
 	return (FALSE);
-}
-void	print_vec(t_vec3 v)
-{
-	printf("%f %f %f \n", v.x, v.y, v.z);
 }
 
 int				rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter)

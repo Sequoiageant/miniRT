@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 11:34:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:03:35 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:55:44 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,16 @@ int	ft_lstsize(t_obj *lst)
 
 void	print_obj(t_obj *objlst)
 {
-	while (objlst)
+	if (objlst)
 	{
-		printf("	-->Type %d\n", objlst->type);
-		objlst = objlst->next;
+		while (objlst)
+		{
+			printf("	-->Type %d\n", objlst->type);
+			objlst = objlst->next;
+		}
 	}
+	else
+		printf("%s\n", "LISTE VIDE");
 }
 
 void	print_lights(t_light *lights)
@@ -66,6 +71,11 @@ void	print_cams(t_cam *cams)
 		printf("	-->%f\n", cams->fov);
 		cams = cams->next;
 	}
+}
+
+void	print_vec(t_vec3 v)
+{
+	printf("%f %f %f \n", v.x, v.y, v.z);
 }
 
 /*void	print_list2(t_obj *objlst)

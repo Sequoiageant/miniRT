@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/10 19:06:02 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/10 19:48:49 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,15 +82,18 @@ SRCS += parsing_tests.c
 SRCS += parsing_utils.c
 SRCS += parsing_utils2.c
 SRCS += parsing_utils3.c
+SRCS += parsing_free.c
 
 # Raytracing Sources
 SRCS += cam_handler.c
 SRCS += event_handler.c
 SRCS += minirt_utils.c 
 SRCS += ft_vec_func_struct.c
+SRCS += vec_rotation.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
-SRCS += color_utils.c
+SRCS += color_set.c
+SRCS += color_operations.c
 SRCS += inter_sphere.c
 SRCS += inter_plane.c
 SRCS += inter_triangle.c
