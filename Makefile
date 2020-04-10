@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/10 11:39:39 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/10 19:06:02 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,10 +75,13 @@ SRCS += main.c
 # Parsing Sources
 SRCS += parser.c
 SRCS += parsing_env.c
+SRCS += parsing_env2.c
 SRCS += parsing_obj.c
+SRCS += parsing_obj2.c
 SRCS += parsing_tests.c
 SRCS += parsing_utils.c
 SRCS += parsing_utils2.c
+SRCS += parsing_utils3.c
 
 # Raytracing Sources
 SRCS += cam_handler.c

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 17:01:55 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 18:48:29 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,6 @@
 	return (0);
 }
 */
-
-int	ft_lstsize(t_obj *lst)
-{
-	int size;
-
-	size = 0;
-	if (lst != NULL)
-	{
-		while (lst)
-		{
-			size++;
-			lst = lst->next;
-		}
-	}
-	return (size);
-}
-
-void	print_obj(t_obj *objlst)
-{
-	while (objlst)
-	{
-		printf("	-->Type %d\n", objlst->type);
-		objlst = objlst->next;
-	}
-}
 
 int	error(t_data *data, char **tab, t_stm *machine)
 {
@@ -146,7 +121,7 @@ int	empty(t_data *data, char **tab, t_stm *machine)
 	return (MACHINE_AGAIN);
 }
 
-int	run_machine(char *line, t_data * data, t_stm *machine)
+int	run_machine(char *line, t_data *data, t_stm *machine)
 {
 	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
 	int				ret_machine;
@@ -162,28 +137,12 @@ int	run_machine(char *line, t_data * data, t_stm *machine)
 		{
 			ret_machine = func[machine->state](data, tab, machine);
 			if (ret_machine == MACHINE_ERROR)
-				 ret = FAILURE;
+				ret = FAILURE;
 		}
 		machine->state = EMPTY;
 		free_split(tab);
 	}
 	return (ret);
-}
-
-int check_missing_type(t_stm *machine, size_t * line_nb)
-{
-	if (machine->objlst_set == FALSE || machine->lights_set == FALSE
-		|| machine->cams_set == FALSE || machine->res_set == FALSE
-		|| machine->al_set == FALSE)
-	{
-		if (machine->error == 0)
-		{
-			machine->error |= TYPE_NB_ERROR_MASK;
-			*line_nb = 0;
-			return (FAILURE);
-		}
-	}
-	return (SUCCESS);
 }
 
 int	parser(t_data *data, int fd)
@@ -209,7 +168,7 @@ int	parser(t_data *data, int fd)
 			free(line);
 		}
 	}
-	if (check_missing_type(&machine, &line_nb) == FAILURE)
+	if (check_missing_type(data, &machine, &line_nb) == FAILURE)
 		ret = FAILURE;
 	select_error(machine.error, line_nb);
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 17:02:25 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 19:08:09 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,8 @@ typedef struct		s_state_machine
 {
 	enum e_state	state;
 	int				error;
-	short			objlst_set;
-	short			cams_set;
-	short			lights_set;
 	short			res_set;
 	short			al_set;
-	char			pad[2];
 }					t_stm;
 
 /*
@@ -495,7 +491,7 @@ void				init_data(t_data *data, t_stm *machine);
 void				select_error(int error, size_t line_nb);
 
 /*
-** ------------------------------- Environment ------------------------------
+** ------------------------------- Parser Env ------------------------------
 */
 
 typedef	int			(*t_func)(t_data *, char **, t_stm *);
@@ -506,11 +502,21 @@ int					set_res(char **tab, t_data *data, t_stm *machine);
 int					set_light(char **tab, t_data *data, t_stm *machine);
 int					set_al(char **tab, t_data *data, t_stm *machine);
 int					set_cam(char **tab, t_data *data, t_stm *machine);
+
+/*
+** ----------------------------- Parser Objects ----------------------------
+*/
+
 int					set_sp(char **tab, t_obj **objlst, t_data *data, t_stm *m);
 int					set_sq(char **tab, t_obj **objlst, t_data *data, t_stm *m);
 int					set_pl(char **tab, t_obj **objlst, t_data *data, t_stm *m);
 int					set_cy(char **tab, t_obj **objlst, t_data *data, t_stm *m);
 int					set_tr(char **tab, t_obj **objlst, t_data *data, t_stm *m);
+void				ft_add_sp(t_obj **objlst, t_sp sp, t_data *data);
+void				ft_add_sq(t_obj **objlst, t_sq sq, t_data *data);
+void				ft_add_pl(t_obj **objlst, t_pl pl, t_data *data);
+void				ft_add_cy(t_obj **objlst, t_cy cy, t_data *data);
+void				ft_add_tr(t_obj **objlst, t_tr tr, t_data *data);
 
 /*
 ** --------------------------------- Vectors --------------------------------
@@ -559,6 +565,7 @@ double				deg_to_rad(double alpha);
 double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
 int					print_error(const char *error, int line_nb);
+int					check_missing_type(t_data *data, t_stm *machine, size_t *line_nb);
 
 /*
 ** ---------------------------------- Colors ---------------------------------
@@ -593,11 +600,12 @@ void				ft_raytracing(t_data *data);
 ** ------------------------------- bmp Handler ------------------------------
 */
 
-int					save_bmp(const unsigned char *data,	const t_win res);
+int					save_bmp(const unsigned char *data, const t_win res);
+
 /*
-** ------------------------------- bmp Handler ------------------------------
+** ---------------------------- Debug (to delete) ---------------------------
 */
 
-void				print_split(char **tab);
+# include "debug.h"
 
 #endif

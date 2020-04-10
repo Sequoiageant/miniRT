@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/06 18:32:24 by julien            #+#    #+#             */
-/*   Updated: 2020/04/10 17:02:07 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 18:50:18 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	select_error(int error, size_t line_nb)
 {
-	const char *str_error[] = {SAVE_ERROR, ARGS_ERROR, FD_ERROR,
+	const char	*str_error[] = {SAVE_ERROR, ARGS_ERROR, FD_ERROR,
 		VECTOR_ERROR, TYPE_ERROR, ENV_ERROR,
 		SIGN_ERROR, INT_ERROR, COL_ERROR,
 		RANGE_ERROR, RANGE2_ERROR, FOV_ERROR,
@@ -78,27 +78,12 @@ void	free_split(char **tab)
 
 void	init_data(t_data *data, t_stm *machine)
 {
+	data->lights = NULL;
+	data->cams = NULL;
+	data->objlst = NULL;
 	data->objlst_set = FALSE;
 	data->cams_set = FALSE;
 	data->lights_set = FALSE;
-	machine->objlst_set = FALSE;
-	machine->cams_set = FALSE;
-	machine->lights_set = FALSE;
 	machine->res_set = FALSE;
 	machine->al_set = FALSE;
 }
-
-/*void	ft_free_tab2(char ***tab)
-{
-	int i;
-
-	i = 0;
-	while ((*tab)[i])
-	{
-		free((*tab)[i]);
-		(*tab)[i] = NULL;
-		i++;
-	}
-	free(*tab);
-	*tab = NULL;
-}*/
