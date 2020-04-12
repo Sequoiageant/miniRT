@@ -58,8 +58,8 @@ char	*mlx_int_static_line(char **xpm_data,int *pos,int size)
 	return ((char *)0);
       len = len2;
     }
-  strcpy(copy,str);
-  /* strlcpy(copy, str, len2+1); */
+  /* strcpy(copy,str); */
+  strlcpy(copy, str, len2+1);
   return (copy);
 }
 
@@ -110,11 +110,6 @@ int	mlx_int_xpm_set_pixel(t_img *img, char *data, int opp, int col, int x)
 	*(data+x*opp+opp-dec-1) = col&0xFF;
       col >>= 8;
     }
-}
-
-int		mlx_get_color_value(t_xvar *xvar, int color)
-{
-	return(mlx_int_get_good_color(xvar, color));
 }
 
 

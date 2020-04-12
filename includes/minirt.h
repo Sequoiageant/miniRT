@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:53:28 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:05:11 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-# include <mlx.h>
 # include <limits.h>
 # include <stdio.h>
 # include <errno.h>
+# include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
 

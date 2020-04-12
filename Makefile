@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/10 19:48:49 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/12 13:00:38 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,8 +55,8 @@ endif
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-	MLX_DIR 	= ./minilibx_linux/
-	MLX			= -lmlx -lX11 -lXext -lm
+	MLX_DIR 	= ./minilibx/
+	MLX			= -L $(MLX_DIR) -lmlx -lX11 -lXext -lm
 	ENV			= -D LINUX
 else
 	MLX_DIR 	= ./minilibx_opengl_20191021/
@@ -151,8 +151,9 @@ $(LIBFT): FORCE
 	echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
 
 compmlx:
-	$(MAKE) -C $(MLX_DIR)
 	echo "$(_BOLD)$(_RED)--> Creating MLX...$(_END)"
+	$(MAKE) -C $(MLX_DIR)
+	echo "$(_BOLD)$(_RED)--> MLX made $(_END)"
 
 FORCE:
 
