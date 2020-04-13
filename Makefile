@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/13 16:10:34 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/13 19:25:50 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,6 +107,9 @@ SRCS += bmp_create.c
 SRCS += get_next_line.c
 
 vpath %.c srcs/
+vpath %.c srcs/parsing/
+vpath %.c srcs/raytracing/
+vpath %.c srcs/math_vec_color/
 vpath %.c srcs/gnl/
 vpath %.c srcs/bmp_handler/
 

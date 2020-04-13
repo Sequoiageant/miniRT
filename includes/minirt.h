@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 20:05:11 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/13 19:08:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@
 # define PROP_ERROR		"Incorrect number of properties."
 # define TYPE_NB_ERROR	"One type of properties is missing"
 # define MALLOC_ERROR	"Malloc error."
+# define BMP_SUCCESS	"Screenshot saved in ./bmp_saved/\n"
 
 # define SAVE_ERROR_MASK	0x000001
 # define ARGS_ERROR_MASK	0x000002
