@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/12 13:00:38 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/13 12:20:54 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ endif
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-	MLX_DIR 	= ./minilibx/
+	MLX_DIR 	= ./minilibx-linux/
 	MLX			= -L $(MLX_DIR) -lmlx -lX11 -lXext -lm
 	ENV			= -D LINUX
 else
@@ -137,11 +137,11 @@ fast:
 
 $(NAME):	$(LIBFT) compmlx $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
-			echo "$(_BOLD)$(_YELLOW)-> Linking $@...$(_END)"
+			echo "$(_BOLD)$(_YELLOW)-> $@ linked$(_END)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) $(ENV) -c $< -o $@ $(ALL_INC)
-			echo "$(_BOLD)$(_GREEN)-> $@ made$(_END)"
+			echo "$(_BOLD)$(_GREEN)--> $@ made$(_END)"
 
 $(DIR_OBJS):
 	mkdir -p $@

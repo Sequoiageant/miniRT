@@ -1,4 +1,4 @@
-R 1204 850
+sudo apt-get updateR 1204 850
 #R 850 620
 #R 3000 3000
 test
