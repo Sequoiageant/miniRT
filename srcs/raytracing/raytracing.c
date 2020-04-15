@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/04/08 16:18:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/15 12:28:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,10 +170,10 @@ void	ft_raytracing(t_data *data)
 	win = data->win;
 	fov = select_cam(*data).fov;
 	win.y = 0;
-	while (win.y < win.h - 1)
+	while (win.y < win.h)
 	{
 		win.x = 0;
-		while (win.x < win.w - 1)
+		while (win.x < win.w)
 		{
 			finter.min_t = INFINITY;
 			finter.set = false;

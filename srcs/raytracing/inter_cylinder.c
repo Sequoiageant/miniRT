@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inter_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/23 18:28:19 by julien            #+#    #+#             */
-/*   Updated: 2020/03/27 18:16:47 by julien           ###   ########.fr       */
+/*   Created: 2020/04/14 19:53:04 by julnolle          #+#    #+#             */
+/*   Updated: 2020/04/15 12:13:18 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,24 @@ int	truncate_cylinder(t_trunc *trunc, t_cy cy, t_vec3 ray, t_vec3 origin)
 	return (TRUE);
 }
 
-
+/*enum e_bool intersect_cylinder(t_primitive cp, t_ray r, double *current_z)
+{
+    t_vec3  pdp = vec3_substract(cp.direction, cp.position);
+    t_vec3  eyexpdp = vec3_cross(vec3_substract(r.origin, cp.position), pdp);
+    t_vec3  rdxpdp = vec3_cross(r.direction, pdp);
+    float   a = vec3_dot(rdxpdp, rdxpdp);
+    float   b = 2 * vec3_dot(rdxpdp, eyexpdp);
+    float   c = vec3_dot(eyexpdp, eyexpdp) - (cp.radius * cp.radius * vec3_dot(pdp, pdp));
+    double  t[2];
+    double delta;
+    delta = sqrt((b * b) - (4.0 * a * c));
+    if (delta < 0)
+        return (false);
+    t[0] = (-b - (delta)) / (2.0 * a);
+    t[1] = (-b + (delta)) / (2.0 * a);
+    return (test_intersect(t, current_z));
+}
+*/
 int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	t_vec3 origin;
