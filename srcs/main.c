@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 16:16:43 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/13 19:14:38 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/15 15:37:37 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	minirt(t_data *data, int ac, char **av)
 		{
 			if (ac == 2)
 				ret = ft_launch_window(data);
-			else if (ac >= 3 && ft_strcmp(av[2], "-save") == 0)
+			else if (ac == 3 && ft_strcmp(av[2], "-save") == 0)
 			{
 				if ((ret = ft_save_image(data)) == SUCCESS)
 					write(1, BMP_SUCCESS, ft_strlen(BMP_SUCCESS));
@@ -99,7 +99,7 @@ int			main(int ac, char **av)
 	t_data	data;
 
 	ret = SUCCESS;
-	if (ac >= 2)
+	if (ac == 2 || ac == 3)
 		ret = minirt(&data, ac, av);
 	else
 		ret = print_error(ARGS_ERROR, 0);

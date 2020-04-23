@@ -6,7 +6,7 @@ a.out.dSYM/*
 test/
 essai.c
 essai
-test*.c
+# test*.c
 valgrind-out.txt
 ressource.c
 *.swp

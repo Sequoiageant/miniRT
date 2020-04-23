@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:26:31 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/16 15:56:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ t_vec3	ft_sub_vec3(t_vec3 u, t_vec3 v)
 	return (p);
 }
 
-void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
+/*void	ft_rot_vec3(t_vec3 *u, t_vec3 *dir)
 {
 	u->x *= dir->x;
 	u->y *= dir->y;
 	u->z *= dir->z;
-}
+}*/
 
 t_vec3	ft_multby_vec3(t_vec3 *u, double mult)
 {

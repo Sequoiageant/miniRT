@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 19:00:13 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:01:09 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/17 17:00:03 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int		set_res(char **tab, t_data *data, t_stm *machine)
 	{
 		if (is_int_or_float(tab[1], '+') && is_int_or_float(tab[2], '+'))
 		{
-			data->win.w = ft_min(ft_atoi(tab[1]), MAX_W);
-			data->win.h = ft_min(ft_atoi(tab[2]), MAX_H);
+			data->win.w = ft_atoi(tab[1]);
+			data->win.h = ft_atoi(tab[2]);
 			if (data->win.w > 0 && data->win.h > 0)
 				set = SUCCESS;
 			else

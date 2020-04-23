@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/07 19:35:59 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/15 13:01:51 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
+	dst = mlx->addr + (y * mlx->line_len + x * (mlx->bpp / 8));
 	*(unsigned int*)dst = color;
 }
 

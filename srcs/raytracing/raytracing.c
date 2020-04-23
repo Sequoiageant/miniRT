@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/04/15 12:28:14 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/16 18:09:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,16 @@ void reset_inter(t_inter *inter)
 	inter->normal.z = 0.0;
 }
 
-t_vec3	trace_ray_normalized(t_win win, double x, double y, double fov)
+t_vec3	trace_ray_normalized(t_win win, double fov, t_vec3 dir)
 {
 	t_vec3 ray;
+	(void)dir;
 
-	ray.x = (x + 0.5) - win.w / 2;
-	ray.y = (y + 0.5) - win.h / 2;
+	ray.x = win.x - win.w / 2;
+	ray.y = win.y - win.h / 2;
 	ray.z = -win.w / (2.0 * tan(fov / 2.0));
 	ft_normalize(&ray);
+	// rot_3d(&ray, dir);
 	return (ray);
 }
 
@@ -177,7 +179,7 @@ void	ft_raytracing(t_data *data)
 		{
 			finter.min_t = INFINITY;
 			finter.set = false;
-			ray = trace_ray_normalized(win, win.x, win.y, fov);
+			ray = trace_ray_normalized(win, fov, data->cams->dir);
 			find_closest_inter(data, &finter, &ray);
 			color = modulate_color(data, finter, (win.y/win.h));
 			ft_pixel_put(&data->mlx, win.x, win.y, color);

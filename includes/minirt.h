@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/13 19:08:14 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/17 17:32:24 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,11 +214,13 @@ typedef struct		s_mlx
 {
 	void			*mlx_ptr;
 	void			*mlx_win;
+	int				max_w;
+	int				max_h;
 	void			*img;
 	char			*addr;
-	int				bits_per_pixel;
-	int				line_length;
-	int				endian;
+	int				bpp;
+	int				line_len;
+	int				end;
 	char			pad[4];
 }					t_mlx;
 
@@ -534,8 +536,7 @@ double				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
 t_vec3				ft_multby_vec3(t_vec3 *u, double mult);
 t_vec3				ft_divby_vec3(t_vec3 *u, double div);
 t_vec3				ft_decal_vec3(t_vec3 *u, double sub);
-void				ft_rot_vec3(t_vec3 *u, t_vec3 *dir);
-void				rot_3d(t_vec3 *v, double rot);
+void				rot_3d(t_vec3 *v, t_vec3 dir);
 
 /*
 ** ------------------------------ Intersections -----------------------------
@@ -557,7 +558,6 @@ void				ft_free_tab2(char ***tab);
 void				free_split(char **tab);
 double				ft_max(double a, double b);
 double				ft_min(double a, double b);
-int					ft_close(t_data *data);
 double				deg_to_rad(double alpha);
 double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);

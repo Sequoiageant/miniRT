@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/13 19:25:50 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/17 18:05:39 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -140,25 +140,28 @@ fast:
 
 $(NAME):	$(LIBFT) compmlx $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
-			echo "$(_BOLD)$(_YELLOW)-> $@ linked$(_END)"
+			@echo "$(_BOLD)$(_YELLOW)-> $@ linked$(_END)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) $(ENV) -c $< -o $@ $(ALL_INC)
-			echo "$(_BOLD)$(_GREEN)--> $@ made$(_END)"
+			@echo "$(_BOLD)$(_GREEN)--> $@ made$(_END)"
 
 $(DIR_OBJS):
 	mkdir -p $@
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
-	echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
+	@echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
 
 compmlx:
-	echo "$(_BOLD)$(_RED)--> Creating MLX...$(_END)"
+	@echo "$(_BOLD)$(_RED)--> Creating MLX...$(_END)"
 	$(MAKE) -C $(MLX_DIR)
-	echo "$(_BOLD)$(_RED)--> MLX made $(_END)"
+	@echo "$(_BOLD)$(_RED)--> MLX made $(_END)"
 
 FORCE:
+
+ci:
+	rm bmp_saved/minirt_*
 
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
@@ -174,5 +177,5 @@ fclean: clean
 re: fclean
 	$(MAKE)
 
-.PHONY:		all exec clean fclean re bonus test compmlx
+.PHONY:		all exec clean fclean re bonus test compmlx ci
 .SILENT:	$(OBJS) $(DIR_OBJS) $(NAME) $(LIBFT) compmlx
