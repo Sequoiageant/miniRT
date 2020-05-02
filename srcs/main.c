@@ -76,10 +76,10 @@ static int	minirt(t_data *data, int ac, char **av)
 		if (parser(data, fd) != FAILURE)
 		{
 			if (ac == 2)
-				ret = ft_launch_window(data);
+				ret = launch_window(data);
 			else if (ac == 3 && ft_strcmp(av[2], "-save") == 0)
 			{
-				if ((ret = ft_save_image(data)) == SUCCESS)
+				if ((ret = save_image(data)) == SUCCESS)
 					write(1, BMP_SUCCESS, ft_strlen(BMP_SUCCESS));
 			}
 			else

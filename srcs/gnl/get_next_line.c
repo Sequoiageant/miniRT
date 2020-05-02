@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:41:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 12:01:06 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/30 15:51:11 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,21 @@ static	int		ft_strchr_pos(const char *s, int c)
 	return (pos);
 }
 
-static	void	ft_read_line(char **str, int fd, int *ret)
+static	int		ft_read_line(char **str, int fd)
 {
-	char buf[BUFFER_SIZE + 1];
+	char	buf[BUFFER_SIZE + 1];
+	int		ret;
 
-	*ret = 1;
-	while (ft_strchr_pos(*str, '\n') == -1 || ft_strchr_pos(*str, '\0') == -1)
+	ret = 1;
+	while (ft_strchr_pos(*str, '\n') == -1 && ret > 0)
 	{
-		if (((*ret) = read(fd, buf, BUFFER_SIZE)) > 0)
+		if ((ret = read(fd, buf, BUFFER_SIZE)) > 0)
 		{
-			buf[(*ret)] = '\0';
+			buf[ret] = '\0';
 			ft_strjoin_back(buf, str);
 		}
-		else
-			return ;
 	}
+	return (ret);
 }
 
 static	int		ft_fill_line(char **line, char **str)
@@ -90,7 +90,8 @@ int				get_next_line(int fd, char **line)
 	static char	*str;
 	int			ret;
 
-	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0 || BUFFER_SIZE > 8384550)
+	ret = -1;
+	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!str)
 	{
@@ -99,10 +100,9 @@ int				get_next_line(int fd, char **line)
 	}
 	if (str)
 	{
-		ft_read_line(&str, fd, &ret);
-		if (ret == -1)
-			return (-1);
-		return (ft_fill_line(line, &str));
+		ret = ft_read_line(&str, fd);
+		if (ret != -1)
+			ret = ft_fill_line(line, &str);
 	}
-	return (-1);
+	return (ret);
 }

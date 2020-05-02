@@ -43,7 +43,7 @@ int choose_cam(int key, t_data *data)
 		if (search_list(cam_num, *data) == 1)
 			data->cam_num = cam_num;
 	}
-	ft_raytracing(data);
+	raytracing(data);
 	printf("%d\n", cam_num);
 	return(0);
 }

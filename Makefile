@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/17 18:05:39 by julnolle         ###   ########.fr        #
+#    Updated: 2020/04/30 16:49:25 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,7 @@ SRCS += parsing_free.c
 SRCS += cam_handler.c
 SRCS += event_handler.c
 SRCS += minirt_utils.c 
-SRCS += ft_vec_func_struct.c
+SRCS += ft_vec_func.c
 SRCS += vec_rotation.c
 SRCS += minirt_forms.c
 SRCS += raytracing.c
@@ -140,7 +140,7 @@ fast:
 
 $(NAME):	$(LIBFT) compmlx $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(ALL_INC) $(LIB_LINK) -o $@
-			@echo "$(_BOLD)$(_YELLOW)-> $@ linked$(_END)"
+			@echo "$(_BOLD)$(_YELLOW)==> $@ linked$(_END)"
 
 $(OBJS): 	$(DIR_OBJS)%.o: %.c $(HEAD) Makefile | $(DIR_OBJS)
 			$(CC) $(CFLAGS) $(ENV) -c $< -o $@ $(ALL_INC)
@@ -151,12 +151,12 @@ $(DIR_OBJS):
 
 $(LIBFT): FORCE
 	$(MAKE) -C $(LIBFT_DIR)
-	@echo "$(_BOLD)$(_RED)--> $@ made$(_END)"
+	@echo "$(_BOLD)$(_YELLOW)--> $@ made$(_END)"
 
 compmlx:
-	@echo "$(_BOLD)$(_RED)--> Creating MLX...$(_END)"
+	@echo "$(_BOLD)$(_YELLOW)--> Creating MLX...$(_END)"
 	$(MAKE) -C $(MLX_DIR)
-	@echo "$(_BOLD)$(_RED)--> MLX made $(_END)"
+	@echo "$(_BOLD)$(_YELLOW)--> MLX made $(_END)"
 
 FORCE:
 

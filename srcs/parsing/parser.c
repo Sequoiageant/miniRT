@@ -20,7 +20,7 @@
 	return (0);
 }*/
 
-/*int	ft_list_objects(char **tab, t_data *data, int i)
+/*int	list_objects(char **tab, t_data *data, int i)
 {
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
 	static t_obj	*objlst;

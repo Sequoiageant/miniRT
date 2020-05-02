@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/16 15:56:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/04/30 16:38:39 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,22 @@ t_vec3	new_vec_from_char(char *a, char *b, char *c)
 	return (vec);
 }
 
-double	ft_norm_vec3_2(t_vec3 *vec)
+double	norm_vec3_2(t_vec3 *vec)
 {
 	return (vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
 }
 
-double	ft_norm_vec3(t_vec3 *vec)
+double	norm_vec3(t_vec3 *vec)
 {
-	return (sqrt(ft_norm_vec3_2(vec)));
+	return (sqrt(norm_vec3_2(vec)));
 }
 
-double 	ft_dot_product3(t_vec3 u, t_vec3 v)
+double 	dot_product3(t_vec3 u, t_vec3 v)
 {
 	return (u.x * v.x + u.y * v.y + u.z * v.z);
 }
 
-t_vec3	ft_cross_product3(t_vec3 *u, t_vec3 *v)
+t_vec3	cross_product3(t_vec3 *u, t_vec3 *v)
 {
 	t_vec3 p;
 
@@ -64,7 +64,7 @@ t_vec3	ft_cross_product3(t_vec3 *u, t_vec3 *v)
 	return (p);
 }
 
-t_vec3	ft_add_vec3(t_vec3 u, t_vec3 v)
+t_vec3	add_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3 p;
 
@@ -74,7 +74,7 @@ t_vec3	ft_add_vec3(t_vec3 u, t_vec3 v)
 	return (p);
 }
 
-t_vec3	ft_sub_vec3(t_vec3 u, t_vec3 v)
+t_vec3	sub_vec3(t_vec3 u, t_vec3 v)
 {
 	t_vec3 p;
 
@@ -91,7 +91,7 @@ t_vec3	ft_sub_vec3(t_vec3 u, t_vec3 v)
 	u->z *= dir->z;
 }*/
 
-t_vec3	ft_multby_vec3(t_vec3 *u, double mult)
+t_vec3	multby_vec3(t_vec3 *u, double mult)
 {
 	t_vec3 p;
 
@@ -100,7 +100,7 @@ t_vec3	ft_multby_vec3(t_vec3 *u, double mult)
 	p.z = u->z * mult;
 	return (p);
 }
-t_vec3	ft_divby_vec3(t_vec3 *u, double div)
+t_vec3	divby_vec3(t_vec3 *u, double div)
 {
 	t_vec3 p;
 
@@ -110,7 +110,7 @@ t_vec3	ft_divby_vec3(t_vec3 *u, double div)
 	return (p);
 }
 
-t_vec3	ft_decal_vec3(t_vec3 *u, double sub)
+t_vec3	decal_vec3(t_vec3 *u, double sub)
 {
 	t_vec3 p;
 
@@ -124,7 +124,7 @@ void	ft_normalize(t_vec3 *vec)
 {
 	double norm;
 
-	norm = ft_norm_vec3(vec);
+	norm = norm_vec3(vec);
 	if (norm != 1 && norm != 0)
 	{
 		vec->x /= norm;
@@ -133,7 +133,7 @@ void	ft_normalize(t_vec3 *vec)
 	}
 }
 
-t_vec3	ft_get_normalized(t_vec3 vec)
+t_vec3	get_normalized(t_vec3 vec)
 {
 	ft_normalize(&vec);
 	return (vec);

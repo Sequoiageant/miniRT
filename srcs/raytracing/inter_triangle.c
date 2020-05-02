@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   inter_triangle.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 18:28:19 by julien            #+#    #+#             */
-/*   Updated: 2020/03/25 12:18:37 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/30 16:20:54 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "libft.h"
 
 static int		rt_pl_triangle(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
@@ -21,17 +20,16 @@ static int		rt_pl_triangle(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 
 	p3 = objlst->u_obj.tr.p3;
 	origin = inter->origin;
-	denom = ft_dot_product3(*ray, inter->normal);
+	denom = dot_product3(*ray, inter->normal);
 	if (fabs(denom) > EPSILON)
 	{	
-		inter->t = (ft_dot_product3(ft_sub_vec3(p3, origin), inter->normal)) / denom; 
-		inter->pos = ft_add_vec3(origin, ft_multby_vec3(ray, inter->t));
+		inter->t = (dot_product3(sub_vec3(p3, origin), inter->normal)) / denom; 
+		inter->pos = add_vec3(origin, multby_vec3(ray, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
 	} 
 	return (FALSE);
 }
-
 
 int				rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
@@ -54,20 +52,20 @@ int				rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	double alpha;
 
 	tr = objlst->u_obj.tr;
-	u = ft_sub_vec3(tr.p3, tr.p1);
-	v = ft_sub_vec3(tr.p2, tr.p1);
-	inter->normal = ft_cross_product3(&u, &v);
+	u = sub_vec3(tr.p3, tr.p1);
+	v = sub_vec3(tr.p2, tr.p1);
+	inter->normal = cross_product3(&u, &v);
 
 	if (rt_pl_triangle(ray, objlst, inter))
 	{
-		w = ft_sub_vec3(inter->pos, tr.p1);
-		m11 = ft_norm_vec3_2(&u);
-		m12 = ft_dot_product3(u, v);
-		m22 = ft_norm_vec3_2(&v);
+		w = sub_vec3(inter->pos, tr.p1);
+		m11 = norm_vec3_2(&u);
+		m12 = dot_product3(u, v);
+		m22 = norm_vec3_2(&v);
 		detm = m11 * m22 - m12 * m12;
 
-		b11 = ft_dot_product3(w, u);
-		b21 = ft_dot_product3(w, v);
+		b11 = dot_product3(w, u);
+		b21 = dot_product3(w, v);
 		detb = b11 * m22 - b21 * m12;
 		beta = detb / detm;
 
@@ -94,11 +92,11 @@ int				rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	double		denom;
 
 	origin = inter->origin;
-	denom = ft_dot_product3(*ray, inter->normal);
+	denom = dot_product3(*ray, inter->normal);
 	if (fabs(denom) > EPSILON)
 	{	
-		inter->t = (ft_dot_product3(ft_sub_vec3(p3, origin), inter->normal)) / denom; 
-		inter->pos = ft_add_vec3(origin, ft_multby_vec3(ray, inter->t));
+		inter->t = (dot_product3(sub_vec3(p3, origin), inter->normal)) / denom; 
+		inter->pos = add_vec3(origin, multby_vec3(ray, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
 	} 
@@ -116,19 +114,19 @@ int		rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	t_vec3 c3;
 
 	tr = objlst->u_obj.tr;
-	p1p2 = ft_sub_vec3(tr.p1, tr.p2);
-	p1p3 = ft_sub_vec3(tr.p1, tr.p3);
-	p2p3 = ft_sub_vec3(tr.p2, tr.p3);
-	inter->normal = ft_get_normalized(ft_cross_product3(&p1p2, &p1p3));
+	p1p2 = sub_vec3(tr.p1, tr.p2);
+	p1p3 = sub_vec3(tr.p1, tr.p3);
+	p2p3 = sub_vec3(tr.p2, tr.p3);
+	inter->normal = get_normalized(cross_product3(&p1p2, &p1p3));
 	// printf("%f\n", d);
 	if (rt_pl_triangle(ray, inter, tr.p3))
 	{
-		c1 = ft_sub_vec3(inter->pos, tr.p1);
-		c2 = ft_sub_vec3(inter->pos, tr.p2);
-		c3 = ft_sub_vec3(inter->pos, tr.p3);
-		if (ft_dot_product3(inter->normal, ft_cross_product3(&p1p2, &c1)) > 0.0
-			&& ft_dot_product3(inter->normal, ft_cross_product3(&p1p3, &c2)) > 0.0
-			&& ft_dot_product3(inter->normal, ft_cross_product3(&p2p3, &c3)) > 0.0)
+		c1 = sub_vec3(inter->pos, tr.p1);
+		c2 = sub_vec3(inter->pos, tr.p2);
+		c3 = sub_vec3(inter->pos, tr.p3);
+		if (dot_product3(inter->normal, cross_product3(&p1p2, &c1)) > 0.0
+			&& dot_product3(inter->normal, cross_product3(&p1p3, &c2)) > 0.0
+			&& dot_product3(inter->normal, cross_product3(&p2p3, &c3)) > 0.0)
 			return (TRUE);
 	}
 	return (FALSE);

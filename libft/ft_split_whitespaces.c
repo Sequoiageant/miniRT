@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_whitespaces.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 13:23:00 by julien            #+#    #+#             */
-/*   Updated: 2020/04/02 15:15:24 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/30 15:21:22 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char		**ft_free_split(char **tab, size_t stop)
 	return (tab);
 }
 
-char	**ft_split_whitespaces(char const *str)
+char			**ft_split_whitespaces(char const *str)
 {
 	char	**tab;
 	size_t	i;

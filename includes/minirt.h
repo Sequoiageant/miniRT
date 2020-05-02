@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/17 17:32:24 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/02 19:02:18 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,8 +458,8 @@ typedef struct		s_data
 ** ------------------------------- MLX Events -------------------------------
 */
 
-int					ft_launch_window(t_data *data);
-int					ft_save_image(t_data *data);
+int					launch_window(t_data *data);
+int					save_image(t_data *data);
 int					key_event(int key, t_data *data);
 int					ft_close(t_data *data);
 void				free_minirt(t_data *data);
@@ -475,7 +475,7 @@ int					choose_cam(int key, t_data *data);
 */
 
 int					run_machine(char *line, t_data *data, t_stm *machine);
-int					ft_list_objects(char **tab, t_data *data, int i);
+int					list_objects(char **tab, t_data *data, int i);
 int					is_int_or_float(char *str, char sign);
 int					ckeck_vec(char *str);
 int					set_vector(char *str, t_vec3 *vec, int *err);
@@ -524,18 +524,18 @@ void				ft_add_tr(t_obj **objlst, t_tr tr, t_data *data);
 t_vec3				new_vec(double a, double b, double c);
 void				reset_vec(t_vec3 *vec);
 t_vec3				new_vec_from_char(char *a, char *b, char *c);
-double				ft_dot_product3(t_vec3 u, t_vec3 v);
-t_vec3				ft_cross_product3(t_vec3 *u, t_vec3 *v);
-t_vec3				ft_add_vec3(t_vec3 u, t_vec3 v);
-t_vec3				ft_sub_vec3(t_vec3 u, t_vec3 v);
-double				ft_norm_vec3(t_vec3 *u);
+double				dot_product3(t_vec3 u, t_vec3 v);
+t_vec3				cross_product3(t_vec3 *u, t_vec3 *v);
+t_vec3				add_vec3(t_vec3 u, t_vec3 v);
+t_vec3				sub_vec3(t_vec3 u, t_vec3 v);
+double				norm_vec3(t_vec3 *u);
 void				ft_normalize(t_vec3 *vec);
-double				ft_norm_vec3_2(t_vec3 *vec);
-t_vec3				ft_get_normalized(t_vec3 vec);
-double				*ft_mult_vec3(t_vec3 *u, t_vec3 m);
-t_vec3				ft_multby_vec3(t_vec3 *u, double mult);
-t_vec3				ft_divby_vec3(t_vec3 *u, double div);
-t_vec3				ft_decal_vec3(t_vec3 *u, double sub);
+double				norm_vec3_2(t_vec3 *vec);
+t_vec3				get_normalized(t_vec3 vec);
+double				*mult_vec3(t_vec3 *u, t_vec3 m);
+t_vec3				multby_vec3(t_vec3 *u, double mult);
+t_vec3				divby_vec3(t_vec3 *u, double div);
+t_vec3				decal_vec3(t_vec3 *u, double sub);
 void				rot_3d(t_vec3 *v, t_vec3 dir);
 
 /*
@@ -547,6 +547,7 @@ int					rt_pl(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 int					rt_tr(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 int					rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter);
 int					rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter);
+t_vec3				sign_normal(t_vec3 normal, t_vec3 ori, t_vec3 pos);
 
 /*
 ** ---------------------------------- Utils ---------------------------------
@@ -582,7 +583,7 @@ t_col				ft_min_col(t_col col);
 ** ------------------------------- Ray tracing ------------------------------
 */
 
-void				ft_raytracing(t_data *data);
+void				raytracing(t_data *data);
 
 /*
 ** ------------------------------- bmp Handler ------------------------------

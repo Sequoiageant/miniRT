@@ -34,7 +34,7 @@ int	key_event(int key, t_data *data)
 	return (0);
 }
 
-int	ft_launch_window(t_data *data)
+int	launch_window(t_data *data)
 {
 	t_mlx	mlx;
 	t_win	win;
@@ -57,13 +57,13 @@ int	ft_launch_window(t_data *data)
 	mlx_hook(mlx.mlx_win, 3, (1 << 1), key_event, data);
 	mlx_hook(mlx.mlx_win, 17, (1L << 17), ft_close, data);
 	data->cam_num = 1;
-	ft_raytracing(data);
+	raytracing(data);
 	mlx_put_image_to_window(mlx.mlx_ptr, mlx.mlx_win, mlx.img, 0, 0);
 	mlx_loop(mlx.mlx_ptr);
 	return (SUCCESS);
 }
 
-int	ft_save_image(t_data *data)
+int	save_image(t_data *data)
 {
 	t_mlx	mlx;
 	t_win	win;
@@ -81,7 +81,7 @@ int	ft_save_image(t_data *data)
 		return (FAILURE);
 	data->mlx = mlx;
 	data->cam_num = 1;
-	ft_raytracing(data);
+	raytracing(data);
 	if (save_bmp((unsigned char*)mlx.addr, data->win) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);

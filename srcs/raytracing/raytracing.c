@@ -102,15 +102,15 @@ double	is_in_shade(t_data *data, t_vec3 ray, t_inter finter)
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	t_vec3			normalized_ray;
 	
-	normalized_ray = ft_get_normalized(ray);
-	finter.normal = ft_multby_vec3(&finter.normal, BIAS);
-	inter.origin = ft_add_vec3(finter.pos, finter.normal);
+	normalized_ray = get_normalized(ray);
+	finter.normal = multby_vec3(&finter.normal, BIAS);
+	inter.origin = add_vec3(finter.pos, finter.normal);
 	objlst = data->objlst;
 	while (objlst)
 	{
 		if (intersec[objlst->type](&normalized_ray, objlst, &inter))
 		{
-			if ((inter.t * inter.t) < ft_norm_vec3_2(&ray))
+			if ((inter.t * inter.t) < norm_vec3_2(&ray))
 				return (TRUE);
 		}
 		objlst = objlst->next;
@@ -132,12 +132,12 @@ int		calc_pixel_color(t_data *data, t_inter finter)
 	light_power = 0.0;
 	while (lights_cpy)
 	{
-		p = ft_sub_vec3(lights_cpy->pos, finter.pos);
+		p = sub_vec3(lights_cpy->pos, finter.pos);
 		if (is_in_shade(data, p, finter))
 			light_power = 0.0;
 		else
 		{
-			light_power = lights_cpy->lum * ft_max(EPSILON, ft_dot_product3(ft_get_normalized(p), finter.normal)) / ft_norm_vec3_2(&p);
+			light_power = lights_cpy->lum * ft_max(EPSILON, dot_product3(get_normalized(p), finter.normal)) / norm_vec3_2(&p);
 			light_power = normalize_and_markout(light_power, 255);
 			// light_power = pow(light_power, 1/2.2);
 		}
@@ -161,7 +161,7 @@ int		modulate_color(t_data *data, t_inter finter, double back_color)
 	return (color);
 }
 
-void	ft_raytracing(t_data *data)
+void	raytracing(t_data *data)
 {
 	t_inter	finter;
 	t_win	win;

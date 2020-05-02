@@ -24,7 +24,7 @@ double		get_rot_angle(t_vec3 dir, char c)
 		n = new_vec(0.0, 1.0, 0.0);
 	else if (c == 'z')
 		n = new_vec(0.0, 0.0, 1.0);
-	teta = acos(ft_dot_product3(dir, n) / (ft_norm_vec3(&dir) * ft_norm_vec3(&n)));
+	teta = acos(dot_product3(dir, n) / (norm_vec3(&dir) * norm_vec3(&n)));
 	teta = rad_to_deg(teta);
 	printf("%c: %f\n", c, teta);
 	return (teta);

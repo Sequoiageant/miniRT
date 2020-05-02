@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_charset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 13:23:00 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 18:50:16 by julien           ###   ########.fr       */
+/*   Updated: 2020/04/30 15:21:04 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static char		**ft_free_split(char ***tab, size_t stop)
 	return (NULL);
 }
 
-char	**ft_split_charset(char *str, char *charset)
+char			**ft_split_charset(char *str, char *charset)
 {
 	char	**tab;
 	size_t	i;

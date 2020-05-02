@@ -57,14 +57,14 @@ double 	ft_dot_product(double *u, double *v, int dim)
     return (result);
 }
 
-void	ft_cross_product3(double *u, double *v, double *p)
+void	cross_product3(double *u, double *v, double *p)
 {
 	p[0] = v[2] * u[1] - v[1] * u[2]; 
 	p[1] = v[0] * u[2] - v[2] * u[0]; 
 	p[2] = v[1] * u[0] - v[0] * u[1]; 
 }
 
-double	*ft_mult_vec3(double *u, double m)
+double	*mult_vec3(double *u, double m)
 {
 	double *mult;
 
