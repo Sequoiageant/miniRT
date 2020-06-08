@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/04/17 17:21:28 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/04 18:58:34 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	ft_close(t_data *data)
 	// print_list(data->objlst);
 	// free_minirt(data);
 	// print_list(data->objlst);
+	free (data->mlx.mlx_ptr);
 	printf("%s\n", "CLOSED");
 	exit(EXIT_SUCCESS);
 }

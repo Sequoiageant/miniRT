@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/04/16 18:09:26 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/04 18:55:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_cam	select_cam(t_data data)
 {
 	while (data.cams)
 	{
-		if (data.cam_num == 0)
-			data.cam_num = 1;
+		// if (data.cam_num == 0)
+		// 	data.cam_num = 1;
 		if (data.cams->nbr == data.cam_num)
 			return (*data.cams);
 		data.cams = data.cams->next;
@@ -71,8 +71,8 @@ t_vec3	trace_ray_normalized(t_win win, double fov, t_vec3 dir)
 
 void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *ray)
 {
-	t_inter inter;
-	t_obj *objlst;
+	t_inter			inter;
+	t_obj			*objlst;
 	static t_ray	intersec[NB_OBJ] = {rt_sp, rt_pl, rt_sq, rt_cy, rt_tr};
 	
 	inter.origin = select_cam(*data).pos;
@@ -171,6 +171,7 @@ void	raytracing(t_data *data)
 
 	win = data->win;
 	fov = select_cam(*data).fov;
+	printf("%f\n", fov);
 	win.y = 0;
 	while (win.y < win.h)
 	{

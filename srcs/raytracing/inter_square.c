@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 18:28:19 by julien            #+#    #+#             */
-/*   Updated: 2020/05/02 19:03:23 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/03 19:55:13 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				rt_sq(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	h = objlst->u_obj.sq.h;
 	p2.x = p0.x - h; p2.y = p0.y; p2.z = p0.z;
 	p4.x = p0.x; p4.y = p0.y - h; p4.z = p0.z;
-	inter->normal = sign_normal(objlst->u_obj.sq.dir, inter->origin, p0);
+	inter->normal = objlst->u_obj.sq.dir;
 	// inter->normal = objlst->u_obj.sq.dir;
 	if (rt_pl_square(ray, objlst, inter))
 	{

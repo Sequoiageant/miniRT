@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/06 18:32:24 by julien            #+#    #+#             */
-/*   Updated: 2020/04/10 18:50:18 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/08 17:06:58 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,15 @@ int		ft_strnequ(char *s1, char *s2, int n)
 
 int		split_size_error(char **tab, size_t size, int *error)
 {
-	size_t i;
+	size_t			i;
+	static size_t	size_tab[NB_ENV + NB_OBJ] = {S_R, S_A, S_C, S_L,
+		S_SP, S_PL, S_SQ, S_CY, S_TR
+	};
 
 	i = 0;
 	while (tab[i] != 0)
 		i++;
-	if (size == i)
+	if (size_tab[size] == i)
 		return (TRUE);
 	else
 		*error |= PROP_ERROR_MASK;

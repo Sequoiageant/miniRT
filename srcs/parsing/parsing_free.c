@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 19:41:01 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:42:31 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/03 13:03:44 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ void		free_minirt(t_data *data)
 		free_objlist(&data->objlst);
 	if (data->lights_set)
 		free_lightlist(&data->lights);
-	if (data->cams_set)
+	if (data->cams_set > 0)
 		free_camlist(&data->cams);
 }

@@ -3,47 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   cam_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julien <julien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 20:52:12 by julien            #+#    #+#             */
-/*   Updated: 2020/03/24 20:53:00 by julien           ###   ########.fr       */
+/*   Updated: 2020/05/04 18:44:10 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	search_list(int cam_num, t_data data)
+/*int	search_list(int cam_num, t_data data)
 {
-	while (data.cams)
+	while (data->cams)
 	{
-		if (data.cams->nbr == cam_num)
-		{
-			return (1);
-		}
-		data.cams = data.cams->next;
+		if (data->cams->nbr == cam_num)
+			return (1) ;
+		data->cams = data->cams->next;
 	}
 	return (0);
-}
+}*/
 
 int choose_cam(int key, t_data *data)
 {
-	static int cam_num = 1;
+	static int cam_choice = 1;
 
-	if(key == LEFT)
-		cam_num--;
-	else if(key == RIGHT)
-		cam_num++;
-	if (cam_num > 0)
+	if(key == LEFT && cam_choice > 1)
+		cam_choice--;
+	else if(key == RIGHT && cam_choice < data->cams_set)
+		cam_choice++;
+	if (cam_choice > 0 && cam_choice < data->cams_set)
 	{
-		if (search_list(cam_num, *data) == 1)
-			data->cam_num = cam_num;
+		// search_list(cam_choice, data);
+		data->cam_num = cam_choice;
+		// mlx_clear_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
+		reset_image(data);
+		raytracing(data);
 	}
-	if (cam_num < data->cam_num)
-	{
-		if (search_list(cam_num, *data) == 1)
-			data->cam_num = cam_num;
-	}
-	raytracing(data);
-	printf("%d\n", cam_num);
+	printf("%d\n", data->cam_num);
 	return(0);
 }

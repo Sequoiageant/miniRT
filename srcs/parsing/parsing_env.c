@@ -6,18 +6,16 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:50:18 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:01:57 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/04 15:37:47 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_add_cam(t_cam **cams, t_cam *cam)
+/*void	ft_add_cam(t_cam **cams, t_cam *cam, int cam_num)
 {
-	static	int	cam_num;
 	t_cam		*new;
 
-	cam_num++;
 	new = (t_cam*)malloc(sizeof(t_cam));
 	if (new)
 	{
@@ -29,7 +27,34 @@ void	ft_add_cam(t_cam **cams, t_cam *cam)
 		(*cams) = new;
 	}
 	ft_putendl("	-->cam added");
-	// print_cams((*cams));
+	print_cams((*cams));
+}
+*/
+void	ft_add_cam(t_cam **cams, t_cam *cam, int cam_num)
+{
+	t_cam	*new;
+	t_cam	*tmp;
+
+	new = (t_cam*)malloc(sizeof(t_cam));
+	if (new)
+	{
+		new->nbr = cam_num;
+		new->pos = cam->pos;
+		new->dir = cam->dir;
+		new->fov = cam->fov;
+		new->next = NULL;
+		if (*cams == NULL)
+			(*cams) = new;
+		else
+		{
+			tmp = *cams;
+			while (tmp->next != NULL)
+				tmp = tmp->next;
+			tmp->next = new;
+		}
+	}
+	ft_putendl("	-->cam added");
+	print_cams((*cams));
 }
 
 void	ft_add_light(t_light **lights, t_light *light)
@@ -80,9 +105,11 @@ int		set_light(char **tab, t_data *data, t_stm *machine)
 
 int		set_cam(char **tab, t_data *data, t_stm *machine)
 {
-	t_cam	cam;
-	int		ret;
+	t_cam		cam;
+	int			ret;
+	static	int	cam_num;
 
+	cam_num++;
 	ret = set_vector(tab[1], &cam.pos, &machine->error);
 	if (ret != FAILURE)
 		ret = set_normal_vec(tab[2], &cam.dir, &machine->error);
@@ -100,7 +127,7 @@ int		set_cam(char **tab, t_data *data, t_stm *machine)
 		machine->error |= INT_ERROR_MASK;
 		ret = FAILURE;
 	}
-	ft_add_cam(&data->cams, &cam);
-	data->cams_set = TRUE;
+	ft_add_cam(&data->cams, &cam, cam_num);
+	data->cams_set = cam_num;
 	return (ret);
 }

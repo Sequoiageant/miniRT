@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 11:34:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:55:44 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/03 19:28:36 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	print_cams(t_cam *cams)
 	while (cams)
 	{
 		printf("	-->num %d\n", cams->nbr);
-		printf("	-->%f\n", cams->fov);
+		printf("	-->fov: %f\n", cams->fov);
 		cams = cams->next;
 	}
 }

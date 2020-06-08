@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:37:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/08 16:56:40 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static int	error(t_data *data, char **tab, t_stm *machine)
 static int	set_obj(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_obj[NB_OBJ] = {P_SP, P_PL, P_SQ, P_CY, P_TR};
-	static int		size_tab[NB_OBJ] = {S_SP, S_PL, S_SQ, S_CY, S_TR};
 	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
 	static t_obj	*objlst;
 	int				ret;
@@ -64,7 +63,7 @@ static int	set_obj(t_data *data, char **tab, t_stm *machine)
 		if (ft_strnequ(tab[0], str_obj[i], 2) == TRUE)
 		{
 			printf("[%s] -> OBJECT\n", str_obj[i]);
-			if (split_size_error(tab, size_tab[i], &machine->error))
+			if (split_size_error(tab, i + NB_ENV, &machine->error))
 				ret = func[i](tab, &objlst, data, machine);
 			if (ret == SUCCESS)
 			{
@@ -83,7 +82,6 @@ static int	set_obj(t_data *data, char **tab, t_stm *machine)
 static int	set_env(t_data *data, char **tab, t_stm *machine)
 {
 	static char		*str_env[NB_ENV] = {P_R, P_A, P_C, P_L};
-	static int		size_tab[NB_ENV] = {S_R, S_A, S_C, S_L};
 	static t_func3	func[NB_ENV] = {set_res, set_al, set_cam, set_light};
 	int				ret;
 	int				i;
@@ -96,7 +94,7 @@ static int	set_env(t_data *data, char **tab, t_stm *machine)
 		if (ft_strcmp(tab[0], str_env[i]) == 0)
 		{
 			printf("[%s] -> ENV\n", str_env[i]);
-			if (split_size_error(tab, size_tab[i], &machine->error))
+			if (split_size_error(tab, i, &machine->error))
 				ret = func[i](tab, data, machine);
 			if (ret == SUCCESS)
 				return (MACHINE_CONTINUE);

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/05/02 19:02:18 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/05/04 18:26:17 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -584,6 +584,7 @@ t_col				ft_min_col(t_col col);
 */
 
 void				raytracing(t_data *data);
+void				reset_image(t_data *data);
 
 /*
 ** ------------------------------- bmp Handler ------------------------------
