@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/05/04 18:26:17 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/17 18:07:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,12 @@ typedef struct		s_color
 	int t;
 }					t_col;
 
+typedef struct		s_matrix
+{
+	double d[4][4];
+}					t_matrix;
+
+
 /*
 ** quadratic equation structure
 */
@@ -469,6 +475,9 @@ void				free_minirt(t_data *data);
 */
 
 int					choose_cam(int key, t_data *data);
+t_matrix			look_at(t_vec3 origin, t_vec3 dir);
+t_vec3				multiply_by_matrix(t_vec3 p, t_matrix m);
+
 
 /*
 ** --------------------------------- Parser ---------------------------------

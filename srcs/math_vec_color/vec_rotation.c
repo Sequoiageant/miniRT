@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 19:27:00 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/16 16:27:09 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/17 18:06:42 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ double		get_rot_angle(t_vec3 dir, char c)
 
 	n = new_vec(0.0, 0.0, 0.0);
 	if (c == 'x')
-		n = new_vec(1.0, 0.0, 0.0);
+		n = new_vec(0.0, 0.0, 1.0);
 	else if (c == 'y')
-		n = new_vec(0.0, 1.0, 0.0);
+		n = new_vec(0.0, 0.0, 1.0);
 	else if (c == 'z')
 		n = new_vec(0.0, 0.0, 1.0);
 	teta = acos(dot_product3(dir, n) / (norm_vec3(&dir) * norm_vec3(&n)));
-	teta = rad_to_deg(teta);
-	printf("%c: %f\n", c, teta);
+	// teta = rad_to_deg(teta);
+	// printf("%c: %f\n", c, teta);
 	return (teta);
 }
 
@@ -64,6 +64,45 @@ void		rot_3d(t_vec3 *v, t_vec3 dir)
 	rot_y(v, dir);
 	rot_z(v, dir);
 }
+
+t_vec3		multiply_by_matrix(t_vec3 p, t_matrix m)
+{
+	t_vec3 res;
+
+	res.x = p.x * m.d[0][0] + p.y * m.d[1][0] + p.z * m.d[2][0] + m.d[3][0];
+	res.y = p.x * m.d[0][1] + p.y * m.d[1][1] + p.z * m.d[2][1] + m.d[3][1];
+	res.z = p.x * m.d[0][2] + p.y * m.d[1][2] + p.z * m.d[2][2] + m.d[3][2];
+	return (res);
+}
+t_matrix	look_at(t_vec3 origin, t_vec3 dir)
+{
+	t_matrix	m;
+	t_vec3		random;
+	t_vec3		right;
+	t_vec3		up;
+
+	random = new_vec(0.0, 1.0, 0.0);
+	ft_normalize(&random);
+	right = cross_product3(&random, &dir);
+	ft_normalize(&right);
+	up = cross_product3(&dir, &right);
+	ft_normalize(&up);
+	m.d[0][0] = right.x;
+	m.d[0][1] = right.y;
+	m.d[0][2] = right.z;
+	m.d[1][0] = up.x;
+	m.d[1][1] = up.y;
+	m.d[1][2] = up.z;
+	m.d[2][0] = dir.x;
+	m.d[2][1] = dir.y;
+	m.d[2][2] = dir.z;
+	m.d[3][0] = origin.x;
+	m.d[3][1] = origin.y;
+	m.d[3][2] = origin.z;
+	return (m);
+}
+
+
 
 /*void   rot_3d(t_vec3 *v, double rot)
 {
