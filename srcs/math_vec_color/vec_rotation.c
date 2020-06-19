@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 19:27:00 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/17 18:06:42 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/18 10:25:56 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,16 @@ void		rot_3d(t_vec3 *v, t_vec3 dir)
 	rot_z(v, dir);
 }
 
-t_vec3		multiply_by_matrix(t_vec3 p, t_matrix m)
+t_vec3		multiply_by_matrix(t_vec3 u, t_matrix m)
 {
-	t_vec3 res;
+	t_vec3 v;
 
-	res.x = p.x * m.d[0][0] + p.y * m.d[1][0] + p.z * m.d[2][0] + m.d[3][0];
-	res.y = p.x * m.d[0][1] + p.y * m.d[1][1] + p.z * m.d[2][1] + m.d[3][1];
-	res.z = p.x * m.d[0][2] + p.y * m.d[1][2] + p.z * m.d[2][2] + m.d[3][2];
-	return (res);
+	v.x = u.x * m.d[0][0] + u.y * m.d[1][0] + u.z * m.d[2][0] + m.d[3][0];
+	v.y = u.x * m.d[0][1] + u.y * m.d[1][1] + u.z * m.d[2][1] + m.d[3][1];
+	v.z = u.x * m.d[0][2] + u.y * m.d[1][2] + u.z * m.d[2][2] + m.d[3][2];
+	return (v);
 }
+
 t_matrix	look_at(t_vec3 origin, t_vec3 dir)
 {
 	t_matrix	m;

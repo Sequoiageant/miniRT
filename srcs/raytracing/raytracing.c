@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 16:52:56 by julien            #+#    #+#             */
-/*   Updated: 2020/06/17 18:17:06 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/18 17:33:49 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void reset_inter(t_inter *inter)
 	inter->normal.z = 0.0;
 }
 
-t_vec3	trace_ray_normalized(t_win win, double fov)
+t_vec3	calc_primitive_ray(t_win win, double fov)
 {
 	t_vec3 ray;
 	// (void)dir;
@@ -72,7 +72,7 @@ ft_normalize(&ray);
 	return (ray);
 }
 
-t_vec3		ray_to_pixel(t_win win, t_data *data)
+t_vec3		trace_ray_normalized(t_win win, t_data *data)
 {
 	// t_vec3		origin;
 	t_vec3		ray;
@@ -82,7 +82,7 @@ t_vec3		ray_to_pixel(t_win win, t_data *data)
 	camera = select_cam(*data);
 	c2w = look_at(camera.pos, camera.dir);
 	// origin = multiply_by_matrix(new_vec(0, 0, 0), c2w);
-	ray = trace_ray_normalized(win, camera.fov);
+	ray = calc_primitive_ray(win, camera.fov);
 	ray = multiply_by_matrix(ray, c2w);
 	ray = sub_vec3(ray, camera.pos);
 	ft_normalize(&ray);
@@ -186,12 +186,9 @@ void	raytracing(t_data *data)
 	t_inter	finter;
 	t_win	win;
 	t_vec3	ray;
-	double	fov;
 	int		color;
 
 	win = data->win;
-	fov = select_cam(*data).fov;
-	printf("%f\n", fov);
 	win.y = 0;
 	while (win.y < win.h)
 	{
@@ -200,7 +197,7 @@ void	raytracing(t_data *data)
 		{
 			finter.min_t = INFINITY;
 			finter.set = false;
-			ray = ray_to_pixel(win, data);
+			ray = trace_ray_normalized(win, data);
 			find_closest_inter(data, &finter, &ray);
 			color = modulate_color(data, finter, (win.y/win.h));
 			ft_pixel_put(&data->mlx, win.x, win.y, color);

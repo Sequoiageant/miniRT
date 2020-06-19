@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/14 19:53:04 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/30 16:21:01 by julnolle         ###   ########.fr       */
+/*   Created: 2020/06/18 19:37:44 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/19 15:51:18 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,114 @@
 			return (TRUE);
 	return (FALSE);
 }*/
+void		swap_doubles(double *a, double *b)
+{
+	double buffer;
 
-int	truncate_cylinder(t_trunc *trunc, t_cy cy, t_vec3 ray, t_vec3 origin)
+	buffer = *a;
+	*a = *b;
+	*b = buffer;
+}
+int			solve_quadratic(t_quadra *q)
+{
+	double delta;
+	double det;
+
+	delta = pow(q->b, 2) - 4.0 * q->a * q->c;
+	if (delta < 0)
+		return (FALSE);
+	else if (delta == 0)
+	{
+		q->t1 = -0.5 * q->b / q->a;
+		q->t2 = -0.5 * q->b / q->a;
+	}
+	else
+	{
+		if (q->b > 0)
+			det = -1 * (q->b + sqrt(delta)) / 2;
+		else
+			det = -1 * (q->b - sqrt(delta)) / 2;
+		q->t1 = det / q->a;
+		q->t2 = q->c / det;
+	}
+	if (q->t1 > q->t2)
+		swap_doubles(&q->t1, &q->t2);
+	return (TRUE);
+}
+
+t_vec3		get_cylinder_normal(t_inter *inter, t_cy cy)
+{
+	t_vec3 ctp;
+	t_vec3 normal;
+
+	ctp = sub_vec3(inter->pos, cy.pos);
+	normal = sub_vec3(ctp, multby_vec3(&cy.dir, dot_product3(cy.dir, ctp)));
+	ft_normalize(&normal);
+	return (normal);
+}
+
+void		check_t(double *t, t_cy cy, t_vec3 *ray, t_inter *inter)
+{
+	t_vec3 q;
+	t_vec3 p2;
+
+	p2 = add_vec3(cy.pos, multby_vec3(&cy.dir, cy.h));
+	q = add_vec3(inter->origin, multby_vec3(ray, *t));
+	if (dot_product3(cy.dir, sub_vec3(q, cy.pos)) <= 0.0)
+		*t = -1.0;
+	if (dot_product3(cy.dir, sub_vec3(q, p2)) >= 0.0)
+		*t = -1.0;
+}
+
+int			cyl_get_roots(t_quadra *q, t_cy cy,	t_vec3 *ray, t_inter *inter)
+{
+	t_vec3	a_sqrt;
+	t_vec3	right;
+
+	a_sqrt = sub_vec3(*ray, multby_vec3(&cy.dir, dot_product3(*ray, cy.dir)));
+	q->a = dot_product3(a_sqrt, a_sqrt);
+	right = sub_vec3(sub_vec3(inter->origin, cy.pos), multby_vec3(&cy.dir,
+				dot_product3(sub_vec3(inter->origin, cy.pos), cy.dir)));
+	q->b = 2.0 * dot_product3(a_sqrt, right);
+	q->c = dot_product3(right, right) - ((cy.dia / 2.0) * (cy.dia / 2.0));
+	if (!solve_quadratic(q))
+		return (FALSE);
+	return (TRUE);
+}
+
+int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
+{
+	t_quadra	q;
+
+	if (!cyl_get_roots(&q, objlst->u_obj.cy, ray, inter))
+		return (FALSE);
+	if (q.t1 > 0.0)
+		check_t(&q.t1, objlst->u_obj.cy, ray, inter);
+	if (q.t2 > 0.0)
+		check_t(&q.t2, objlst->u_obj.cy, ray, inter);
+	if (q.t1 < 0.0 && q.t2 < 0.0)
+		return (FALSE);
+	if (q.t2 < q.t1)
+		if (q.t2 > 0.0)
+			inter->t = q.t2;
+		else
+			inter->t = q.t1;
+	else
+	{
+		if (q.t1 > 0.0)
+			inter->t = q.t1;
+		else
+			inter->t = q.t2;
+	}
+	inter->pos = add_vec3(inter->origin, multby_vec3(ray, inter->t));
+	inter->normal = get_cylinder_normal(inter, objlst->u_obj.cy);
+	return (TRUE);
+}
+
+
+
+/*BOOOOOOOOOOOOOOOOOONNNNNNNNNNNNN*/
+/*int	truncate_cylinder(t_trunc *trunc, t_cy cy, t_vec3 ray, t_vec3 origin)
 {
 	t_vec3 pmax;
 	double dc;
@@ -149,24 +255,6 @@ int	truncate_cylinder(t_trunc *trunc, t_cy cy, t_vec3 ray, t_vec3 origin)
 	return (TRUE);
 }
 
-/*enum e_bool intersect_cylinder(t_primitive cp, t_ray r, double *current_z)
-{
-    t_vec3  pdp = vec3_substract(cp.direction, cp.position);
-    t_vec3  eyexpdp = vec3_cross(vec3_substract(r.origin, cp.position), pdp);
-    t_vec3  rdxpdp = vec3_cross(r.direction, pdp);
-    float   a = vec3_dot(rdxpdp, rdxpdp);
-    float   b = 2 * vec3_dot(rdxpdp, eyexpdp);
-    float   c = vec3_dot(eyexpdp, eyexpdp) - (cp.radius * cp.radius * vec3_dot(pdp, pdp));
-    double  t[2];
-    double delta;
-    delta = sqrt((b * b) - (4.0 * a * c));
-    if (delta < 0)
-        return (false);
-    t[0] = (-b - (delta)) / (2.0 * a);
-    t[1] = (-b + (delta)) / (2.0 * a);
-    return (test_intersect(t, current_z));
-}
-*/
 int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 {
 	t_vec3 origin;
@@ -238,3 +326,5 @@ int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	}
 	return (FALSE);
 }
+*/
+/*END BOOOOOOOOOOONNNNNNNNNN*/
