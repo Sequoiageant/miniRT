@@ -1,5 +1,6 @@
 # miniRT
 *First graphic project in 42 School. Allows you to generate scenes in 3D containing simple objects like spheres, planes, squares, cylinders and triangles.*
+Each scene can be be viewed by a set of cameras characterized by its position, direction and Field Of View.
 
 **In Progress...**
 
@@ -10,6 +11,8 @@
 2. Execute the binary made with:
 	* firt argument (mandatory): the **path to the scene** you want to generate
 	* second argument (optionnal): **"-save"** to save the generated image as [.bmp] into bmp_saved/
+3. Change camera view by typing **"LEFT ARROW"** & **"RIGHT ARROW"**
+4. Close the window by typing **"ESC"** or clicking the red cross
 
 ie.
 ```sh
@@ -23,7 +26,7 @@ $ ./minirt scenes/147_spheres.rt -save
 ```
 ## Configuration file
 **The configuration file must respect some rules:**
-* The first letter represents the Type of the property
+* The first letter represents the **Type** of the property
 	* **R:** Resolution
 	* **A:** Ambiant light
 	* **c:** Cameras
@@ -33,7 +36,8 @@ $ ./minirt scenes/147_spheres.rt -save
 	* **sq:** Square
 	* **cy:** Cylinder
 	* **tr:** Triangle
-* Each type is defined by its own set of properties, in **unique order** (see example).
+* All **types** can be sorted in random order.
+* A **type** is defined by its own set of properties, in **unique order** (see example).
 * The **R** is unique and represented by 2 integers > 0.
 * The **A** is unique and in the range [0.0; 1.0].
 * All **vectors** *(ie. 30.0,-10.0,-50.0)* must contain 3 integers or floats components, separated by a "," without spaces.
@@ -48,20 +52,20 @@ $ ./minirt scenes/147_spheres.rt -save
 
 **Example of configuration file:**
 ```
-# Image Resolution (unique)
+# Image Resolution (width - height)(unique)
 R	850	620
 
-# Ambiant light (unique)
+# Ambiant light (intensity - color)(unique)
 A	0.7		255,255,255
 
-# Cameras (at least one)
+# Cameras (position - direction - FOV)(at least one)
 c	0.0,0.0,0.0		0,0,1	60
 
-# Spot lights
+# Spot lights (position - intensity - color)
 l	40.0,-10.0,0.0		0.5		255,255,255
 l	30.0,-10.0,-50.0	0.8		255,255,255
 
-# Objects
+# Objects (position - own characteristics - color)
 sp	-6.0,3.0,-30.0	10.0	100,56,255
 sp	0.0,-3.0,-30.0	10.0	255,69,255
 sp	6.0,3.0,-30.0	10.0	255,69,50
