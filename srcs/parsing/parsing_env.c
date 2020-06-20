@@ -6,30 +6,12 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:50:18 by julnolle          #+#    #+#             */
-/*   Updated: 2020/05/04 15:37:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 12:03:08 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-/*void	ft_add_cam(t_cam **cams, t_cam *cam, int cam_num)
-{
-	t_cam		*new;
-
-	new = (t_cam*)malloc(sizeof(t_cam));
-	if (new)
-	{
-		new->nbr = cam_num;
-		new->pos = cam->pos;
-		new->dir = cam->dir;
-		new->fov = cam->fov;
-		new->next = (*cams);
-		(*cams) = new;
-	}
-	ft_putendl("	-->cam added");
-	print_cams((*cams));
-}
-*/
 void	ft_add_cam(t_cam **cams, t_cam *cam, int cam_num)
 {
 	t_cam	*new;

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/30 15:52:08 by julien            #+#    #+#             */
-/*   Updated: 2020/04/15 12:27:28 by julnolle         ###   ########.fr       */
+/*   Created: 2020/06/19 18:35:40 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/19 18:46:48 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,20 @@ static int				write_img(int fd, const unsigned char *img, t_win res)
 
 int						save_bmp(const unsigned char *img, const t_win res)
 {
-	int				filesize;
 	int				fd;
 	unsigned char	*bmpfileheader;
 	unsigned char	*bmpinfoheader;
 	char			*name;
+	char			*time_stamp;
 
 	name = ft_strjoin(BMP_LOCATION, "minirt_");
-	ft_strjoin_back(ft_itoa(time(NULL)), &name);
+	time_stamp = ft_itoa(time(NULL));
+	ft_strjoin_back(time_stamp, &name);
+	free(time_stamp);
 	ft_strjoin_back(".bmp", &name);
-	filesize = 14 + 40 + 3 * res.w * res.h;
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
 	free(name);
-	bmpfileheader = file_header_bmp(filesize);
+	bmpfileheader = file_header_bmp(14 + 40 + 3 * res.w * res.h);
 	write(fd, bmpfileheader, 14);
 	free(bmpfileheader);
 	bmpinfoheader = info_header_bmp(res);

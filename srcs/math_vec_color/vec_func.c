@@ -1,23 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   vec_func.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/10 18:52:42 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/19 18:52:54 by julnolle         ###   ########.fr       */
+/*   Created: 2020/02/07 14:57:34 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/20 12:00:07 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#include "minirt.h"
 
-void	print_split(char **tab);
-int		ft_lstsize(t_obj *lst);
-void	print_obj(t_obj *objlst);
-void	print_lights(t_light *lights);
-void	print_cams(t_cam *cams);
-void	print_vec(t_vec3 v);
+t_vec3	new_vec(double a, double b, double c)
+{
+	t_vec3 vec;
 
-#endif
+	vec.x = a;
+	vec.y = b;
+	vec.z = c;
+	return (vec);
+}
+
+void	reset_vec(t_vec3 *vec)
+{
+	vec->x = 0.0;
+	vec->y = 0.0;
+	vec->z = 0.0;
+}
+
+t_vec3	new_vec_from_char(char *a, char *b, char *c)
+{
+	t_vec3 vec;
+
+	vec.x = ft_atof(a);
+	vec.y = ft_atof(b);
+	vec.z = ft_atof(c);
+	return (vec);
+}

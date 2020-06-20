@@ -6,29 +6,11 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/08 16:56:40 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 12:02:11 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-/*int	ft_list_env(char **tab, t_data *data, int i)
-{
-	static t_func3	func[NB_ENV] = {set_res, set_al, set_cam, set_light};
-
-	func[i](tab, data);
-	return (0);
-}*/
-
-/*int	list_objects(char **tab, t_data *data, int i)
-{
-	static t_func2	func[NB_OBJ] = {set_sp, set_pl, set_sq, set_cy, set_tr};
-	static t_obj	*objlst;
-
-	func[i](tab, &objlst, data);
-	return (0);
-}
-*/
 
 static int	error(t_data *data, char **tab, t_stm *machine)
 {
@@ -66,10 +48,7 @@ static int	set_obj(t_data *data, char **tab, t_stm *machine)
 			if (split_size_error(tab, i + NB_ENV, &machine->error))
 				ret = func[i](tab, &objlst, data, machine);
 			if (ret == SUCCESS)
-			{
-				// print_obj(data->objlst);
 				return (MACHINE_CONTINUE);
-			}
 			else
 				return (MACHINE_ERROR);
 		}
@@ -142,54 +121,3 @@ int			run_machine(char *line, t_data *data, t_stm *machine)
 	}
 	return (ret);
 }
-
-/*int	parser(t_data *data, int fd)
-{
-	t_stm			machine;
-	int				ret;
-	int				ret_machine;
-	char			**tab;
-	char			*line;
-	static t_func	func[NB_STATE] = {empty, set_env, set_obj, error};
-	size_t			line_nb;
-
-	ret = 1;
-	line_nb = 0;
-	machine.state = EMPTY;
-	init_data(data);
-	while (ret > 0)
-	{
-		line = NULL;
-		ret = get_next_line(fd, &line);
-		line_nb++;
-		if (ret != FAILURE)
-		{
-			tab = ft_split_whitespaces(line);
-			if (tab)
-			{
-				ret_machine = MACHINE_AGAIN;
-				while (ret_machine == MACHINE_AGAIN)
-					ret_machine = func[machine.state](data, tab, &machine);
-				machine.state = EMPTY;
-				free_split(tab);
-			}
-			free(line);
-			if (ret_machine == MACHINE_ERROR)
-			{
-				ret = FAILURE;
-			}
-		}
-	}
-	if (data->objlst_set == FALSE || data->lights_set == FALSE || data->cams_set == FALSE)
-	{
-		ret = FAILURE;
-		if (machine.error == 0)
-		{
-			machine.error |= TYPE_NB_ERROR_MASK;
-			line_nb = 0;
-		}
-	}
-	select_error(machine.error, line_nb);
-	return (ret);
-}
-*/

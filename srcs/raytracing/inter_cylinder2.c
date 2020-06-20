@@ -1,19 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inter_cylinder.c                                   :+:      :+:    :+:   */
+/*   inter_cylinder2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 19:37:44 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 18:18:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 18:18:47 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int		solve_quadratic(t_quadra *q, t_inter *inter)
+void		swap_doubles(double *a, double *b)
 {
+	double buffer;
+
+	buffer = *a;
+	*a = *b;
+	*b = buffer;
+}
+
+static int		solve_quadratic(t_quadra *q)
+{
+	double nom;
+
 	q->delta = q->b * q->b - 4.0 * q->a * q->c;
 	if (q->delta < 0)
 		return (FALSE);
@@ -24,12 +35,15 @@ static int		solve_quadratic(t_quadra *q, t_inter *inter)
 	}
 	else
 	{
-		q->t1 = (-q->b - sqrt(q->delta)) / (2 * q->a);
-		q->t2 = (-q->b + sqrt(q->delta)) / (2 * q->a);
+		if (q->b > 0)
+			nom = -1 * (q->b + sqrt(q->delta)) / 2;
+		else
+			nom = -1 * (q->b - sqrt(q->delta)) / 2;
+		q->t1 = nom / q->a;
+		q->t2 = q->c / nom;
 	}
-	if (q->t2 < 0.)
-		return (FALSE);
-	inter->t = ft_min(q->t1, q->t2);
+	if (q->t1 > q->t2)
+		swap_doubles(&q->t1, &q->t2);
 	return (TRUE);
 }
 
@@ -65,10 +79,10 @@ static int		get_cy_inter(t_quadra *q, t_cy cy, t_vec3 *ray, t_inter *inter)
 	a_sqrt = sub_vec3(*ray, multby_vec3(&cy.dir, dot_product3(*ray, cy.dir)));
 	q->a = dot_product3(a_sqrt, a_sqrt);
 	right = sub_vec3(sub_vec3(inter->origin, cy.pos), multby_vec3(&cy.dir,
-				dot_product3(sub_vec3(inter->origin, cy.pos), cy.dir)));
+		dot_product3(sub_vec3(inter->origin, cy.pos), cy.dir)));
 	q->b = 2.0 * dot_product3(a_sqrt, right);
 	q->c = dot_product3(right, right) - ((cy.dia * cy.dia) / 4.0);
-	if (!solve_quadratic(q, inter))
+	if (!solve_quadratic(q))
 		return (FALSE);
 	return (TRUE);
 }
@@ -85,7 +99,20 @@ int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 		trunc_cylinder(&q.t2, objlst->u_obj.cy, ray, inter);
 	if (q.t1 < 0.0 && q.t2 < 0.0)
 		return (FALSE);
+	if (q.t2 < q.t1)
+		if (q.t2 > 0)
+			inter->t = q.t2;
+		else
+			inter->t = q.t1;
+	else
+	{
+		if (q.t1 > 0)
+			inter->t = q.t1;
+		else
+			inter->t = q.t2;
+	}
 	inter->pos = add_vec3(inter->origin, multby_vec3(ray, inter->t));
 	inter->normal = get_cylinder_normal(inter, objlst->u_obj.cy);
 	return (TRUE);
+
 }

@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:58:17 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/30 15:20:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/19 19:44:52 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@ double	ft_atof(const char *str)
 	double	e;
 	double	d;
 	int		len;
+	short	sign;
 
 	e = (double)ft_atoi(str);
+	sign = 1;
+	if (str[0] == '-')
+		sign = -sign;
 	if (str[0] == '-' || str[0] == '+')
 		str++;
 	while (*str >= '0' && *str <= '9')
@@ -33,5 +37,5 @@ double	ft_atof(const char *str)
 		len++;
 	}
 	d /= pow(10, len);
-	return ((e < 0) ? -(-e + d) : e + d);
+	return ((sign < 0) ? -(-e + d) : e + d);
 }

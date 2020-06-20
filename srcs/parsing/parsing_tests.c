@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 17:25:08 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/08 16:10:55 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 12:04:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ int	ckeck_vec(char *str)
 		if (ft_isdigit(str[i]) && (str[i + 1] == '+' || str[i + 1] == '-'))
 			return (FALSE);
 		if (str[i] == '.' && (str[i + 1] == '.' || str[i + 1] == '\0'))
+			return (FALSE);
+		if ((str[i] == '+' || str[i] == '-')
+			&& (str[i + 1] == '+' || str[i + 1] == '-'))
 			return (FALSE);
 		if (str[i] == ',')
 			count++;

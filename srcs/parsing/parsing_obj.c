@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:50:11 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/10 19:05:18 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 12:03:57 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	set_sp(char **tab, t_obj **objlst, t_data *data, t_stm *machine)
 		ret = set_color(tab[3], &sp.color, &machine->error);
 		ft_add_sp(objlst, sp, data);
 	}
-	// print_list2((*objlst));
 	return (ret);
 }
 

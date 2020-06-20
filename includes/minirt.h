@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/17 18:07:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 16:55:01 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@
 #  define ESC		65307
 #  define LEFT		65361
 #  define RIGHT		65363
+#  define KEY_S		115
 
 # else
 
@@ -475,6 +476,7 @@ void				free_minirt(t_data *data);
 */
 
 int					choose_cam(int key, t_data *data);
+t_cam				select_cam(t_data data);
 t_matrix			look_at(t_vec3 origin, t_vec3 dir);
 t_vec3				multiply_by_matrix(t_vec3 p, t_matrix m);
 
@@ -541,11 +543,7 @@ double				norm_vec3(t_vec3 *u);
 void				ft_normalize(t_vec3 *vec);
 double				norm_vec3_2(t_vec3 *vec);
 t_vec3				get_normalized(t_vec3 vec);
-double				*mult_vec3(t_vec3 *u, t_vec3 m);
 t_vec3				multby_vec3(t_vec3 *u, double mult);
-t_vec3				divby_vec3(t_vec3 *u, double div);
-t_vec3				decal_vec3(t_vec3 *u, double sub);
-void				rot_3d(t_vec3 *v, t_vec3 dir);
 
 /*
 ** ------------------------------ Intersections -----------------------------
@@ -573,6 +571,8 @@ double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
 int					print_error(const char *error, int line_nb);
 int					check_missing_type(t_data *data, t_stm *machine, size_t *line_nb);
+void				reset_inter(t_inter *inter);
+t_vec3				trace_ray_normalized(t_win win, t_cam camera);
 
 /*
 ** ---------------------------------- Colors ---------------------------------

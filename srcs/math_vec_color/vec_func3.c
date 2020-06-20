@@ -1,43 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt_utils.c                                     :+:      :+:    :+:   */
+/*   vec_func3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 15:35:45 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 11:43:18 by julnolle         ###   ########.fr       */
+/*   Created: 2020/06/20 11:56:19 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/20 11:56:26 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double	ft_max(double a, double b)
+double	norm_vec3_2(t_vec3 *vec)
 {
-	return ((a > b) ? a : b);
+	return (vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
 }
 
-double	ft_min(double a, double b)
+double	norm_vec3(t_vec3 *vec)
 {
-	return ((a < b) ? a : b);
+	return (sqrt(norm_vec3_2(vec)));
 }
 
-double	deg_to_rad(double alpha)
+void	ft_normalize(t_vec3 *vec)
 {
-	return (alpha * PI / 180);
+	double norm;
+
+	norm = norm_vec3(vec);
+	if (norm != 1 && norm != 0)
+	{
+		vec->x /= norm;
+		vec->y /= norm;
+		vec->z /= norm;
+	}
 }
 
-double	rad_to_deg(double alpha)
+t_vec3	get_normalized(t_vec3 vec)
 {
-	return (alpha * 180 / PI);
-}
-
-double	normalize_and_markout(double to_mod, double denom)
-{
-	double modified;
-
-	modified = to_mod / denom;
-	modified = ft_min(modified, 1.0);
-	modified = ft_max(0.0, modified);
-	return (modified);
+	ft_normalize(&vec);
+	return (vec);
 }

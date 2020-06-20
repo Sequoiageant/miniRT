@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/04/30 16:49:25 by julnolle         ###   ########.fr        #
+#    Updated: 2020/06/20 12:12:21 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,9 +88,11 @@ SRCS += parsing_free.c
 SRCS += cam_handler.c
 SRCS += event_handler.c
 SRCS += minirt_utils.c 
-SRCS += ft_vec_func.c
+SRCS += minirt_utils2.c 
+SRCS += vec_func.c
+SRCS += vec_func2.c
+SRCS += vec_func3.c
 SRCS += vec_rotation.c
-SRCS += minirt_forms.c
 SRCS += raytracing.c
 SRCS += color_set.c
 SRCS += color_operations.c

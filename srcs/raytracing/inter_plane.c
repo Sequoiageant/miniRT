@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/24 21:11:12 by julien            #+#    #+#             */
-/*   Updated: 2020/05/02 18:52:14 by julnolle         ###   ########.fr       */
+/*   Created: 2020/03/24 21:11:12 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/20 16:19:54 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vec3 sign_normal(t_vec3 normal, t_vec3 ori, t_vec3 pos)
+t_vec3	sign_normal(t_vec3 normal, t_vec3 ori, t_vec3 pos)
 {
 	if ((pos.x > ori.x && normal.x > 0) || (pos.x < ori.x && normal.x < 0))
 		normal.x = -normal.x;
@@ -34,11 +34,11 @@ int		rt_pl(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	inter->normal = sign_normal(objlst->u_obj.pl.normal, origin, p0);
 	denom = dot_product3(*ray, inter->normal);
 	if (fabs(denom) > EPSILON)
-	{	
+	{
 		inter->t = dot_product3(sub_vec3(p0, origin), inter->normal) / denom;
 		inter->pos = add_vec3(origin, multby_vec3(ray, inter->t));
 		if (inter->t >= 0.0 && inter->t < INFINITY)
 			return (TRUE);
-	} 
+	}
 	return (FALSE);
 }

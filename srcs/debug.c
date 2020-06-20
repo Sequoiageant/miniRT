@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/10 11:34:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/05/03 19:28:36 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/19 19:16:28 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	print_cams(t_cam *cams)
 	{
 		printf("	-->num %d\n", cams->nbr);
 		printf("	-->fov: %f\n", cams->fov);
+		printf("	-->dir: ");
+		print_vec(cams->dir);
 		cams = cams->next;
 	}
 }
@@ -78,21 +80,6 @@ void	print_vec(t_vec3 v)
 	printf("%f %f %f \n", v.x, v.y, v.z);
 }
 
-/*void	print_list2(t_obj *objlst)
-{
-	t_sp	*sp;
-
-	while (objlst)
-	{
-		if (objlst->type == SPHERE)
-		{
-			sp = (objlst->content);
-			printf("	-->%f\n", sp->dia);
-		}
-		objlst = objlst->next;
-	}
-}
-*/
 /*void	ft_add_obj(t_obj **objlst, void *content, int type, t_data *data)
 {
 	t_obj *new;

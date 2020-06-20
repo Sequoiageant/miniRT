@@ -6,14 +6,14 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/24 19:16:50 by julien            #+#    #+#             */
-/*   Updated: 2020/04/30 15:22:47 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 11:02:25 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft.h"
 
-int	main(void)
+/*int	main(void)
 {
 	char *strs;
 	char **new;
@@ -34,4 +34,11 @@ int	main(void)
 	new = NULL;
 	// printf("%zu\n", count_words(strs, c));
 	return (0);
+}
+*/
+
+int	main(void)
+{
+	char *test="+-5.0";
+	printf("%f\n", atof(test));
 }

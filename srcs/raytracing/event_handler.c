@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/24 20:47:28 by julien            #+#    #+#             */
-/*   Updated: 2020/05/04 18:58:34 by julnolle         ###   ########.fr       */
+/*   Created: 2020/06/19 17:29:56 by julnolle          #+#    #+#             */
+/*   Updated: 2020/06/20 16:23:35 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 int	ft_close(t_data *data)
 {
 	mlx_clear_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
+	mlx_destroy_image(data->mlx.mlx_ptr, data->mlx.img);
 	mlx_destroy_window(data->mlx.mlx_ptr, data->mlx.mlx_win);
-	// print_list(data->objlst);
-	// free_minirt(data);
-	// print_list(data->objlst);
-	free (data->mlx.mlx_ptr);
-	printf("%s\n", "CLOSED");
+	free_minirt(data);
+	free(data->mlx.mlx_ptr);
 	exit(EXIT_SUCCESS);
 }
 
@@ -85,5 +83,7 @@ int	save_image(t_data *data)
 	raytracing(data);
 	if (save_bmp((unsigned char*)mlx.addr, data->win) == FAILURE)
 		return (FAILURE);
+	mlx_destroy_image(mlx.mlx_ptr, mlx.img);
+	free(data->mlx.mlx_ptr);
 	return (SUCCESS);
 }

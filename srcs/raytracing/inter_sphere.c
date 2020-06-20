@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 11:02:17 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/18 11:02:55 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/20 17:16:37 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,3 @@ int		rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 	ft_normalize(&inter->normal);
 	return (TRUE);
 }
-
- /*// Solution normalement optimisée
-int		rt_sp(t_vec3 *ray, t_obj *objlst, t_inter *inter)
-{
-	t_vec3		origin;
-	t_vec3		oc;
-	double		q;
-	double		r2;
-	double		d;
-	double		l;
-	double		m;
-
-	origin = inter->origin;
-	r2 = (objlst->u_obj.sp.dia * objlst->u_obj.sp.dia) / 4;
-	oc = sub_vec3(objlst->u_obj.sp.pos, origin);
-	d = dot_product3(*ray, oc);
-	l = norm_vec3_2(&oc);
-
-	if (d < 0.0 && l < r2)
-		return (FALSE);
-	m = l - (d * d);
-	if (m > r2)
-		return (FALSE);
-	q = sqrt(r2 - m);
-	if (l > r2)
-		inter->t = d - q;
-	else
-		inter->t = d + q;
-	inter->pos = add_vec3(origin, multby_vec3(ray, inter->t));
-	inter->normal = sub_vec3(inter->pos, objlst->u_obj.sp.pos);
-	ft_normalize(&inter->normal);
-	return (TRUE);
-}*/

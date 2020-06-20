@@ -1,12 +1,16 @@
 a.out
 a.out.dSYM
 a.out.dSYM/*
+minirt
 .DS_Store
 libft.a
 *.o
 test/
+ressources/
 essai.c
 essai
+libft/main.c
+libft/a.out
 # test*.c
 valgrind-out.txt
 ressource.c
