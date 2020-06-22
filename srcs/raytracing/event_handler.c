@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/19 17:29:56 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 16:23:35 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:45:43 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ int	ft_close(t_data *data)
 
 int	key_event(int key, t_data *data)
 {
-	ft_putnbr(key);
-	ft_putendl("");
 	if (key == LEFT || key == RIGHT)
 		choose_cam(key, data);
+	if (key == KEY_S)
+	{
+		save_bmp((unsigned char*)data->mlx.addr, data->win);
+		write(1, BMP_SUCCESS, ft_strlen(BMP_SUCCESS));
+	}
 	else if (key == ESC)
 		ft_close(data);
 	return (0);

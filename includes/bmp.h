@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 11:34:04 by julnolle          #+#    #+#             */
-/*   Updated: 2020/04/08 16:51:53 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:40:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@
 
 # ifndef BMP_LOCATION
 #  define BMP_LOCATION "./bmp_saved/"
-# endif
-
-# ifndef OPEN_FLAG
-#  define OPEN_FLAG S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 # endif
 
 typedef struct			s_header

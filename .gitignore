@@ -5,7 +5,7 @@ minirt
 .DS_Store
 libft.a
 *.o
-test/
+test*
 ressources/
 essai.c
 essai
@@ -17,3 +17,5 @@ ressource.c
 *.swp
 result*
 bmp_saved/minirt*
+keycode.h
+debug*

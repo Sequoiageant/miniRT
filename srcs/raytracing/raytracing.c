@@ -6,27 +6,11 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/20 11:46:44 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 16:29:59 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:08:22 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-/*t_vec3	calc_primitive_ray(t_win win, double fov)
-{
-	t_vec3 ray;
-	// (void)dir;
-
-	ray.x = win.x - win.w / 2;
-	ray.y = win.y - win.h / 2;
-	ray.z = -win.w / (2.0 * tan(fov / 2.0));
-// 	ray.x = win.x - win.w / 2;
-// 	ray.y = win.h / 2 - win.y;
-// 	ray.z = -win.h / (2.0 * tan(fov / 2.0));
-// ft_normalize(&ray);
-		// rot_3d(&ray, dir);
-	return (ray);
-}*/
 
 void	find_closest_inter(t_data *data, t_inter *finter, t_vec3 *ray)
 {

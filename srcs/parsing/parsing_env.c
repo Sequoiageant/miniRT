@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:50:18 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 12:03:08 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:22:51 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	ft_add_cam(t_cam **cams, t_cam *cam, int cam_num)
 			tmp->next = new;
 		}
 	}
-	ft_putendl("	-->cam added");
-	print_cams((*cams));
 }
 
 void	ft_add_light(t_light **lights, t_light *light)
@@ -52,8 +50,6 @@ void	ft_add_light(t_light **lights, t_light *light)
 		new->next = (*lights);
 		(*lights) = new;
 	}
-	print_lights((*lights));
-	ft_putendl("	-->light added");
 }
 
 int		set_light(char **tab, t_data *data, t_stm *machine)

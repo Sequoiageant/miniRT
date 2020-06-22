@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 19:40:47 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 16:55:01 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:38:47 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-# include <limits.h>
-# include <stdio.h>
 # include <errno.h>
 # include "mlx.h"
 # include "libft.h"
@@ -226,14 +224,6 @@ typedef struct		s_mlx
 }					t_mlx;
 
 /*
-** image structure <== to be deleted ??
-*/
-
-typedef struct		s_image {
-	int		test;
-}					t_image;
-
-/*
 ** window structure
 */
 
@@ -276,7 +266,6 @@ typedef struct		s_matrix
 {
 	double d[4][4];
 }					t_matrix;
-
 
 /*
 ** quadratic equation structure
@@ -480,7 +469,6 @@ t_cam				select_cam(t_data data);
 t_matrix			look_at(t_vec3 origin, t_vec3 dir);
 t_vec3				multiply_by_matrix(t_vec3 p, t_matrix m);
 
-
 /*
 ** --------------------------------- Parser ---------------------------------
 */
@@ -570,9 +558,10 @@ double				deg_to_rad(double alpha);
 double				rad_to_deg(double alpha);
 double				normalize_and_markout(double to_mod, double denom);
 int					print_error(const char *error, int line_nb);
-int					check_missing_type(t_data *data, t_stm *machine, size_t *line_nb);
+int					check_missing_type(t_data *data, t_stm *m, size_t *line);
 void				reset_inter(t_inter *inter);
 t_vec3				trace_ray_normalized(t_win win, t_cam camera);
+int					solve_quadratic(t_quadra *q);
 
 /*
 ** ---------------------------------- Colors ---------------------------------
@@ -602,9 +591,7 @@ void				reset_image(t_data *data);
 int					save_bmp(const unsigned char *data, const t_win res);
 
 /*
-** ---------------------------- Debug (to delete) ---------------------------
+** ---------------------------- Debug (debug.c) -----------------------------
 */
-
-# include "debug.h"
 
 #endif

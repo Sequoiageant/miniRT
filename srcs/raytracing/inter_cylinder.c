@@ -6,32 +6,11 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 19:37:44 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 18:18:56 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:08:46 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-static int		solve_quadratic(t_quadra *q, t_inter *inter)
-{
-	q->delta = q->b * q->b - 4.0 * q->a * q->c;
-	if (q->delta < 0)
-		return (FALSE);
-	else if (q->delta == 0)
-	{
-		q->t1 = -0.5 * q->b / q->a;
-		q->t2 = -0.5 * q->b / q->a;
-	}
-	else
-	{
-		q->t1 = (-q->b - sqrt(q->delta)) / (2 * q->a);
-		q->t2 = (-q->b + sqrt(q->delta)) / (2 * q->a);
-	}
-	if (q->t2 < 0.)
-		return (FALSE);
-	inter->t = ft_min(q->t1, q->t2);
-	return (TRUE);
-}
 
 static t_vec3	get_cylinder_normal(t_inter *inter, t_cy cy)
 {
@@ -65,10 +44,10 @@ static int		get_cy_inter(t_quadra *q, t_cy cy, t_vec3 *ray, t_inter *inter)
 	a_sqrt = sub_vec3(*ray, multby_vec3(&cy.dir, dot_product3(*ray, cy.dir)));
 	q->a = dot_product3(a_sqrt, a_sqrt);
 	right = sub_vec3(sub_vec3(inter->origin, cy.pos), multby_vec3(&cy.dir,
-				dot_product3(sub_vec3(inter->origin, cy.pos), cy.dir)));
+		dot_product3(sub_vec3(inter->origin, cy.pos), cy.dir)));
 	q->b = 2.0 * dot_product3(a_sqrt, right);
 	q->c = dot_product3(right, right) - ((cy.dia * cy.dia) / 4.0);
-	if (!solve_quadratic(q, inter))
+	if (!solve_quadratic(q))
 		return (FALSE);
 	return (TRUE);
 }
@@ -85,6 +64,18 @@ int				rt_cy(t_vec3 *ray, t_obj *objlst, t_inter *inter)
 		trunc_cylinder(&q.t2, objlst->u_obj.cy, ray, inter);
 	if (q.t1 < 0.0 && q.t2 < 0.0)
 		return (FALSE);
+	if (q.t2 < q.t1)
+		if (q.t2 > 0)
+			inter->t = q.t2;
+		else
+			inter->t = q.t1;
+	else
+	{
+		if (q.t1 > 0)
+			inter->t = q.t1;
+		else
+			inter->t = q.t2;
+	}
 	inter->pos = add_vec3(inter->origin, multby_vec3(ray, inter->t));
 	inter->normal = get_cylinder_normal(inter, objlst->u_obj.cy);
 	return (TRUE);

@@ -6,7 +6,7 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/06/20 12:12:21 by julnolle         ###   ########.fr        #
+#    Updated: 2020/06/22 14:27:21 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ endif
 # ---------------- SRC --------------- #
 
 # Debug Sources
-SRCS += debug.c
+# SRCS += debug.c
 
 # Main Sources
 SRCS += main.c
@@ -152,11 +152,12 @@ $(DIR_OBJS):
 	mkdir -p $@
 
 $(LIBFT): FORCE
+	@echo "$(_BOLD)$(_GREEN)--> Creating $@...$(_END)"
 	$(MAKE) -C $(LIBFT_DIR)
 	@echo "$(_BOLD)$(_YELLOW)--> $@ made$(_END)"
 
 compmlx:
-	@echo "$(_BOLD)$(_YELLOW)--> Creating MLX...$(_END)"
+	@echo "$(_BOLD)$(_GREEN)--> Creating MLX...$(_END)"
 	$(MAKE) -C $(MLX_DIR)
 	@echo "$(_BOLD)$(_YELLOW)--> MLX made $(_END)"
 

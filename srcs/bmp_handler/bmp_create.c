@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/19 18:35:40 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/19 18:46:48 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:06:14 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,6 @@ static unsigned char	*info_header_bmp(t_win res)
 	bmpinfoheader[11] = (unsigned char)(res.h >> 24);
 	bmpinfoheader[12] = 1;
 	bmpinfoheader[14] = 32;
-	// bmpinfoheader[20] = (unsigned char)(imgsize);
-	// bmpinfoheader[21] = (unsigned char)(imgsize >> 8);
-	// bmpinfoheader[22] = (unsigned char)(imgsize >> 16);
-	// bmpinfoheader[23] = (unsigned char)(imgsize >> 24);
 	return (bmpinfoheader);
 }
 

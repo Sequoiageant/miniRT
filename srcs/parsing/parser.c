@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 19:06:54 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/20 12:02:11 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:22:21 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 static int	error(t_data *data, char **tab, t_stm *machine)
 {
 	(void)data;
-	(void)machine;
 	if (tab[0][0] == '#')
 	{
-		printf("[%s] -> COMMENT\n", tab[0]);
 		return (MACHINE_CONTINUE);
 	}
 	else
 	{
-		printf("[%s] -> ERROR\n", tab[0]);
 		machine->error |= TYPE_ERROR_MASK;
 		return (MACHINE_ERROR);
 	}
@@ -44,7 +41,6 @@ static int	set_obj(t_data *data, char **tab, t_stm *machine)
 	{
 		if (ft_strnequ(tab[0], str_obj[i], 2) == TRUE)
 		{
-			printf("[%s] -> OBJECT\n", str_obj[i]);
 			if (split_size_error(tab, i + NB_ENV, &machine->error))
 				ret = func[i](tab, &objlst, data, machine);
 			if (ret == SUCCESS)
@@ -72,7 +68,6 @@ static int	set_env(t_data *data, char **tab, t_stm *machine)
 	{
 		if (ft_strcmp(tab[0], str_env[i]) == 0)
 		{
-			printf("[%s] -> ENV\n", str_env[i]);
 			if (split_size_error(tab, i, &machine->error))
 				ret = func[i](tab, data, machine);
 			if (ret == SUCCESS)
@@ -91,7 +86,6 @@ static int	empty(t_data *data, char **tab, t_stm *machine)
 	(void)data;
 	if (tab[0] == NULL)
 	{
-		printf("[%s] -> EMPTY\n", tab[0]);
 		return (MACHINE_CONTINUE);
 	}
 	machine->state = ENV;
