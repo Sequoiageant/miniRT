@@ -1,7 +1,7 @@
 a.out
 a.out.dSYM
 a.out.dSYM/*
-minirt
+miniRT
 .DS_Store
 libft.a
 *.o
@@ -19,3 +19,4 @@ result*
 bmp_saved/minirt*
 keycode.h
 debug*
+valgrind_log

@@ -17,12 +17,12 @@ Each scene can be be viewed by a set of cameras characterized by its position, d
 ie.
 ```sh
 $ make
-$ ./minirt scenes/scene2.rt
+$ ./miniRT scenes/scene2.rt
 ```
 or
 ```sh
 $ make
-$ ./minirt scenes/147_spheres.rt -save
+$ ./miniRT scenes/147_spheres.rt -save
 ```
 ## Configuration file
 **The configuration file must respect some rules:**

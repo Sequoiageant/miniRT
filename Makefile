@@ -6,13 +6,13 @@
 #    By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/13 14:56:19 by julnolle          #+#    #+#              #
-#    Updated: 2020/06/22 14:27:21 by julnolle         ###   ########.fr        #
+#    Updated: 2020/06/25 11:25:55 by julnolle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 include color.mk
 
-NAME	= minirt
+NAME	= miniRT
 
 # ---------------- CC ---------------- #
 
