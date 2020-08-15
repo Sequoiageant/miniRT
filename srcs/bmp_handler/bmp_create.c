@@ -6,7 +6,7 @@
 /*   By: julnolle <julnolle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/19 18:35:40 by julnolle          #+#    #+#             */
-/*   Updated: 2020/06/22 13:06:14 by julnolle         ###   ########.fr       */
+/*   Updated: 2020/07/01 16:26:37 by julnolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int						save_bmp(const unsigned char *img, const t_win res)
 	ft_strjoin_back(time_stamp, &name);
 	free(time_stamp);
 	ft_strjoin_back(".bmp", &name);
-	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	free(name);
 	bmpfileheader = file_header_bmp(14 + 40 + 3 * res.w * res.h);
 	write(fd, bmpfileheader, 14);
